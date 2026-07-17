@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ApexNeon Casino</title>
+<style>
+  :root{
+    --bg:#0d0e12;
+    --bg-alt:#141620;
+    --card:#181a24;
+    --purple:#8a2be2;
+    --purple-glow:rgba(138,43,226,0.55);
+    --green:#00ff7f;
+    --green-glow:rgba(0,255,127,0.5);
+    --red:#ff3b5c;
+    --text:#eef0f5;
+    --muted:#9298ab;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:radial-gradient(circle at 20% 0%, #1b1030 0%, var(--bg) 45%) fixed;
+    color:var(--text);
+    font-family:'Segoe UI', Roboto, Arial, sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  button{
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
+    outline:none;
+  }
+  input{
+    font-family:inherit;
+  }
+  .hidden{display:none !important;}
+
+  /* ---------- AUTH SCREEN ---------- */
+  #auth-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+      radial-gradient(circle at 50% 20%, var(--purple-glow) 0%, transparent 45%),
+      var(--bg);
+  }
+  .auth-card{
+    width:100%;
+    max-width:380px;
+    background:linear-gradient(180deg, var(--card), #101219);
+    border:1px solid rgba(138,43,226,0.35);
+    border-radius:18px;
+    padding:36px 30px;
+    box-shadow:0 0 40px rgba(138,43,226,0.25), 0 20px 60px rgba(0,0,0,0.6);
+    animation:fadeUp .5s ease;
+  }
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(18px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .logo{
+    text-align:center;
+    font-size:28px;
+    font-weight:800;
+    letter-spacing:1px;
+    margin-bottom:6px;
+    background:linear-gradient(90deg, var(--green), var(--purple));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 0 30px var(--purple-glow);
+  }
+  .logo span{display:block;font-size:12px;letter-spacing:4px;color:var(--muted);font-weight:600;-webkit-text-fill-color:var(--muted);}
+  .auth-tabs{
+    display:flex;
+    background:#0f1017;
+    border-radius:10px;
+    padding:4px;
+    margin:22px 0 24px;
+    border:1px solid #23263280;
+  }
+  .auth-tab{
+    flex:1;
+    padding:10px 0;
+    text-align:center;
+    border-radius:8px;
+    background:transparent;
+    color:var(--muted);
+    font-weight:600;
+    font-size:14px;
+    transition:all .25s ease;
+  }
+  .auth-tab.active{
+    background:linear-gradient(90deg, var(--purple), #6a1fc0);
+    color:#fff;
+    box-shadow:0 0 18px var(--purple-glow);
+  }
+  .field{
+    margin-bottom:16px;
+  }
+  .field label{
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:6px;
+    letter-spacing:0.5px;
+  }
+  .field input{
+    width:100%;
+    padding:12px 14px;
+    background:#0f1017;
+    border:1px solid #2a2d3a;
+    border-radius:10px;
+    color:var(--text);
+    font-size:14px;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .field input:focus{
+    border-color:var(--purple);
+    box-shadow:0 0 0 3px rgba(138,43,226,0.25);
+  }
+  .btn-primary{
+    width:100%;
+    padding:13px 0;
+    margin-top:6px;
+    border-radius:10px;
+    background:linear-gradient(90deg, var(--green), #00c765);
+    color:#04220f;
+    font-weight:800;
+    font-size:15px;
+    letter-spacing:0.5px;
+    box-shadow:0 0 20px var(--green-glow);
+    transition:transform .15s ease, box-shadow .2s ease;
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 0 30px var(--green-glow);
+  }
+  .btn-primary:active{transform:translateY(0);}
+  .auth-note{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    margin-top:16px;
+  }
+  .auth-error{
+    color:var(--red);
+    font-size:12px;
+    text-align:center;
+    min-height:16px;
+    margin-top:8px;
+  }
+
+  /* ---------- APP SHELL ---------- */
+  #app-screen{min-height:100vh;display:flex;flex-direction:column;}
+  .navbar{
+    position:sticky;
+    top:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 24px;
+    background:rgba(13,14,18,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(138,43,226,0.25);
+  }
+  .nav-logo{
+    font-weight:800;
+    font-size:20px;
+    letter-spacing:1px;
+    background:linear-gradient(90deg, var(--green), var(--purple));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .nav-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .pill{
+    padding:8px 14px;
+    border-radius:999px;
+    background:#141620;
+    border:1px solid #2a2d3a;
+    font-size:13px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .pill.balance{
+    border-color:var(--green);
+    color:var(--green);
+    box-shadow:0 0 14px rgba(0,255,127,0.25);
+    transition:box-shadow .2s;
+  }
+  .pill.balance.flash{
+    box-shadow:0 0 26px var(--green-glow);
+  }
+  .pill.user{color:var(--muted);}
+  .logout-btn{
+    padding:8px 14px;
+    border-radius:999px;
+    background:transparent;
+    border:1px solid #3a3d4a;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:600;
+    transition:all .2s;
+  }
+  .logout-btn:hover{
+    border-color:var(--red);
+    color:var(--red);
+  }
+
+  main{
+    flex:1;
+    width:100%;
+    max-width:1100px;
+    margin:0 auto;
+    padding:28px 20px 60px;
+  }
+
+  /* ---------- LIVE WINS ---------- */
+  #live-wins{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:linear-gradient(90deg, rgba(138,43,226,0.12), rgba(0,255,127,0.08));
+    border:1px solid rgba(138,43,226,0.3);
+    border-radius:12px;
+    padding:10px 16px;
+    margin-bottom:26px;
+    overflow:hidden;
+    min-height:20px;
+  }
+  .live-dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--red);
+    box-shadow:0 0 10px var(--red);
+    animation:pulse 1.4s infinite;
+    flex-shrink:0;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:.3;}
+  }
+  #live-wins-text{
+    font-size:13px;
+    color:var(--text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    animation:fadeIn .4s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+  /* ---------- GAME MENU ---------- */
+  h1.section-title{
+    font-size:22px;
+    margin-bottom:18px;
+    letter-spacing:0.5px;
+  }
+  .game-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+    gap:22px;
+  }
+  .game-card{
+    position:relative;
+    border-radius:18px;
+    padding:28px 22px;
+    background:linear-gradient(145deg, var(--card), #10121a);
+    border:1px solid #262837;
+    overflow:hidden;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s;
+  }
+  .game-card:hover{
+    transform:translateY(-6px);
+    border-color:var(--purple);
+    box-shadow:0 14px 40px rgba(138,43,226,0.35);
+  }
+  .game-card .emoji{
+    font-size:44px;
+    margin-bottom:14px;
+    filter:drop-shadow(0 0 12px rgba(138,43,226,0.6));
+  }
+  .game-card h3{
+    font-size:19px;
+    margin-bottom:6px;
+    letter-spacing:0.5px;
+  }
+  .game-card p{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:18px;
+    line-height:1.5;
+  }
+  .play-btn{
+    padding:10px 20px;
+    border-radius:10px;
+    background:linear-gradient(90deg, var(--purple), #6a1fc0);
+    color:#fff;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:0.5px;
+    box-shadow:0 0 16px var(--purple-glow);
+    transition:transform .15s ease;
+  }
+  .play-btn:hover{transform:translateY(-2px);}
+
+  .back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:9px 16px;
+    border-radius:10px;
+    background:#141620;
+    border:1px solid #2a2d3a;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:22px;
+    transition:all .2s;
+  }
+  .back-btn:hover{
+    border-color:var(--green);
+    color:var(--green);
+  }
+
+  /* ---------- GAME PANEL SHARED ---------- */
+  .game-panel{
+    background:linear-gradient(180deg, var(--card), #101219);
+    border:1px solid #262837;
+    border-radius:20px;
+    padding:32px 26px;
+    box-shadow:0 0 50px rgba(138,43,226,0.12);
+  }
+  .game-panel h2{
+    text-align:center;
+    font-size:24px;
+    margin-bottom:6px;
+    letter-spacing:0.5px;
+  }
+  .game-sub{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:26px;
+  }
+
+  /* ---------- SLOTS ---------- */
+  .reels{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin-bottom:26px;
+  }
+  .reel{
+    width:100px;
+    height:100px;
+    background:#0f1017;
+    border:2px solid var(--purple);
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:52px;
+    box-shadow:inset 0 0 20px rgba(0,0,0,0.6), 0 0 20px rgba(138,43,226,0.35);
+  }
+  .reel.spinning{
+    animation:reelSpin .18s linear infinite;
+  }
+  @keyframes reelSpin{
+    0%{transform:translateY(0) scale(1);}
+    50%{transform:translateY(-10px) scale(0.96);}
+    100%{transform:translateY(0) scale(1);}
+  }
+  .reel.win-glow{
+    border-color:var(--green);
+    box-shadow:0 0 30px var(--green-glow), inset 0 0 20px rgba(0,0,0,0.6);
+    animation:winPulse .6s ease infinite;
+  }
+  @keyframes winPulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.06);}
+  }
+
+  .bet-row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .bet-btn{
+    padding:10px 18px;
+    border-radius:10px;
+    background:#141620;
+    border:1px solid #2a2d3a;
+    color:var(--text);
+    font-weight:700;
+    font-size:14px;
+    transition:all .2s;
+  }
+  .bet-btn.active, .bet-btn:hover{
+    border-color:var(--green);
+    color:var(--green);
+    box-shadow:0 0 14px rgba(0,255,127,0.25);
+  }
+  .current-bet{
+    font-size:13px;
+    color:var(--muted);
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .current-bet b{color:var(--green);}
+
+  .spin-btn{
+    display:block;
+    margin:0 auto;
+    padding:14px 44px;
+    border-radius:12px;
+    background:linear-gradient(90deg, var(--green), #00c765);
+    color:#04220f;
+    font-weight:800;
+    font-size:16px;
+    letter-spacing:1px;
+    box-shadow:0 0 26px var(--green-glow);
+    transition:transform .15s ease, opacity .2s;
+  }
+  .spin-btn:hover{transform:translateY(-2px);}
+  .spin-btn:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+    transform:none;
+  }
+
+  .result-msg{
+    text-align:center;
+    margin-top:20px;
+    font-size:15px;
+    font-weight:700;
+    min-height:22px;
+  }
+  .result-msg.win{color:var(--green);text-shadow:0 0 12px var(--green-glow);}
+  .result-msg.lose{color:var(--red);}
+
+  /* ---------- ROULETTE ---------- */
+  .wheel-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom:26px;
+  }
+  .wheel{
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    background:conic-gradient(
+      var(--green) 0deg 10deg,
+      #16181f 10deg 30deg,
+      var(--red) 30deg 50deg,
+      #16181f 50deg 70deg,
+      var(--red) 70deg 90deg,
+      #16181f 90deg 110deg,
+      var(--red) 110deg 130deg,
+      #16181f 130deg 150deg,
+      var(--red) 150deg 170deg,
+      #16181f 170deg 190deg,
+      var(--red) 190deg 210deg,
+      #16181f 210deg 230deg,
+      var(--red) 230deg 250deg,
+      #16181f 250deg 270deg,
+      var(--red) 270deg 290deg,
+      #16181f 290deg 310deg,
+      var(--red) 310deg 330deg,
+      #16181f 330deg 350deg,
+      var(--red) 350deg 360deg
+    );
+    border:4px solid #2a2d3a;
+    box-shadow:0 0 40px rgba(138,43,226,0.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    transition:transform 2.4s cubic-bezier(0.17, 0.67, 0.21, 1);
+  }
+  .wheel-center{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#0d0e12;
+    border:2px solid var(--purple);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    font-weight:800;
+    box-shadow:0 0 16px var(--purple-glow);
+  }
+  .wheel-pointer{
+    position:absolute;
+    top:-14px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;height:0;
+    border-left:9px solid transparent;
+    border-right:9px solid transparent;
+    border-top:16px solid var(--green);
+    filter:drop-shadow(0 0 6px var(--green-glow));
+  }
+
+  .bet-board{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:12px;
+    max-width:420px;
+    margin:0 auto 20px;
+  }
+  .bet-tile{
+    padding:16px 8px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:800;
+    letter-spacing:0.5px;
+    font-size:13px;
+    border:2px solid transparent;
+    color:#fff;
+    transition:all .2s;
+  }
+  .bet-tile.red{background:linear-gradient(160deg,#c0223f,#7a1027);}
+  .bet-tile.black{background:linear-gradient(160deg,#23252f,#101119);}
+  .bet-tile.green{background:linear-gradient(160deg,#0d8a4c,#054e2a);}
+  .bet-tile.selected{
+    border-color:#fff;
+    box-shadow:0 0 20px rgba(255,255,255,0.35);
+    transform:translateY(-3px);
+  }
+  .bet-tile small{
+    display:block;
+    font-weight:500;
+    opacity:0.75;
+    margin-top:3px;
+  }
+
+  .roulette-result{
+    text-align:center;
+    margin:14px 0;
+    font-size:14px;
+    color:var(--muted);
+    min-height:20px;
+  }
+  .roulette-result .num-red{color:var(--red);font-weight:800;}
+  .roulette-result .num-black{color:#cfd2dd;font-weight:800;}
+  .roulette-result .num-green{color:var(--green);font-weight:800;}
+
+  @media (max-width:520px){
+    .reel{width:76px;height:76px;font-size:36px;}
+    .wheel{width:130px;height:130px;}
+    .navbar{padding:12px 14px;}
+    .nav-right{gap:8px;}
+    .pill{padding:7px 10px;font-size:12px;}
+    .game-panel{padding:24px 16px;}
+    .bet-board{gap:8px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= AUTH SCREEN ================= -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="logo">ApexNeon<span>ONLINE CASINO</span></div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Prijava</button>
+      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Registracija</button>
+    </div>
+
+    <form id="auth-form" onsubmit="handleAuth(event)">
+      <div class="field">
+        <label>Korisničko ime</label>
+        <input type="text" id="username" placeholder="npr. Marko_99" required>
+      </div>
+      <div class="field">
+        <label>Lozinka</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-primary" id="auth-submit-btn">Prijava</button>
+      <div class="auth-error" id="auth-error"></div>
+    </form>
+
+    <div class="auth-note">Dobivate <b style="color:var(--green)">2,500 kredita</b> odmah nakon prijave.</div>
+  </div>
+</div>
+
+<!-- ================= APP SCREEN ================= -->
+<div id="app-screen" class="hidden">
+  <div class="navbar">
+    <div class="nav-logo">ApexNeon</div>
+    <div class="nav-right">
+      <div class="pill user">👤 <span id="nav-username">Player</span></div>
+      <div class="pill balance">💰 Balance: $<span id="nav-balance">2500</span></div>
+      <button class="logout-btn" onclick="logout()">Odjava</button>
+    </div>
+  </div>
+
+  <main>
+    <div id="live-wins">
+      <div class="live-dot"></div>
+      <div id="live-wins-text">Dobrodošli u ApexNeon Casino!</div>
+    </div>
+
+    <!-- GAME MENU -->
+    <div id="menu-view">
+      <h1 class="section-title">Izaberi igru</h1>
+      <div class="game-grid">
+        <div class="game-card">
+          <div class="emoji">🎰</div>
+          <h3>SLOTS</h3>
+          <p>Tri bubnja, jarki simboli i brzi dobici. Poklopi simbole i pokupi nagradu.</p>
+          <button class="play-btn" onclick="openGame('slots')">Igraj</button>
+        </div>
+        <div class="game-card">
+          <div class="emoji">🎡</div>
+          <h3>ROULETTE</h3>
+          <p>Postavi ulog na crveno, crno ili zeleno i zavrti kolo sreće.</p>
+          <button class="play-btn" onclick="openGame('roulette')">Igraj</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLOTS VIEW -->
+    <div id="slots-view" class="hidden">
+      <button class="back-btn" onclick="backToMenu()">← Natrag na izbornik</button>
+      <div class="game-panel">
+        <h2>🎰 Voćkice Slots</h2>
+        <div class="game-sub">Poklopi 3 ista simbola za 10x ulog, 2 ista za 3x ulog</div>
+
+        <div class="reels">
+          <div class="reel" id="reel0">🍒</div>
+          <div class="reel" id="reel1">🍋</div>
+          <div class="reel" id="reel2">💎</div>
+        </div>
+
+        <div class="current-bet">Trenutni ulog: <b>$<span id="slot-bet-display">10</span></b></div>
+
+        <div class="bet-row">
+          <button class="bet-btn active" onclick="setSlotBet(10, this)">$10</button>
+          <button class="bet-btn" onclick="setSlotBet(50, this)">$50</button>
+          <button class="bet-btn" onclick="setSlotBet(100, this)">$100</button>
+        </div>
+
+        <button class="spin-btn" id="spin-btn" onclick="spinSlots()">SPIN</button>
+        <div class="result-msg" id="slot-result"></div>
+      </div>
+    </div>
+
+    <!-- ROULETTE VIEW -->
+    <div id="roulette-view" class="hidden">
+      <button class="back-btn" onclick="backToMenu()">← Natrag na izbornik</button>
+      <div class="game-panel">
+        <h2>🎡 Interaktivni Rulet</h2>
+        <div class="game-sub">Pogodi boju za 2x ulog, pogodi zeleno (0) za 35x ulog</div>
+
+        <div class="wheel-wrap">
+          <div class="wheel" id="wheel">
+            <div class="wheel-pointer"></div>
+            <div class="wheel-center" id="wheel-number">?</div>
+          </div>
+        </div>
+
+        <div class="current-bet">Trenutni ulog: <b>$<span id="roulette-bet-display">50</span></b></div>
+
+        <div class="bet-row">
+          <button class="bet-btn active" onclick="setRouletteBet(50, this)">$50</button>
+          <button class="bet-btn" onclick="setRouletteBet(100, this)">$100</button>
+          <button class="bet-btn" onclick="setRouletteBet(200, this)">$200</button>
+        </div>
+
+        <div class="bet-board">
+          <div class="bet-tile red selected" data-color="red" onclick="selectColor('red', this)">CRVENO<small>2x</small></div>
+          <div class="bet-tile black" data-color="black" onclick="selectColor('black', this)">CRNO<small>2x</small></div>
+          <div class="bet-tile green" data-color="green" onclick="selectColor('green', this)">ZELENO (0)<small>35x</small></div>
+        </div>
+
+        <button class="spin-btn" id="roulette-spin-btn" onclick="spinRoulette()">ZAVRTI RULET</button>
+        <div class="roulette-result" id="roulette-result"></div>
+        <div class="result-msg" id="roulette-outcome"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ===================== STATE ===================== */
+let currentUser = null;
+let balance = 0;
+
+let authMode = 'login';
+let slotBet = 10;
+let rouletteBet = 50;
+let selectedColor = 'red';
+let isSpinning = false;
+
+const SLOT_SYMBOLS = ['🍒', '🍋', '💎', '👑', '7️⃣'];
+const RED_NUMBERS = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+
+const fakeNames = ['Marko_99','Ivana_Lucky','Petar_Vip','Ana_Roll','Filip_Ace','Dario_King','Lea_Star','Josip_High','Mia_Cash','Tomo_Bet'];
+
+/* ===================== AUTH ===================== */
+function switchTab(mode){
+  authMode = mode;
+  document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+  document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+  document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'Prijava' : 'Registriraj se';
+  document.getElementById('auth-error').textContent = '';
+}
+
+function handleAuth(e){
+  e.preventDefault();
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+
+  if(!username || !password){
+    document.getElementById('auth-error').textContent = 'Molimo unesite korisničko ime i lozinku.';
+    return;
+  }
+
+  currentUser = username;
+  balance = 2500;
+
+  document.getElementById('nav-username').textContent = currentUser;
+  updateBalanceDisplay();
+
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('app-screen').classList.remove('hidden');
+
+  startLiveWins();
+}
+
+function logout(){
+  currentUser = null;
+  document.getElementById('app-screen').classList.add('hidden');
+  document.getElementById('auth-screen').classList.remove('hidden');
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+  backToMenu();
+  stopLiveWins();
+}
+
+/* ===================== NAVIGATION ===================== */
+function openGame(game){
+  document.getElementById('menu-view').classList.add('hidden');
+  document.getElementById('slots-view').classList.add('hidden');
+  document.getElementById('roulette-view').classList.add('hidden');
+  document.getElementById(game + '-view').classList.remove('hidden');
+}
+
+function backToMenu(){
+  document.getElementById('slots-view').classList.add('hidden');
+  document.getElementById('roulette-view').classList.add('hidden');
+  document.getElementById('menu-view').classList.remove('hidden');
+}
+
+/* ===================== BALANCE ===================== */
+function updateBalanceDisplay(){
+  document.getElementById('nav-balance').textContent = balance.toLocaleString('en-US');
+  const pill = document.querySelector('.pill.balance');
+  pill.classList.add('flash');
+  setTimeout(() => pill.classList.remove('flash'), 350);
+}
+
+/* ===================== LIVE WINS ===================== */
+let liveWinsTimer = null;
+function startLiveWins(){
+  liveWinsTimer = setInterval(() => {
+    const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+    const amount = Math.floor(Math.random() * 950) + 50;
+    const game = Math.random() < 0.5 ? 'slotovima' : 'ruletu';
+    const el = document.getElementById('live-wins-text');
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = 'fadeIn .4s ease';
+    el.textContent = `🔥 Korisnik ${name} je upravo osvojio $${amount} na ${game}!`;
+  }, 4500);
+}
+function stopLiveWins(){
+  if(liveWinsTimer) clearInterval(liveWinsTimer);
+}
+
+/* ===================== SLOTS ===================== */
+function setSlotBet(amount, btn){
+  slotBet = amount;
+  document.getElementById('slot-bet-display').textContent = amount;
+  document.querySelectorAll('#slots-view .bet-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function spinSlots(){
+  if(isSpinning) return;
+  if(balance < slotBet){
+    showSlotResult('Nedovoljno kredita za ovaj ulog!', 'lose');
+    return;
+  }
+
+  isSpinning = true;
+  balance -= slotBet;
+  updateBalanceDisplay();
+
+  const spinBtn = document.getElementById('spin-btn');
+  spinBtn.disabled = true;
+  document.getElementById('slot-result').textContent = '';
+  document.getElementById('slot-result').className = 'result-msg';
+
+  const reels = [document.getElementById('reel0'), document.getElementById('reel1'), document.getElementById('reel2')];
+  reels.forEach(r => {
+    r.classList.remove('win-glow');
+    r.classList.add('spinning');
+  });
+
+  const spinIntervals = reels.map(r => setInterval(() => {
+    r.textContent = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+  }, 80));
+
+  const finalSymbols = [
+    SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)],
+    SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)],
+    SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)]
+  ];
+
+  const stopDelays = [800, 1200, 1600];
+  reels.forEach((r, i) => {
+    setTimeout(() => {
+      clearInterval(spinIntervals[i]);
+      r.textContent = finalSymbols[i];
+      r.classList.remove('spinning');
+
+      if(i === reels.length - 1){
+        resolveSlotSpin(finalSymbols, reels);
+      }
+    }, stopDelays[i]);
+  });
+}
+
+function resolveSlotSpin(symbols, reels){
+  let winnings = 0;
+  let message = 'Nema dobitka. Pokušaj ponovno!';
+  let type = 'lose';
+
+  if(symbols[0] === symbols[1] && symbols[1] === symbols[2]){
+    winnings = slotBet * 10;
+    message = `🎉 TRI ISTA! Osvojio si $${winnings}!`;
+    type = 'win';
+    reels.forEach(r => r.classList.add('win-glow'));
+  } else if(symbols[0] === symbols[1] || symbols[1] === symbols[2] || symbols[0] === symbols[2]){
+    winnings = slotBet * 3;
+    message = `✨ Dva ista! Osvojio si $${winnings}!`;
+    type = 'win';
+    reels.forEach(r => {
+      if((r.id === 'reel0' && symbols[0] === symbols[1]) ||
+         (r.id === 'reel1') ||
+         (r.id === 'reel2' && symbols[1] === symbols[2]) ||
+         (symbols[0] === symbols[2])){
+        r.classList.add('win-glow');
+      }
+    });
+  }
+
+  if(winnings > 0){
+    balance += winnings;
+    updateBalanceDisplay();
+  }
+
+  showSlotResult(message, type);
+  document.getElementById('spin-btn').disabled = false;
+  isSpinning = false;
+}
+
+function showSlotResult(msg, type){
+  const el = document.getElementById('slot-result');
+  el.textContent = msg;
+  el.className = 'result-msg ' + type;
+}
+
+/* ===================== ROULETTE ===================== */
+function setRouletteBet(amount, btn){
+  rouletteBet = amount;
+  document.getElementById('roulette-bet-display').textContent = amount;
+  document.querySelectorAll('#roulette-view .bet-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function selectColor(color, tile){
+  selectedColor = color;
+  document.querySelectorAll('.bet-tile').forEach(t => t.classList.remove('selected'));
+  tile.classList.add('selected');
+}
+
+function numberColor(n){
+  if(n === 0) return 'green';
+  return RED_NUMBERS.has(n) ? 'red' : 'black';
+}
+
+let wheelRotation = 0;
+function spinRoulette(){
+  if(isSpinning) return;
+  if(balance < rouletteBet){
+    showRouletteOutcome('Nedovoljno kredita za ovaj ulog!', 'lose');
+    return;
+  }
+
+  isSpinning = true;
+  balance -= rouletteBet;
+  updateBalanceDisplay();
+
+  const spinBtn = document.getElementById('roulette-spin-btn');
+  spinBtn.disabled = true;
+  document.getElementById('roulette-result').textContent = '';
+  document.getElementById('roulette-outcome').textContent = '';
+  document.getElementById('roulette-outcome').className = 'result-msg';
+
+  const resultNumber = Math.floor(Math.random() * 37); // 0-36
+  const resultColor = numberColor(resultNumber);
+
+  const wheel = document.getElementById('wheel');
+  wheelRotation += 1440 + Math.floor(Math.random() * 360);
+  wheel.style.transform = `rotate(${wheelRotation}deg)`;
+
+  document.getElementById('wheel-number').textContent = '...';
+
+  setTimeout(() => {
+    document.getElementById('wheel-number').textContent = resultNumber;
+
+    const colorClass = resultColor === 'red' ? 'num-red' : resultColor === 'black' ? 'num-black' : 'num-green';
+    const colorLabel = resultColor === 'red' ? 'CRVENO' : resultColor === 'black' ? 'CRNO' : 'ZELENO';
+    document.getElementById('roulette-result').innerHTML =
+      `Kuglica je stala na broj <span class="${colorClass}">${resultNumber} (${colorLabel})</span>`;
+
+    let winnings = 0;
+    let message = `😢 Nažalost, izgubio si ulog od $${rouletteBet}.`;
+    let type = 'lose';
+
+    if(selectedColor === resultColor){
+      if(resultColor === 'green'){
+        winnings = rouletteBet * 35;
+        message = `🍀 NEVJEROJATNO! Zeleno! Osvojio si $${winnings}!`;
+      } else {
+        winnings = rouletteBet * 2;
+        message = `🎉 Pogodak! Osvojio si $${winnings}!`;
+      }
+      type = 'win';
+      balance += winnings;
+      updateBalanceDisplay();
+    }
+
+    showRouletteOutcome(message, type);
+    spinBtn.disabled = false;
+    isSpinning = false;
+  }, 2500);
+}
+
+function showRouletteOutcome(msg, type){
+  const el = document.getElementById('roulette-outcome');
+  el.textContent = msg;
+  el.className = 'result-msg ' + type;
+}
+</script>
+</body>
+</html>
