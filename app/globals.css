@@ -7,8 +7,6 @@
   --color-dark-700: #1a1a1a;
   --color-dark-600: #222222;
   --color-dark-500: #333333;
-  --color-dark-400: #555555;
-  --color-dark-300: #888888;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -25,7 +23,7 @@
 }
 
 ::selection {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(139, 92, 246, 0.25);
 }
 
 input:-webkit-autofill,
@@ -35,4 +33,23 @@ textarea:-webkit-autofill {
   -webkit-text-fill-color: #fff;
   -webkit-box-shadow: 0 0 0 1000px #111 inset;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Gradient button animation */
+@keyframes gradient-spin {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glow pulse */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Float */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
