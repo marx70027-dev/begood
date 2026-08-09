@@ -16,20 +16,20 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "weblirev | Izrada profesionalnih web stranica",
+  title: "weblirev | Professional Web Development",
   description:
-    "Moderni, brzi i responzivni web sajtovi prilagođeni vašem brendu. Od 1000€ godišnje ili po dogovoru.",
+    "Modern, fast, and responsive websites tailored to your brand. From 1000€/year or custom pricing.",
   keywords: [
-    "web stranice",
-    "izrada web stranica",
-    "web dizajn",
     "web development",
+    "website design",
+    "web design",
     "weblirev",
+    "professional websites",
   ],
   openGraph: {
-    title: "weblirev | Izrada profesionalnih web stranica",
+    title: "weblirev | Professional Web Development",
     description:
-      "Moderni, brzi i responzivni web sajtovi prilagođeni vašem brendu.",
+      "Modern, fast, and responsive websites tailored to your brand.",
     url: "https://weblirev.com",
     siteName: "weblirev",
     type: "website",
@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="hr" className={`${inter.variable} ${syne.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} ${syne.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-[family-name:var(--font-inter)]">
         {children}
       </body>

@@ -7,56 +7,30 @@
   --color-dark-700: #1a1a1a;
   --color-dark-600: #222222;
   --color-dark-500: #333333;
-  --color-cream: #F5F0E8;
-  --color-cream-dark: #E8E0D4;
-  --color-warm: #FAF7F2;
-  --color-slate-soft: #EEF2F7;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
   * {
-    @apply border-white/[0.06];
+    @apply border-gray-200;
   }
   html {
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-dark-950 text-white;
+    @apply bg-white text-gray-900;
   }
 }
 
 ::selection {
-  background: rgba(59, 130, 246, 0.25);
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill {
-  -webkit-text-fill-color: #fff;
-  -webkit-box-shadow: 0 0 0 1000px #111 inset;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
-.light-section input:-webkit-autofill,
-.light-section input:-webkit-autofill:hover,
-.light-section input:-webkit-autofill:focus,
-.light-section textarea:-webkit-autofill {
-  -webkit-text-fill-color: #111;
-  -webkit-box-shadow: 0 0 0 1000px #F5F0E8 inset;
+  background: rgba(59, 130, 246, 0.2);
 }
 
 @keyframes gradient-spin {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
 }
 
 @keyframes float-gentle {
