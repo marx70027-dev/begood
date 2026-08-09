@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     const { error } = await resend.emails.send({
       from: "weblirev.com <onboarding@resend.dev>",
-      to: process.env.CONTACT_EMAIL || "hello@weblirev.com",
+      to: process.env.CONTACT_EMAIL || "mateostopic2703@gmail.com",
       replyTo: email,
       subject: `Nova poruka od ${name} — ${projectType || "Upit"}`,
       html: `
