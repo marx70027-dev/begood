@@ -31,7 +31,7 @@ import Logo from "@/components/ui/logo";
 import { GradientButton } from "@/components/ui/gradient-button";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 
-const ThreeScene = dynamic(() => import("@/components/ui/three-scene"), { ssr: false });
+const ScrollVideo = dynamic(() => import("@/components/ui/scroll-video"), { ssr: false });
 
 const fade = {
   hidden: { opacity: 0, y: 20 },
@@ -46,36 +46,36 @@ const fade = {
 
 const SKILLS = [
   { name: "React / Next.js", pct: 95, icon: <Code2 className="size-4" />, color: "from-blue-500 to-cyan-400" },
-  { name: "UI/UX Dizajn", pct: 90, icon: <Palette className="size-4" />, color: "from-pink-500 to-rose-400" },
-  { name: "Performance", pct: 92, icon: <Rocket className="size-4" />, color: "from-orange-500 to-amber-400" },
-  { name: "SEO", pct: 88, icon: <Globe className="size-4" />, color: "from-green-500 to-emerald-400" },
-  { name: "Sigurnost", pct: 85, icon: <Shield className="size-4" />, color: "from-violet-500 to-purple-400" },
-  { name: "Responzivnost", pct: 95, icon: <Smartphone className="size-4" />, color: "from-indigo-500 to-blue-400" },
+  { name: "UI/UX Dizajn", pct: 90, icon: <Palette className="size-4" />, color: "from-yellow-500 to-amber-400" },
+  { name: "Performance", pct: 92, icon: <Rocket className="size-4" />, color: "from-rose-500 to-pink-400" },
+  { name: "SEO", pct: 88, icon: <Globe className="size-4" />, color: "from-emerald-500 to-teal-400" },
+  { name: "Sigurnost", pct: 85, icon: <Shield className="size-4" />, color: "from-indigo-500 to-blue-400" },
+  { name: "Responzivnost", pct: 95, icon: <Smartphone className="size-4" />, color: "from-orange-500 to-amber-400" },
 ];
 
 const STEPS = [
-  { n: "01", title: "Konzultacija", desc: "Upoznajemo vaše potrebe, ciljeve i viziju projekta.", color: "text-violet-400", border: "border-violet-500/20" },
-  { n: "02", title: "Dizajn", desc: "Wireframe i vizualni dizajn prilagođen vašem brendu.", color: "text-blue-400", border: "border-blue-500/20" },
-  { n: "03", title: "Razvoj", desc: "Kodiramo s najnovijim tehnologijama — brzo, sigurno, responzivno.", color: "text-emerald-400", border: "border-emerald-500/20" },
-  { n: "04", title: "Lansiranje", desc: "Postavljamo sve na server, konfiguriramo domenu — live.", color: "text-amber-400", border: "border-amber-500/20" },
+  { n: "01", title: "Konzultacija", desc: "Upoznajemo vaše potrebe, ciljeve i viziju projekta.", color: "text-blue-600", bg: "bg-blue-100", border: "border-blue-200" },
+  { n: "02", title: "Dizajn", desc: "Wireframe i vizualni dizajn prilagođen vašem brendu.", color: "text-yellow-600", bg: "bg-yellow-100", border: "border-yellow-200" },
+  { n: "03", title: "Razvoj", desc: "Kodiramo s najnovijim tehnologijama — brzo, sigurno, responzivno.", color: "text-emerald-600", bg: "bg-emerald-100", border: "border-emerald-200" },
+  { n: "04", title: "Lansiranje", desc: "Postavljamo sve na server, konfiguriramo domenu — live.", color: "text-rose-600", bg: "bg-rose-100", border: "border-rose-200" },
 ];
 
 const PORTFOLIO = [
-  { title: "E-commerce platforma", cat: "web-shop", gradient: "from-violet-600 via-purple-500 to-pink-500", tags: ["Next.js", "Stripe", "Tailwind"] },
-  { title: "Korporativna stranica", cat: "korporativno", gradient: "from-blue-600 via-cyan-500 to-teal-400", tags: ["React", "CMS", "SEO"] },
-  { title: "SaaS dashboard", cat: "aplikacija", gradient: "from-emerald-600 via-green-500 to-lime-400", tags: ["TypeScript", "Charts", "API"] },
-  { title: "Portfolio fotografa", cat: "portfolio", gradient: "from-pink-600 via-rose-500 to-orange-400", tags: ["Galerija", "Animacije", "Lightbox"] },
-  { title: "Restaurant web", cat: "ugostiteljstvo", gradient: "from-amber-600 via-orange-500 to-red-400", tags: ["Rezervacije", "Meni", "Mapa"] },
-  { title: "Fitness aplikacija", cat: "aplikacija", gradient: "from-indigo-600 via-violet-500 to-purple-400", tags: ["PWA", "Dashboard", "Tracking"] },
+  { title: "E-commerce platforma", cat: "web-shop", gradient: "from-blue-600 via-indigo-500 to-violet-500", tags: ["Next.js", "Stripe", "Tailwind"] },
+  { title: "Korporativna stranica", cat: "korporativno", gradient: "from-amber-500 via-yellow-400 to-orange-400", tags: ["React", "CMS", "SEO"] },
+  { title: "SaaS dashboard", cat: "aplikacija", gradient: "from-emerald-500 via-teal-400 to-cyan-400", tags: ["TypeScript", "Charts", "API"] },
+  { title: "Portfolio fotografa", cat: "portfolio", gradient: "from-pink-500 via-rose-400 to-red-400", tags: ["Galerija", "Animacije", "Lightbox"] },
+  { title: "Restaurant web", cat: "ugostiteljstvo", gradient: "from-orange-500 via-amber-400 to-yellow-400", tags: ["Rezervacije", "Meni", "Mapa"] },
+  { title: "Fitness aplikacija", cat: "aplikacija", gradient: "from-cyan-500 via-blue-400 to-indigo-500", tags: ["PWA", "Dashboard", "Tracking"] },
 ];
 
 const CATS = ["sve", "web-shop", "korporativno", "aplikacija", "portfolio", "ugostiteljstvo"];
 
 const PAYMENTS = [
-  { icon: <Building2 className="size-6" />, title: "Bankovna transakcija", sub: "IBAN / Transakcijski račun", color: "from-blue-500 to-blue-600" },
-  { icon: <CreditCard className="size-6" />, title: "Kartice", sub: "Stripe / Revolut Business", color: "from-violet-500 to-violet-600" },
-  { icon: <Bitcoin className="size-6" />, title: "Kriptovalute", sub: "Po dogovoru", color: "from-amber-500 to-orange-500" },
-  { icon: <Receipt className="size-6" />, title: "Gotovina / Račun", sub: "Po ponudi", color: "from-emerald-500 to-green-500" },
+  { icon: <Building2 className="size-6" />, title: "Bankovna transakcija", sub: "IBAN / Transakcijski račun", color: "bg-blue-500" },
+  { icon: <CreditCard className="size-6" />, title: "Kartice", sub: "Stripe / Revolut Business", color: "bg-indigo-500" },
+  { icon: <Bitcoin className="size-6" />, title: "Kriptovalute", sub: "Po dogovoru", color: "bg-amber-500" },
+  { icon: <Receipt className="size-6" />, title: "Gotovina / Račun", sub: "Po ponudi", color: "bg-emerald-500" },
 ];
 
 const PROJECT_TYPES = [
@@ -141,15 +141,12 @@ export default function Home() {
     { id: "kontakt", label: "Kontakt" },
   ];
 
-  const inputCls =
-    "w-full bg-white/[0.03] border border-white/[0.08] rounded-lg px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20 transition-all";
-
   return (
-    <div className="bg-dark-950">
+    <div>
       <CookieConsent />
 
       {/* ── Nav ── */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-dark-950/80 backdrop-blur-xl border-b border-white/[0.04]">
+      <nav className="fixed top-0 inset-x-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-14">
           <a href="#">
             <Logo className="h-6 w-auto" />
@@ -157,7 +154,7 @@ export default function Home() {
           <ul className="hidden md:flex gap-8">
             {NAV.map((l) => (
               <li key={l.id}>
-                <a href={`#${l.id}`} className="text-[13px] text-white/40 hover:text-white transition-colors">
+                <a href={`#${l.id}`} className="text-[13px] text-white/50 hover:text-white transition-colors font-display tracking-wide">
                   {l.label}
                 </a>
               </li>
@@ -182,11 +179,11 @@ export default function Home() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-white/[0.04] overflow-hidden bg-dark-950/95 backdrop-blur-xl"
+              className="md:hidden border-t border-white/[0.06] overflow-hidden bg-black/90 backdrop-blur-xl"
             >
               <div className="px-6 py-4 flex flex-col gap-1">
                 {NAV.map((l) => (
-                  <a key={l.id} href={`#${l.id}`} className="text-white/50 hover:text-white py-2.5 text-sm" onClick={() => setMobileMenu(false)}>
+                  <a key={l.id} href={`#${l.id}`} className="text-white/50 hover:text-white py-2.5 text-sm font-display" onClick={() => setMobileMenu(false)}>
                     {l.label}
                   </a>
                 ))}
@@ -199,81 +196,63 @@ export default function Home() {
         </AnimatePresence>
       </nav>
 
-      {/* ── Hero ── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* 3D background */}
-        <ThreeScene />
+      {/* ── Hero with scroll-driven video ── */}
+      <section className="relative">
+        <ScrollVideo />
 
-        {/* Gradient orbs */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-violet-600/[0.07] blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-blue-600/[0.05] blur-[100px] pointer-events-none" />
-        <div className="absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full bg-pink-600/[0.04] blur-[80px] pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-screen flex items-center z-10 pointer-events-none">
+          <div className="max-w-6xl mx-auto px-6 w-full">
+            <div className="max-w-2xl pointer-events-auto">
+              <motion.div custom={0} variants={fade} initial="hidden" animate="visible" className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-display tracking-widest uppercase mb-6">
+                <Zap className="size-3" />
+                Web Development Studio
+              </motion.div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-32 w-full">
-          <div className="max-w-2xl">
-            <motion.div custom={0} variants={fade} initial="hidden" animate="visible" className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-medium tracking-wide mb-6">
-              <Zap className="size-3" />
-              Profesionalna izrada web stranica
-            </motion.div>
-
-            <motion.h1 custom={1} variants={fade} initial="hidden" animate="visible" className="text-4xl sm:text-5xl md:text-[3.5rem] font-bold leading-[1.15] mb-6 tracking-tight">
-              Vaš digitalni uspjeh
-              <br />
-              <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                počinje ovdje.
-              </span>
-            </motion.h1>
-
-            <motion.p custom={2} variants={fade} initial="hidden" animate="visible" className="text-white/35 text-lg leading-relaxed mb-10 max-w-lg">
-              Dizajniramo i razvijamo moderne web stranice koje privlače klijente
-              i rastu s vašim poslom.
-            </motion.p>
-
-            <motion.div custom={3} variants={fade} initial="hidden" animate="visible" className="flex gap-3 flex-wrap">
-              <a href="#kontakt">
-                <GradientButton size="lg">
-                  Započni projekt <ArrowRight className="size-4 ml-1" />
-                </GradientButton>
-              </a>
-              <a href="#portfolio">
-                <GradientButton variant="variant" size="lg">Pogledaj radove</GradientButton>
-              </a>
-            </motion.div>
-
-            <motion.div custom={4} variants={fade} initial="hidden" animate="visible" className="flex gap-6 mt-14 flex-wrap">
-              {[
-                { icon: <Zap className="size-3.5" />, text: "Brza izrada", c: "text-amber-400" },
-                { icon: <Shield className="size-3.5" />, text: "100% sigurno", c: "text-emerald-400" },
-                { icon: <Smartphone className="size-3.5" />, text: "Responzivno", c: "text-blue-400" },
-                { icon: <Clock className="size-3.5" />, text: "24/7 podrška", c: "text-violet-400" },
-              ].map((item) => (
-                <span key={item.text} className="flex items-center gap-2 text-white/30 text-sm">
-                  <span className={item.c}>{item.icon}</span>
-                  {item.text}
+              <motion.h1 custom={1} variants={fade} initial="hidden" animate="visible" className="text-4xl sm:text-5xl md:text-[3.8rem] font-extrabold leading-[1.1] mb-6 tracking-tight font-display">
+                Vaš digitalni uspjeh
+                <br />
+                <span className="bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-400 bg-clip-text text-transparent">
+                  počinje ovdje.
                 </span>
-              ))}
-            </motion.div>
+              </motion.h1>
+
+              <motion.p custom={2} variants={fade} initial="hidden" animate="visible" className="text-white/60 text-lg leading-relaxed mb-10 max-w-lg">
+                Dizajniramo i razvijamo moderne web stranice koje privlače klijente
+                i rastu s vašim poslom.
+              </motion.p>
+
+              <motion.div custom={3} variants={fade} initial="hidden" animate="visible" className="flex gap-3 flex-wrap">
+                <a href="#kontakt">
+                  <GradientButton size="lg">
+                    Započni projekt <ArrowRight className="size-4 ml-1" />
+                  </GradientButton>
+                </a>
+                <a href="#portfolio">
+                  <GradientButton variant="variant" size="lg">Pogledaj radove</GradientButton>
+                </a>
+              </motion.div>
+            </div>
           </div>
         </div>
 
         <motion.a href="#o-nama" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/15 hover:text-white/30 transition-colors z-10"
+          className="absolute bottom-[calc(200vh+40px)] left-1/2 -translate-x-1/2 text-white/30 hover:text-white/60 transition-colors z-10"
         >
           <ChevronDown className="size-5" />
         </motion.a>
       </section>
 
-      {/* ── O nama ── */}
-      <section id="o-nama" className="py-28 px-6">
+      {/* ── O nama — cream/beige section ── */}
+      <section id="o-nama" className="py-28 px-6 bg-cream light-section">
         <div className="max-w-6xl mx-auto">
-          <SectionHead
+          <SectionHeadLight
             label="O nama"
-            title={<>Gradimo <span className="bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent">digitalna iskustva</span></>}
+            title={<>Gradimo <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">digitalna iskustva</span></>}
             sub="Kombiniramo vrhunski dizajn i najnovije tehnologije za rezultate koji se vide."
           />
 
-          {/* Skill cards */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-24 max-w-3xl mx-auto">
+          {/* Skill cards — light theme */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-24 max-w-3xl mx-auto">
             {SKILLS.map((s, i) => (
               <motion.div
                 key={s.name}
@@ -288,15 +267,15 @@ export default function Home() {
               >
                 <div className={`relative w-full h-36 transition-transform duration-500 [transform-style:preserve-3d] ${flipped[i] ? "[transform:rotateY(180deg)]" : ""}`}>
                   {/* front */}
-                  <div className="absolute inset-0 bg-dark-800 border border-white/[0.06] rounded-xl p-4 flex flex-col justify-between [backface-visibility:hidden] group-hover:border-white/[0.12] transition-colors">
+                  <div className="absolute inset-0 bg-white border border-black/[0.08] rounded-2xl p-4 flex flex-col justify-between [backface-visibility:hidden] group-hover:shadow-lg group-hover:shadow-black/5 transition-all">
                     <div className="flex items-center gap-2">
-                      <div className={`w-7 h-7 rounded-lg bg-gradient-to-br ${s.color} flex items-center justify-center text-white`}>
+                      <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white shadow-sm`}>
                         {s.icon}
                       </div>
-                      <span className="text-[13px] font-medium text-white/70">{s.name}</span>
+                      <span className="text-[13px] font-semibold text-gray-800 font-display">{s.name}</span>
                     </div>
                     <div>
-                      <div className="w-full h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
+                      <div className="w-full h-2 bg-black/[0.06] rounded-full overflow-hidden">
                         <motion.div
                           className={`h-full rounded-full bg-gradient-to-r ${s.color}`}
                           initial={{ width: 0 }}
@@ -305,14 +284,14 @@ export default function Home() {
                           transition={{ duration: 0.8, delay: i * 0.08 }}
                         />
                       </div>
-                      <span className="text-[11px] text-white/15 mt-1.5 block">Klikni za detalje</span>
+                      <span className="text-[11px] text-gray-400 mt-1.5 block">Klikni za detalje</span>
                     </div>
                   </div>
                   {/* back */}
-                  <div className={`absolute inset-0 rounded-xl p-4 flex items-center justify-center text-center [backface-visibility:hidden] [transform:rotateY(180deg)] bg-gradient-to-br ${s.color}`}>
+                  <div className={`absolute inset-0 rounded-2xl p-4 flex items-center justify-center text-center [backface-visibility:hidden] [transform:rotateY(180deg)] bg-gradient-to-br ${s.color} shadow-lg`}>
                     <div>
-                      <span className="text-3xl font-bold text-white block">{s.pct}%</span>
-                      <span className="text-white/70 text-xs">{s.name}</span>
+                      <span className="text-3xl font-extrabold text-white block font-display">{s.pct}%</span>
+                      <span className="text-white/80 text-xs font-display">{s.name}</span>
                     </div>
                   </div>
                 </div>
@@ -320,21 +299,21 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Process steps */}
+          {/* Process steps — light theme */}
           <div className="max-w-2xl mx-auto">
-            <h3 className="text-sm text-white/25 uppercase tracking-wider text-center mb-12">Proces rada</h3>
+            <h3 className="text-sm text-gray-400 uppercase tracking-[3px] text-center mb-12 font-display">Proces rada</h3>
             <div className="space-y-0">
               {STEPS.map((step, i) => (
                 <motion.div key={step.n} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex gap-6 group">
                   <div className="flex flex-col items-center">
-                    <div className={`w-10 h-10 rounded-full border ${step.border} flex items-center justify-center text-xs ${step.color} font-mono group-hover:bg-white/[0.03] transition-colors flex-shrink-0`}>
+                    <div className={`w-11 h-11 rounded-full ${step.bg} border ${step.border} flex items-center justify-center text-xs ${step.color} font-bold font-display flex-shrink-0`}>
                       {step.n}
                     </div>
-                    {i < STEPS.length - 1 && <div className="w-px h-full bg-gradient-to-b from-white/[0.08] to-transparent min-h-[40px]" />}
+                    {i < STEPS.length - 1 && <div className="w-px h-full bg-gradient-to-b from-black/[0.1] to-transparent min-h-[40px]" />}
                   </div>
                   <div className="pb-10">
-                    <h4 className={`text-[15px] font-semibold ${step.color} mb-1`}>{step.title}</h4>
-                    <p className="text-sm text-white/30 leading-relaxed">{step.desc}</p>
+                    <h4 className={`text-[15px] font-bold ${step.color} mb-1 font-display`}>{step.title}</h4>
+                    <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -343,26 +322,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Usluge ── */}
-      <section id="usluge" className="py-28 px-6 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-violet-600/[0.02] via-transparent to-transparent pointer-events-none" />
+      {/* ── Usluge — white section with blue accents ── */}
+      <section id="usluge" className="py-28 px-6 bg-white light-section relative">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500" />
         <div className="max-w-6xl mx-auto relative">
-          <SectionHead
+          <SectionHeadLight
             label="Ponuda"
-            title={<>Usluge i <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">cijene</span></>}
+            title={<>Usluge i <span className="bg-gradient-to-r from-yellow-500 to-amber-500 bg-clip-text text-transparent">cijene</span></>}
             sub="Transparentne cijene, bez skrivenih troškova."
           />
 
-          <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {/* Standard */}
             <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              className="bg-dark-800 border border-white/[0.06] rounded-2xl p-8 hover:border-violet-500/20 transition-all duration-300 relative overflow-hidden group"
+              className="bg-slate-soft border border-black/[0.06] rounded-2xl p-8 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 relative overflow-hidden group"
             >
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
-              <span className="text-[11px] text-violet-400 uppercase tracking-wider font-medium">Standardni paket</span>
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-400" />
+              <span className="text-[11px] text-blue-600 uppercase tracking-widest font-bold font-display">Standardni paket</span>
               <div className="mt-4 mb-6">
-                <span className="text-4xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">1000€</span>
-                <span className="text-white/20 text-sm ml-1">/ godišnje</span>
+                <span className="text-5xl font-extrabold text-gray-900 font-display">1000€</span>
+                <span className="text-gray-400 text-sm ml-1">/ godišnje</span>
               </div>
               <ul className="space-y-3 mb-8">
                 {[
@@ -375,8 +354,8 @@ export default function Home() {
                   "Google Analytics",
                   "Podrška i održavanje",
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5 text-white/40 text-sm">
-                    <Check className="size-3.5 text-violet-400 flex-shrink-0" />
+                  <li key={item} className="flex items-center gap-2.5 text-gray-600 text-sm">
+                    <Check className="size-4 text-blue-500 flex-shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -390,15 +369,15 @@ export default function Home() {
 
             {/* Custom */}
             <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-              className="bg-dark-800 border border-white/[0.08] rounded-2xl p-8 hover:border-pink-500/20 transition-all duration-300 relative overflow-hidden group"
+              className="bg-gray-900 text-white rounded-2xl p-8 hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300 relative overflow-hidden group"
             >
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-pink-500/50 to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-500" />
               <div className="absolute top-4 right-4">
-                <span className="text-[10px] text-pink-300 uppercase tracking-wider font-medium bg-pink-500/10 px-2.5 py-1 rounded-full border border-pink-500/20">Premium</span>
+                <span className="text-[10px] text-amber-200 uppercase tracking-widest font-bold bg-amber-500/20 px-3 py-1 rounded-full border border-amber-400/30 font-display">Premium</span>
               </div>
-              <span className="text-[11px] text-pink-400 uppercase tracking-wider font-medium">Po dogovoru</span>
+              <span className="text-[11px] text-amber-400 uppercase tracking-widest font-bold font-display">Po dogovoru</span>
               <div className="mt-4 mb-6">
-                <span className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">Custom</span>
+                <span className="text-5xl font-extrabold bg-gradient-to-r from-yellow-300 to-amber-400 bg-clip-text text-transparent font-display">Custom</span>
               </div>
               <ul className="space-y-3 mb-8">
                 {[
@@ -411,8 +390,8 @@ export default function Home() {
                   "Napredna analitika",
                   "Prioritetna podrška",
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5 text-white/40 text-sm">
-                    <Check className="size-3.5 text-pink-400 flex-shrink-0" />
+                  <li key={item} className="flex items-center gap-2.5 text-white/60 text-sm">
+                    <Check className="size-4 text-amber-400 flex-shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -426,40 +405,40 @@ export default function Home() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-16 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-3xl mx-auto">
             {[
-              { n: "50+", l: "Projekata", c: "text-violet-400" },
-              { n: "100%", l: "Zadovoljstvo", c: "text-emerald-400" },
-              { n: "24/7", l: "Podrška", c: "text-blue-400" },
-              { n: "30+", l: "Klijenata", c: "text-pink-400" },
+              { n: "50+", l: "Projekata", c: "text-blue-600", bg: "bg-blue-50" },
+              { n: "100%", l: "Zadovoljstvo", c: "text-emerald-600", bg: "bg-emerald-50" },
+              { n: "24/7", l: "Podrška", c: "text-amber-600", bg: "bg-amber-50" },
+              { n: "30+", l: "Klijenata", c: "text-rose-600", bg: "bg-rose-50" },
             ].map((s, i) => (
               <motion.div key={s.l} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="text-center py-6 bg-dark-800/50 rounded-xl border border-white/[0.04] hover:border-white/[0.08] transition-colors"
+                className={`text-center py-6 ${s.bg} rounded-2xl border border-black/[0.04] hover:shadow-md transition-all`}
               >
-                <span className={`text-2xl font-bold ${s.c} block`}>{s.n}</span>
-                <span className="text-white/20 text-xs">{s.l}</span>
+                <span className={`text-3xl font-extrabold ${s.c} block font-display`}>{s.n}</span>
+                <span className="text-gray-400 text-xs font-display">{s.l}</span>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Portfolio ── */}
-      <section id="portfolio" className="py-28 px-6">
+      {/* ── Portfolio — dark section ── */}
+      <section id="portfolio" className="py-28 px-6 bg-dark-950">
         <div className="max-w-6xl mx-auto">
           <SectionHead
             label="Radovi"
-            title={<><span className="bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-transparent">Portfolio</span></>}
+            title={<><span className="bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-400 bg-clip-text text-transparent">Portfolio</span></>}
             sub="Pogledajte projekte koje smo ostvarili za naše klijente."
           />
 
           <div className="flex gap-2 mb-10 justify-center flex-wrap">
             {CATS.map((c) => (
               <button key={c} onClick={() => setActiveCat(c)}
-                className={`px-3.5 py-1.5 rounded-lg text-[13px] transition-all cursor-pointer ${
+                className={`px-4 py-2 rounded-full text-[13px] transition-all cursor-pointer font-display tracking-wide ${
                   activeCat === c
-                    ? "bg-violet-500/15 text-violet-300 border border-violet-500/30"
-                    : "text-white/25 hover:text-white/40 border border-transparent"
+                    ? "bg-white text-black font-semibold"
+                    : "text-white/30 hover:text-white/50 border border-white/[0.08]"
                 }`}
               >
                 {c === "sve" ? "Sve" : c === "web-shop" ? "Web Shop" : c.charAt(0).toUpperCase() + c.slice(1)}
@@ -467,31 +446,31 @@ export default function Home() {
             ))}
           </div>
 
-          <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+          <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
             <AnimatePresence mode="popLayout">
               {filtered.map((p, i) => (
                 <motion.div key={p.title} layout custom={i} variants={fade} initial="hidden" animate="visible"
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="group bg-dark-800 border border-white/[0.06] rounded-2xl overflow-hidden hover:border-white/[0.12] transition-all duration-300 cursor-pointer"
+                  className="group bg-dark-800 border border-white/[0.06] rounded-2xl overflow-hidden hover:border-white/[0.15] transition-all duration-300 cursor-pointer hover:shadow-lg hover:shadow-white/[0.02]"
                 >
-                  <div className={`h-44 bg-gradient-to-br ${p.gradient} relative overflow-hidden`}>
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_60%)]" />
+                  <div className={`h-48 bg-gradient-to-br ${p.gradient} relative overflow-hidden`}>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_60%)]" />
                     <div className="absolute bottom-3 left-3 flex gap-1">
                       {[...Array(3)].map((_, j) => (
-                        <div key={j} className="w-2 h-2 rounded-full bg-white/20" />
+                        <div key={j} className="w-2 h-2 rounded-full bg-white/25" />
                       ))}
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/30 backdrop-blur-sm">
-                      <span className="flex items-center gap-1.5 text-white text-sm font-medium bg-white/10 px-4 py-2 rounded-lg border border-white/20">
+                      <span className="flex items-center gap-1.5 text-white text-sm font-semibold bg-white/15 px-5 py-2.5 rounded-full border border-white/25 font-display">
                         <ExternalLink className="size-3.5" /> Pogledaj
                       </span>
                     </div>
                   </div>
                   <div className="p-5">
-                    <h3 className="text-sm font-semibold text-white/80 mb-3">{p.title}</h3>
+                    <h3 className="text-sm font-bold text-white/90 mb-3 font-display">{p.title}</h3>
                     <div className="flex gap-1.5 flex-wrap">
                       {p.tags.map((t) => (
-                        <span key={t} className="text-[11px] px-2 py-0.5 rounded-md bg-white/[0.04] text-white/30 border border-white/[0.06]">
+                        <span key={t} className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.06] text-white/40 border border-white/[0.08]">
                           {t}
                         </span>
                       ))}
@@ -504,37 +483,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Plaćanje ── */}
-      <section id="placanje" className="py-28 px-6 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-600/[0.02] via-transparent to-transparent pointer-events-none" />
+      {/* ── Plaćanje — warm/yellow tinted section ── */}
+      <section id="placanje" className="py-28 px-6 bg-warm light-section relative">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400" />
         <div className="max-w-6xl mx-auto relative">
-          <SectionHead
+          <SectionHeadLight
             label="Plaćanje"
-            title={<>Načini <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">plaćanja</span></>}
+            title={<>Načini <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">plaćanja</span></>}
             sub="Prihvaćamo više načina plaćanja za vašu udobnost."
           />
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-8">
             {PAYMENTS.map((m, i) => (
               <motion.div key={m.title} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="bg-dark-800 border border-white/[0.06] rounded-xl p-5 text-center hover:border-white/[0.12] transition-all duration-300 group"
+                className="bg-white border border-black/[0.06] rounded-2xl p-5 text-center hover:shadow-lg hover:shadow-black/5 transition-all duration-300 group"
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${m.color} flex items-center justify-center text-white mx-auto mb-3 group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`w-12 h-12 rounded-2xl ${m.color} flex items-center justify-center text-white mx-auto mb-3 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
                   {m.icon}
                 </div>
-                <h3 className="text-sm font-medium text-white/70 mb-0.5">{m.title}</h3>
-                <p className="text-[11px] text-white/20">{m.sub}</p>
+                <h3 className="text-sm font-bold text-gray-800 mb-0.5 font-display">{m.title}</h3>
+                <p className="text-[11px] text-gray-400">{m.sub}</p>
               </motion.div>
             ))}
           </div>
 
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            className="max-w-2xl mx-auto bg-dark-800/50 border border-amber-500/10 rounded-xl p-4 flex items-start gap-3"
+            className="max-w-2xl mx-auto bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3"
           >
-            <Lock className="size-4 text-amber-400 flex-shrink-0 mt-0.5" />
+            <Lock className="size-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-xs text-amber-200/60 leading-relaxed">
-                <strong className="text-amber-300/80">Napomena o sigurnosti:</strong> Plaćanje se ugovara nakon konzultacije.
+              <p className="text-sm text-amber-800 leading-relaxed">
+                <strong className="text-amber-900 font-display">Napomena o sigurnosti:</strong> Plaćanje se ugovara nakon konzultacije.
                 Nikada ne isporučujemo usluge bez potvrđene uplate na račun.
                 Koristimo Stripe za sigurnu obradu kartica.
               </p>
@@ -543,12 +522,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Kontakt ── */}
-      <section id="kontakt" className="py-28 px-6">
+      {/* ── Kontakt — dark section ── */}
+      <section id="kontakt" className="py-28 px-6 bg-dark-950">
         <div className="max-w-6xl mx-auto">
           <SectionHead
             label="Kontakt"
-            title={<>Započnite svoj <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">projekt</span></>}
+            title={<>Započnite svoj <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">projekt</span></>}
             sub="Ispunite formu i javit ćemo vam se u roku 24h."
           />
 
@@ -558,32 +537,32 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="max-w-xl mx-auto bg-dark-800 border border-white/[0.06] rounded-2xl p-8 space-y-5 relative overflow-hidden"
+            className="max-w-xl mx-auto bg-dark-800 border border-white/[0.08] rounded-2xl p-8 space-y-5 relative overflow-hidden"
           >
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500" />
 
             {/* Honeypot */}
             <input type="text" name="website" className="absolute -left-[9999px]" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-white/30 text-xs mb-1.5">Ime i prezime *</label>
-                <input name="name" type="text" required minLength={2} maxLength={100} className={inputCls} placeholder="Vaše ime" />
+                <label className="block text-white/40 text-xs mb-1.5 font-display">Ime i prezime *</label>
+                <input name="name" type="text" required minLength={2} maxLength={100} className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all" placeholder="Vaše ime" />
               </div>
               <div>
-                <label className="block text-white/30 text-xs mb-1.5">Email *</label>
-                <input name="email" type="email" required maxLength={254} className={inputCls} placeholder="vas@email.com" />
+                <label className="block text-white/40 text-xs mb-1.5 font-display">Email *</label>
+                <input name="email" type="email" required maxLength={254} className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all" placeholder="vas@email.com" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-white/30 text-xs mb-1.5">Telefon</label>
-                <input name="phone" type="tel" className={inputCls} placeholder="+385 ..." />
+                <label className="block text-white/40 text-xs mb-1.5 font-display">Telefon</label>
+                <input name="phone" type="tel" className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all" placeholder="+385 ..." />
               </div>
               <div>
-                <label className="block text-white/30 text-xs mb-1.5">Tip projekta</label>
-                <select name="projectType" className={`${inputCls} appearance-none cursor-pointer`}>
+                <label className="block text-white/40 text-xs mb-1.5 font-display">Tip projekta</label>
+                <select name="projectType" className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all appearance-none cursor-pointer">
                   <option value="" className="bg-dark-800">Odaberite...</option>
                   {PROJECT_TYPES.map((t) => (<option key={t} value={t} className="bg-dark-800">{t}</option>))}
                 </select>
@@ -591,16 +570,16 @@ export default function Home() {
             </div>
 
             <div>
-              <label className="block text-white/30 text-xs mb-1.5">Budžet</label>
-              <select name="budget" className={`${inputCls} appearance-none cursor-pointer`}>
+              <label className="block text-white/40 text-xs mb-1.5 font-display">Budžet</label>
+              <select name="budget" className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all appearance-none cursor-pointer">
                 <option value="" className="bg-dark-800">Odaberite raspon...</option>
                 {BUDGETS.map((b) => (<option key={b} value={b} className="bg-dark-800">{b}</option>))}
               </select>
             </div>
 
             <div>
-              <label className="block text-white/30 text-xs mb-1.5">Poruka *</label>
-              <textarea name="message" required minLength={10} rows={4} className={`${inputCls} resize-none`} placeholder="Opišite svoj projekt..." />
+              <label className="block text-white/40 text-xs mb-1.5 font-display">Poruka *</label>
+              <textarea name="message" required minLength={10} rows={4} className="w-full bg-white/[0.04] border border-white/[0.1] rounded-xl px-4 py-3 text-sm text-white placeholder-white/25 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/25 transition-all resize-none" placeholder="Opišite svoj projekt..." />
             </div>
 
             <GradientButton type="submit" disabled={formStatus === "sending"} className="w-full disabled:opacity-40" size="lg">
@@ -613,24 +592,24 @@ export default function Home() {
               )}
             </GradientButton>
 
-            {formStatus === "error" && <p className="text-red-400/80 text-sm text-center">{errorMsg}</p>}
-            {formStatus === "sent" && <p className="text-emerald-400/60 text-sm text-center">Hvala! Javit ćemo vam se u roku 24h.</p>}
+            {formStatus === "error" && <p className="text-red-400 text-sm text-center">{errorMsg}</p>}
+            {formStatus === "sent" && <p className="text-emerald-400 text-sm text-center">Hvala! Javit ćemo vam se u roku 24h.</p>}
           </motion.form>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-white/[0.04] py-10 px-6">
+      <footer className="border-t border-white/[0.06] py-10 px-6 bg-dark-950">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <Logo className="h-5 w-auto opacity-30" />
+          <Logo className="h-5 w-auto opacity-40" />
           <div className="flex gap-6">
             {NAV.map((l) => (
-              <a key={l.id} href={`#${l.id}`} className="text-white/15 hover:text-white/30 text-xs transition-colors">
+              <a key={l.id} href={`#${l.id}`} className="text-white/20 hover:text-white/40 text-xs transition-colors font-display">
                 {l.label}
               </a>
             ))}
           </div>
-          <p className="text-white/10 text-xs">&copy; {new Date().getFullYear()} weblirev.com</p>
+          <p className="text-white/15 text-xs">&copy; {new Date().getFullYear()} weblirev.com</p>
         </div>
       </footer>
     </div>
@@ -642,9 +621,19 @@ export default function Home() {
 function SectionHead({ label, title, sub }: { label: string; title: React.ReactNode; sub: string }) {
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
-      <span className="text-[11px] text-white/20 uppercase tracking-[3px] block mb-3">{label}</span>
-      <h2 className="text-2xl md:text-4xl font-bold mb-3 tracking-tight">{title}</h2>
-      <p className="text-white/25 max-w-lg mx-auto text-[15px]">{sub}</p>
+      <span className="text-[11px] text-white/25 uppercase tracking-[4px] block mb-3 font-display">{label}</span>
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-3 tracking-tight font-display">{title}</h2>
+      <p className="text-white/30 max-w-lg mx-auto text-[15px]">{sub}</p>
+    </motion.div>
+  );
+}
+
+function SectionHeadLight({ label, title, sub }: { label: string; title: React.ReactNode; sub: string }) {
+  return (
+    <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
+      <span className="text-[11px] text-gray-400 uppercase tracking-[4px] block mb-3 font-display">{label}</span>
+      <h2 className="text-3xl md:text-4xl font-extrabold mb-3 tracking-tight text-gray-900 font-display">{title}</h2>
+      <p className="text-gray-500 max-w-lg mx-auto text-[15px]">{sub}</p>
     </motion.div>
   );
 }

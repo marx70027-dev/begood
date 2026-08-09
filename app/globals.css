@@ -7,7 +7,12 @@
   --color-dark-700: #1a1a1a;
   --color-dark-600: #222222;
   --color-dark-500: #333333;
+  --color-cream: #F5F0E8;
+  --color-cream-dark: #E8E0D4;
+  --color-warm: #FAF7F2;
+  --color-slate-soft: #EEF2F7;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -23,7 +28,7 @@
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.25);
+  background: rgba(59, 130, 246, 0.25);
 }
 
 input:-webkit-autofill,
@@ -35,20 +40,25 @@ textarea:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Gradient button animation */
+.light-section input:-webkit-autofill,
+.light-section input:-webkit-autofill:hover,
+.light-section input:-webkit-autofill:focus,
+.light-section textarea:-webkit-autofill {
+  -webkit-text-fill-color: #111;
+  -webkit-box-shadow: 0 0 0 1000px #F5F0E8 inset;
+}
+
 @keyframes gradient-spin {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* Glow pulse */
 @keyframes glow-pulse {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
 
-/* Float */
 @keyframes float-gentle {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
