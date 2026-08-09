@@ -1,306 +1,1027 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Phone, MapPin, Clock, CheckCircle, Hammer, Paintbrush, Grid3x3 } from "lucide-react";
-import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Code2,
+  Palette,
+  Rocket,
+  Globe,
+  Shield,
+  Smartphone,
+  ArrowRight,
+  Check,
+  Star,
+  Send,
+  Menu,
+  X,
+  ChevronDown,
+  CreditCard,
+  Building2,
+  Bitcoin,
+  Receipt,
+  Sparkles,
+  Zap,
+  Clock,
+  Users,
+  ExternalLink,
+  MousePointer,
+} from "lucide-react";
+import { useState, useRef, type FormEvent } from "react";
 import HeroAnimation from "@/components/ui/hero-animation";
-import DisplayCards from "@/components/ui/display-cards";
 import { Button } from "@/components/ui/neon-button";
-import Image from "next/image";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.7, delay: i * 0.15, ease: "easeOut" as const },
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: "easeOut" as const },
   }),
 };
 
-const GALLERY = [
-  { src: "/galerija/91168180-9de4-4005-8dda-1377ec6b17d6.jpeg", label: "Moleraj", tall: true },
-  { src: "/galerija/e8501d74-b603-431e-800d-c39b99016f4f.jpeg", label: "Moleraj", wide: true },
-  { src: "/galerija/9d48078a-c9d0-4932-8daf-322a5b61ed19.jpeg", label: "Moleraj" },
-  { src: "/galerija/1d658dbe-9cdc-4369-81ce-4a240c5a9646.jpeg", label: "Keramika" },
-  { src: "/galerija/ccdce442-3f18-4c50-9852-cb475eb5bdc2.jpeg", label: "Moleraj" },
-  { src: "/galerija/c1cdb7a1-dd85-4c03-a8f0-3ec0f8a13131.jpeg", label: "Keramika" },
-  { src: "/galerija/c1cdb7a1-dd85-4c03-a8f0-3ec0f8a13131_1.jpeg", label: "Keramika" },
-  { src: "/galerija/ccdce442-3f18-4c50-9852-cb475eb5bdc2_1.jpeg", label: "Moleraj" },
-  { src: "/galerija/e8501d74-b603-431e-800d-c39b99016f4f_1.jpeg", label: "Moleraj" },
-];
-
-const SERVICES_CARDS = [
-  {
-    icon: <Hammer className="size-4 text-yellow-300" />,
-    title: "Fasade",
-    description: "Toplinska izolacija, žbuke",
-    date: "ETICS · Silikonske · Akrilne",
-    titleClassName: "text-yellow-400",
-    className: "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-full before:rounded-xl before:h-full before:content-[''] before:bg-[#0a1628]/70 hover:before:opacity-0 before:transition-opacity before:duration-700 before:left-0 before:top-0",
-  },
-  {
-    icon: <Paintbrush className="size-4 text-yellow-300" />,
-    title: "Moleraj",
-    description: "Gletanje, bojanje zidova",
-    date: "Unutarnji · Vanjski · Dekorativni",
-    titleClassName: "text-yellow-400",
-    className: "[grid-area:stack] translate-x-16 translate-y-10 hover:-translate-y-1 before:absolute before:w-full before:rounded-xl before:h-full before:content-[''] before:bg-[#0a1628]/70 hover:before:opacity-0 before:transition-opacity before:duration-700 before:left-0 before:top-0",
-  },
-  {
-    icon: <Grid3x3 className="size-4 text-yellow-300" />,
-    title: "Keramika",
-    description: "Pločice, mozaik, kamen",
-    date: "Kupaonice · Podovi · Terase",
-    titleClassName: "text-yellow-400",
-    className: "[grid-area:stack] translate-x-32 translate-y-20 hover:translate-y-10",
-  },
-];
-
-type PriceRow = { name: string; desc: string; price: string; hot?: boolean; isNew?: boolean };
-
-const PRICE_DATA: Record<PriceTab, PriceRow[]> = {
-  fasade: [
-    { name: "Topla fasada (EPS)", desc: "Ljepljenje, armirani sloj, završna žbuka", price: "od 35 €/m²", hot: true },
-    { name: "Silikonska završna žbuka", desc: "Na pripremljenu podlogu", price: "od 12 €/m²" },
-    { name: "Akrilna žbuka", desc: "Glatka ili struktura po izboru", price: "od 10 €/m²" },
-    { name: "Kamena vuna + fasada", desc: "Vatrostalni sustav", price: "od 45 €/m²" },
-    { name: "Sanacija fasade", desc: "Krpanje, premaz, bojanje", price: "od 15 €/m²" },
-    { name: "Mozaik fasada", desc: "Razne granulacije i boje", price: "od 18 €/m²" },
-  ],
-  moleraj: [
-    { name: "Gletanje (2 sloja)", desc: "Dvostruko + brušenje", price: "od 7 €/m²", hot: true },
-    { name: "Bojanje zidova (2 sloja)", desc: "Disperzivna boja po izboru", price: "od 4 €/m²" },
-    { name: "Kompletni moleraj sobe", desc: "Priprema + gletanje + bojanje", price: "od 10 €/m²" },
-    { name: "Dekorativna žbuka", desc: "Beton look, mramor, venecijanski efekti", price: "od 18 €/m²", isNew: true },
-    { name: "Tapete", desc: "Sve vrste, priprema + postava", price: "od 8 €/m²" },
-    { name: "Ličenje drva i metala", desc: "Prozori, vrata, ograde", price: "po dogovoru" },
-  ],
-  keramika: [
-    { name: "Podne pločice", desc: "Standardne i large-format", price: "od 12 €/m²", hot: true },
-    { name: "Zidne pločice", desc: "Kupaonice, kuhinje, predprostori", price: "od 14 €/m²" },
-    { name: "Kupaonica komplet", desc: "Pod + zidovi + fugiranje", price: "od 25 €/m²" },
-    { name: "Terasa / vanjski prostori", desc: "Vodonepropusna postava", price: "od 18 €/m²" },
-    { name: "Prirodni kamen", desc: "Mramor, granit, travertin", price: "od 25 €/m²" },
-    { name: "Fugiranje", desc: "Klasično ili epoksidno", price: "od 3 €/m²" },
-  ],
+const stagger = {
+  visible: { transition: { staggerChildren: 0.1 } },
 };
 
-type PriceTab = "fasade" | "moleraj" | "keramika";
+// ─── DATA ──────────────────────────────────────────────────────
+
+const SKILLS = [
+  { name: "React / Next.js", level: 95, icon: <Code2 className="size-4" /> },
+  { name: "UI/UX Dizajn", level: 90, icon: <Palette className="size-4" /> },
+  { name: "Performance", level: 92, icon: <Rocket className="size-4" /> },
+  { name: "SEO", level: 88, icon: <Globe className="size-4" /> },
+  { name: "Sigurnost", level: 85, icon: <Shield className="size-4" /> },
+  {
+    name: "Responzivnost",
+    level: 95,
+    icon: <Smartphone className="size-4" />,
+  },
+];
+
+const TIMELINE = [
+  {
+    year: "Korak 1",
+    title: "Konzultacija",
+    desc: "Besplatni poziv ili meeting — upoznajemo vaše potrebe, ciljeve i viziju.",
+  },
+  {
+    year: "Korak 2",
+    title: "Dizajn i prototip",
+    desc: "Kreiramo wireframe i vizualni dizajn prilagođen vašem brendu.",
+  },
+  {
+    year: "Korak 3",
+    title: "Razvoj",
+    desc: "Kodiramo stranicu s najnovijim tehnologijama — brzo, sigurno, responzivno.",
+  },
+  {
+    year: "Korak 4",
+    title: "Lansiranje",
+    desc: "Postavljamo sve na server, konfiguriramo domenu i idemo live!",
+  },
+];
+
+const PORTFOLIO = [
+  {
+    title: "E-commerce platforma",
+    category: "web-shop",
+    image:
+      "linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%)",
+    tags: ["Next.js", "Stripe", "Tailwind"],
+  },
+  {
+    title: "Korporativna stranica",
+    category: "korporativno",
+    image:
+      "linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #ec4899 100%)",
+    tags: ["React", "CMS", "SEO"],
+  },
+  {
+    title: "SaaS dashboard",
+    category: "aplikacija",
+    image:
+      "linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #3b82f6 100%)",
+    tags: ["TypeScript", "Charts", "API"],
+  },
+  {
+    title: "Portfolio fotografa",
+    category: "portfolio",
+    image:
+      "linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #f43f5e 100%)",
+    tags: ["Galerija", "Animacije", "Lightbox"],
+  },
+  {
+    title: "Restaurant web",
+    category: "ugostiteljstvo",
+    image:
+      "linear-gradient(135deg, #f97316 0%, #eab308 50%, #84cc16 100%)",
+    tags: ["Rezervacije", "Meni", "Mapa"],
+  },
+  {
+    title: "Fitness aplikacija",
+    category: "aplikacija",
+    image:
+      "linear-gradient(135deg, #06b6d4 0%, #10b981 50%, #34d399 100%)",
+    tags: ["PWA", "Dashboard", "Tracking"],
+  },
+];
+
+const CATEGORIES = [
+  "sve",
+  "web-shop",
+  "korporativno",
+  "aplikacija",
+  "portfolio",
+  "ugostiteljstvo",
+];
+
+const PAYMENT_METHODS = [
+  {
+    icon: <Building2 className="size-8" />,
+    title: "Bankovna transakcija",
+    desc: "IBAN / Transakcijski račun",
+    color: "from-blue-500 to-blue-600",
+  },
+  {
+    icon: <CreditCard className="size-8" />,
+    title: "Kartice",
+    desc: "Stripe / Revolut Business",
+    color: "from-cyan-500 to-cyan-600",
+  },
+  {
+    icon: <Bitcoin className="size-8" />,
+    title: "Kriptovalute",
+    desc: "Po dogovoru",
+    color: "from-amber-500 to-orange-500",
+  },
+  {
+    icon: <Receipt className="size-8" />,
+    title: "Gotovina / Račun",
+    desc: "Po ponudi",
+    color: "from-emerald-500 to-green-500",
+  },
+];
+
+const PROJECT_TYPES = [
+  "Landing page",
+  "Korporativna stranica",
+  "Web shop",
+  "Web aplikacija",
+  "Portfolio",
+  "Blog / CMS",
+  "Redizajn postojeće",
+  "Drugo",
+];
+
+const BUDGETS = [
+  "Do 500€",
+  "500€ – 1000€",
+  "1000€ – 2000€",
+  "2000€+",
+  "Po dogovoru",
+];
+
+// ─── COMPONENT ─────────────────────────────────────────────────
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<PriceTab>("fasade");
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("sve");
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+  const [formStatus, setFormStatus] = useState<
+    "idle" | "sending" | "sent" | "error"
+  >("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const filteredPortfolio =
+    activeCategory === "sve"
+      ? PORTFOLIO
+      : PORTFOLIO.filter((p) => p.category === activeCategory);
+
+  function toggleFlip(i: number) {
+    setFlippedCards((prev) => ({ ...prev, [i]: !prev[i] }));
+  }
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormStatus("sending");
+    setErrorMsg("");
+
+    const fd = new FormData(e.currentTarget);
+    const data = {
+      name: fd.get("name"),
+      email: fd.get("email"),
+      phone: fd.get("phone"),
+      message: fd.get("message"),
+      projectType: fd.get("projectType"),
+      budget: fd.get("budget"),
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error || "Greška pri slanju.");
+      }
+
+      setFormStatus("sent");
+      formRef.current?.reset();
+      setTimeout(() => setFormStatus("idle"), 5000);
+    } catch (err) {
+      setFormStatus("error");
+      setErrorMsg(
+        err instanceof Error ? err.message : "Greška pri slanju."
+      );
+      setTimeout(() => setFormStatus("idle"), 4000);
+    }
+  }
+
+  const NAV_LINKS = [
+    { id: "o-nama", label: "O nama" },
+    { id: "usluge", label: "Usluge" },
+    { id: "portfolio", label: "Portfolio" },
+    { id: "placanje", label: "Plaćanje" },
+    { id: "kontakt", label: "Kontakt" },
+  ];
 
   return (
-    <div className="bg-white overflow-x-hidden">
+    <div className="bg-navy-950 overflow-x-hidden">
+      {/* ─── NAVBAR ─────────────────────────────────── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+          <a href="#" className="text-xl font-bold tracking-tight">
+            <span className="text-gradient">webli</span>
+            <span className="text-white">rev</span>
+          </a>
 
-      {/* NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a1628]/97 backdrop-blur-md border-b-2 border-yellow-400 flex items-center justify-between px-[6%] h-[68px]">
-        <a href="#" className="text-2xl font-black text-white tracking-tight">
-          Be<span className="text-yellow-400">Good</span>
-        </a>
-        <ul className="hidden md:flex gap-8 list-none">
-          {(["sto-radimo", "galerija", "cjenik", "kontakt"] as const).map((id) => (
-            <li key={id}>
-              <a href={`#${id}`} className="text-white/80 hover:text-yellow-400 text-sm font-semibold uppercase tracking-wide transition-colors">
-                {id === "sto-radimo" ? "Što radimo" : id.charAt(0).toUpperCase() + id.slice(1)}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <a href="tel:0992263774" className="bg-yellow-400 text-[#0a1628] px-4 py-2 rounded-lg font-black text-sm hover:bg-yellow-300 transition-colors whitespace-nowrap">
-          📞 099 2263774
-        </a>
-      </nav>
+          <ul className="hidden md:flex gap-8 list-none">
+            {NAV_LINKS.map((link) => (
+              <li key={link.id}>
+                <a
+                  href={`#${link.id}`}
+                  className="text-white/60 hover:text-cyan-400 text-sm font-medium transition-colors duration-200"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-      {/* HERO */}
-      <section className="relative w-full h-screen min-h-[500px] flex items-center overflow-hidden bg-[#0a1628]">
-        <HeroAnimation />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/55 to-[#0a1628]/10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/60 via-transparent to-transparent" />
-
-        <motion.div initial={{ opacity: 0, scale: 1.5 }} animate={{ opacity: 0.12, scale: 1 }} transition={{ duration: 2, delay: 0.5 }}
-          className="absolute right-[5%] top-[20%] w-[500px] h-[120px] rounded-full bg-yellow-400 blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 px-[6%] md:px-[8%] max-w-2xl">
-          <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible">
-            <span className="inline-block bg-yellow-400 text-[#0a1628] text-xs font-black tracking-[2px] uppercase px-3 py-1.5 rounded mb-5">
-              Zagreb &amp; okolica
-            </span>
-          </motion.div>
-          <motion.h1 custom={1} variants={fadeUp} initial="hidden" animate="visible"
-            className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-[1.05] mb-5 drop-shadow-2xl">
-            Fasade, moleraj<br />i <span className="text-yellow-400">keramika</span>
-          </motion.h1>
-          <motion.p custom={2} variants={fadeUp} initial="hidden" animate="visible"
-            className="text-white/80 text-lg leading-relaxed mb-8 max-w-lg">
-            Kvalitetna izvedba, pouzdani majstori i besprijekoran završni izgled.
-            Procjena je <strong className="text-yellow-400">besplatna</strong>.
-          </motion.p>
-          <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible" className="flex gap-3 flex-wrap">
-            <a href="#kontakt">
-              <Button variant="solid" size="lg" className="text-base font-black px-8 py-3 rounded-xl">Zatražite ponudu</Button>
+          <div className="flex items-center gap-3">
+            <a href="#kontakt" className="hidden md:block">
+              <Button size="sm">Započnite projekt</Button>
             </a>
-            <a href="#galerija">
-              <Button variant="ghost" size="lg" className="text-white border-white/40 text-base px-8 py-3 rounded-xl">Pogledaj radove</Button>
-            </a>
-          </motion.div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 bg-[#0a1628]/80 backdrop-blur-sm border-t border-yellow-400/20 flex justify-center items-center gap-8 py-3 px-[6%] flex-wrap z-10">
-          {["🏅 Vrhunska kvaliteta", "🔧 Stručna izvedba", "✨ Moderan dizajn", "📅 Brzi rokovi"].map((b) => (
-            <span key={b} className="text-white text-sm font-semibold">{b}</span>
-          ))}
-        </div>
-      </section>
-
-      {/* ŠTO RADIMO */}
-      <section id="sto-radimo" className="bg-[#f4f6fa] py-24 px-[6%]">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-16">
-          <span className="text-yellow-500 text-xs font-black tracking-[3px] uppercase block mb-2">Naše usluge</span>
-          <h2 className="text-4xl md:text-5xl font-black text-[#0a1628]">Što radimo</h2>
-          <p className="text-gray-500 mt-4 max-w-xl mx-auto text-lg">Specijalizirani smo za tri ključna područja — od temelja do savršenog završnog izgleda.</p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-24">
-          {[
-            { icon: <Hammer className="size-7" />, title: "Fasade", items: ["Toplinska izolacija — ETICS", "Silikonske i akrilne žbuke", "Dekorativne fasade", "Obnova starih fasada", "Mozaik i kamene fasade"] },
-            { icon: <Paintbrush className="size-7" />, title: "Moleraj", items: ["Gletanje i izravnanje zidova", "Bojanje zidova i stropova", "Dekorativne žbuke i efekti", "Postavljanje tapeta", "Ličenje drva i metala"] },
-            { icon: <Grid3x3 className="size-7" />, title: "Keramika", items: ["Podne i zidne pločice", "Kupaonice i kuhinje", "Terasa i vanjski prostori", "Prirodni kamen", "Fugiranje i brtvljenje"] },
-          ].map((s, i) => (
-            <motion.div key={s.title} custom={i} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="bg-white rounded-2xl overflow-hidden shadow-md hover:-translate-y-2 hover:shadow-xl transition-all duration-300">
-              <div className="h-1.5 bg-gradient-to-r from-[#1a3a6e] to-yellow-400" />
-              <div className="p-8">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0a1628] to-[#1a3a6e] flex items-center justify-center text-yellow-400 mb-5">{s.icon}</div>
-                <h3 className="text-2xl font-black text-[#0a1628] mb-3">{s.title}</h3>
-                <ul className="space-y-2">
-                  {s.items.map((item) => (
-                    <li key={item} className="flex items-center gap-2 text-gray-600 text-sm">
-                      <CheckCircle className="size-4 text-yellow-500 flex-shrink-0" />{item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Display Cards */}
-        <div className="bg-[#0a1628] rounded-3xl py-16 px-6 max-w-6xl mx-auto flex flex-col items-center">
-          <span className="text-yellow-400 text-xs font-black tracking-[3px] uppercase mb-10">Naše specijalizacije</span>
-          <DisplayCards cards={SERVICES_CARDS} />
-        </div>
-      </section>
-
-      {/* GALERIJA */}
-      <section id="galerija" className="bg-[#0a1628] py-24 px-[6%]">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="text-center mb-12">
-          <span className="text-yellow-400 text-xs font-black tracking-[3px] uppercase block mb-2">Naši radovi</span>
-          <h2 className="text-4xl md:text-5xl font-black text-white">Galerija</h2>
-          <p className="text-white/50 mt-4 text-lg">Primjeri završenih projekata — moleraj, keramika i fasade</p>
-        </motion.div>
-        <div className="columns-2 md:columns-3 gap-3 max-w-6xl mx-auto space-y-3">
-          {GALLERY.map((img, i) => (
-            <motion.div key={img.src} custom={i} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="relative overflow-hidden rounded-xl cursor-pointer group break-inside-avoid"
-              onClick={() => setLightbox(img.src)}>
-              <Image src={img.src} alt={img.label} width={600} height={img.tall ? 800 : 400}
-                className="w-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl" />
-              <div className="absolute inset-0 bg-[#0a1628]/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3 rounded-xl">
-                <span className="bg-yellow-400 text-[#0a1628] text-xs font-black uppercase px-2 py-1 rounded">{img.label}</span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* CJENIK */}
-      <section id="cjenik" className="bg-[#f4f6fa] py-24 px-[6%]">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="mb-10">
-          <span className="text-yellow-500 text-xs font-black tracking-[3px] uppercase block mb-2">Transparentne cijene</span>
-          <h2 className="text-4xl md:text-5xl font-black text-[#0a1628]">Cjenik usluga</h2>
-          <p className="text-gray-500 mt-3 text-lg max-w-xl">Okvirne cijene bez PDV-a. Procjena je <strong>besplatna</strong> — dolazimo na mjerenje.</p>
-        </motion.div>
-        <div className="bg-yellow-400/15 border border-yellow-400 rounded-xl p-4 mb-6 text-sm text-gray-700">
-          ℹ️ Pozovite <strong>099 2263774</strong> za točnu ponudu — dolazimo na besplatni pregled.
-        </div>
-        <div className="flex gap-2 mb-6 flex-wrap">
-          {(["fasade", "moleraj", "keramika"] as PriceTab[]).map((tab) => (
-            <button key={tab} onClick={() => setActiveTab(tab)}
-              className={`px-5 py-2 rounded-lg border-2 font-bold text-sm transition-all cursor-pointer ${activeTab === tab ? "bg-[#0a1628] text-white border-[#0a1628]" : "border-[#1a3a6e] text-[#1a3a6e] hover:bg-[#0a1628] hover:text-white hover:border-[#0a1628]"}`}>
-              {tab === "fasade" ? "🏗️ Fasade" : tab === "moleraj" ? "🖌️ Moleraj" : "🪵 Keramika"}
+            <button
+              className="md:hidden text-white/70 hover:text-white p-2"
+              onClick={() => setMobileMenu(!mobileMenu)}
+              aria-label="Menu"
+            >
+              {mobileMenu ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
-          ))}
-        </div>
-        <div className="bg-white rounded-2xl overflow-hidden shadow-md max-w-5xl">
-          <table className="w-full border-collapse">
-            <thead className="bg-[#0a1628] text-white">
-              <tr>
-                <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider">Usluga</th>
-                <th className="text-left px-6 py-4 text-xs font-bold uppercase tracking-wider hidden sm:table-cell">Opis</th>
-                <th className="text-right px-6 py-4 text-xs font-bold uppercase tracking-wider">Cijena</th>
-              </tr>
-            </thead>
-            <tbody>
-              {PRICE_DATA[activeTab].map((row, i) => (
-                <tr key={i} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-[#0a1628]">
-                    {row.name}
-                    {row.hot && <span className="ml-2 text-xs bg-yellow-100 text-yellow-700 font-bold px-2 py-0.5 rounded uppercase">Popularno</span>}
-                    {row.isNew && <span className="ml-2 text-xs bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded uppercase">Novo</span>}
-                  </td>
-                  <td className="px-6 py-4 text-gray-500 text-sm hidden sm:table-cell">{row.desc}</td>
-                  <td className="px-6 py-4 text-right font-bold text-[#1a3a6e] whitespace-nowrap">{row.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* KONTAKT */}
-      <section id="kontakt" className="bg-gradient-to-br from-[#0a1628] to-[#1a3a6e] py-24 px-[6%] text-center">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-          <span className="text-yellow-400 text-xs font-black tracking-[3px] uppercase block mb-3">Kontakt</span>
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-4">Zatražite besplatnu procjenu</h2>
-          <p className="text-white/60 text-lg mb-10 max-w-lg mx-auto">Javljamo se u roku 24h. Dolazimo na pregled i mjerenje — bez naknade.</p>
-        </motion.div>
-        <div className="flex justify-center gap-4 flex-wrap mb-10">
-          {[
-            { icon: <Phone className="size-6" />, label: "Telefon / WhatsApp", val: "099 2263774", href: "tel:0992263774" },
-            { icon: <MapPin className="size-6" />, label: "Područje rada", val: "Zagreb i okolica" },
-            { icon: <Clock className="size-6" />, label: "Radno vrijeme", val: "Pon–Sub 7:00–19:00" },
-          ].map((c) => (
-            <div key={c.label} className="bg-white/[0.08] border border-white/15 rounded-2xl px-8 py-6 flex flex-col items-center gap-2 min-w-[200px]">
-              <span className="text-yellow-400">{c.icon}</span>
-              <span className="text-white/40 text-xs uppercase tracking-wider font-semibold">{c.label}</span>
-              {c.href
-                ? <a href={c.href} className="text-yellow-400 font-black text-xl hover:underline">{c.val}</a>
-                : <span className="text-white font-bold text-lg">{c.val}</span>}
-            </div>
-          ))}
-        </div>
-        <a href="tel:0992263774"
-          className="inline-block bg-yellow-400 text-[#0a1628] font-black text-xl px-12 py-4 rounded-2xl hover:bg-yellow-300 transition-all hover:-translate-y-1 shadow-2xl shadow-yellow-400/30">
-          📞 Nazovite odmah — 099 2263774
-        </a>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="bg-[#040d1a] text-white/30 text-center py-5 text-sm">
-        <p>&copy; 2025 <span className="text-yellow-400 font-bold">BeGood</span> — Fasade, Moleraj, Keramika · Zagreb · 099 2263774</p>
-        <p className="mt-1 text-xs">Kvaliteta koja se vidi, usluga kojoj vjerujete.</p>
-      </footer>
-
-      {/* LIGHTBOX */}
-      {lightbox && (
-        <div className="fixed inset-0 z-[9999] bg-black/92 flex items-center justify-center" onClick={() => setLightbox(null)}>
-          <button className="absolute top-4 right-6 text-white text-4xl leading-none z-10">✕</button>
-          <div className="relative max-w-[92vw] max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
-            <Image src={lightbox} alt="" width={1200} height={900} className="object-contain max-h-[90vh] rounded-lg" />
           </div>
         </div>
-      )}
+
+        <AnimatePresence>
+          {mobileMenu && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden glass border-t border-white/5 overflow-hidden"
+            >
+              <div className="px-6 py-4 flex flex-col gap-3">
+                {NAV_LINKS.map((link) => (
+                  <a
+                    key={link.id}
+                    href={`#${link.id}`}
+                    className="text-white/70 hover:text-cyan-400 py-2 text-sm font-medium"
+                    onClick={() => setMobileMenu(false)}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+                <a href="#kontakt" onClick={() => setMobileMenu(false)}>
+                  <Button className="w-full mt-2" size="sm">
+                    Započnite projekt
+                  </Button>
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+
+      {/* ─── HERO ───────────────────────────────────── */}
+      <section className="relative w-full min-h-screen flex items-center overflow-hidden">
+        <HeroAnimation />
+
+        <div className="absolute inset-0 bg-gradient-to-b from-navy-950/50 via-navy-950/80 to-navy-950" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-cyan-500/5 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 rounded-full bg-blue-500/5 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 w-full">
+          <div className="max-w-3xl">
+            <motion.div
+              custom={0}
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+            >
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold tracking-wider uppercase mb-6">
+                <Sparkles className="size-3" />
+                Profesionalna izrada web stranica
+              </span>
+            </motion.div>
+
+            <motion.h1
+              custom={1}
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6"
+            >
+              Vaš digitalni uspjeh
+              <br />
+              <span className="text-gradient">počinje ovdje.</span>
+            </motion.h1>
+
+            <motion.p
+              custom={2}
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="text-white/50 text-lg md:text-xl leading-relaxed mb-10 max-w-xl"
+            >
+              Dizajniramo i razvijamo moderne web stranice koje privlače
+              klijente, grade povjerenje i rastu s vašim poslom.
+            </motion.p>
+
+            <motion.div
+              custom={3}
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="flex gap-4 flex-wrap"
+            >
+              <a href="#kontakt">
+                <Button size="lg">
+                  Započnite projekt
+                  <ArrowRight className="inline size-4 ml-2" />
+                </Button>
+              </a>
+              <a href="#portfolio">
+                <Button variant="ghost" size="lg">
+                  Pogledajte radove
+                </Button>
+              </a>
+            </motion.div>
+
+            <motion.div
+              custom={4}
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              className="flex gap-8 mt-14 flex-wrap"
+            >
+              {[
+                { icon: <Zap className="size-4" />, text: "Brza izrada" },
+                { icon: <Shield className="size-4" />, text: "100% sigurno" },
+                { icon: <Smartphone className="size-4" />, text: "Responzivno" },
+                { icon: <Clock className="size-4" />, text: "24/7 podrška" },
+              ].map((item) => (
+                <span
+                  key={item.text}
+                  className="flex items-center gap-2 text-white/40 text-sm"
+                >
+                  <span className="text-cyan-400">{item.icon}</span>
+                  {item.text}
+                </span>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        >
+          <a
+            href="#o-nama"
+            className="flex flex-col items-center text-white/30 hover:text-cyan-400 transition-colors"
+          >
+            <span className="text-xs mb-2">Saznajte više</span>
+            <ChevronDown className="size-5 animate-bounce" />
+          </a>
+        </motion.div>
+      </section>
+
+      {/* ─── O NAMA (INTERACTIVE) ───────────────────── */}
+      <section id="o-nama" className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-cyan-400 text-xs font-semibold tracking-[3px] uppercase block mb-3">
+              Tko smo mi
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              Gradimo <span className="text-gradient">digitalna iskustva</span>
+            </h2>
+            <p className="text-white/40 max-w-2xl mx-auto text-lg">
+              Kombiniramo vrhunski dizajn i najnovije tehnologije kako bismo
+              vašem brendu donijeli rezultate na webu.
+            </p>
+          </motion.div>
+
+          {/* Skill Flip Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-20 max-w-4xl mx-auto">
+            {SKILLS.map((skill, i) => (
+              <motion.div
+                key={skill.name}
+                custom={i}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="perspective-[800px] cursor-pointer"
+                onClick={() => toggleFlip(i)}
+              >
+                <div
+                  className={`relative w-full h-36 transition-transform duration-500 [transform-style:preserve-3d] ${
+                    flippedCards[i] ? "[transform:rotateY(180deg)]" : ""
+                  }`}
+                >
+                  {/* Front */}
+                  <div className="absolute inset-0 glass-card rounded-2xl p-5 flex flex-col justify-between [backface-visibility:hidden]">
+                    <div className="flex items-center gap-2">
+                      <span className="text-cyan-400">{skill.icon}</span>
+                      <span className="text-sm font-semibold text-white/90">
+                        {skill.name}
+                      </span>
+                    </div>
+                    <div>
+                      <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div
+                          className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${skill.level}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: i * 0.1 }}
+                        />
+                      </div>
+                      <span className="text-xs text-white/30 mt-1 block">
+                        {skill.level}% — klik za detalje
+                      </span>
+                    </div>
+                  </div>
+                  {/* Back */}
+                  <div className="absolute inset-0 glass-card rounded-2xl p-5 flex items-center justify-center text-center [backface-visibility:hidden] [transform:rotateY(180deg)] bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/20">
+                    <div>
+                      <span className="text-cyan-400 font-bold text-2xl block mb-1">
+                        {skill.level}%
+                      </span>
+                      <span className="text-white/60 text-sm">
+                        {skill.name}
+                      </span>
+                      <p className="text-white/30 text-xs mt-2">
+                        Klik za povratak
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Interactive Timeline */}
+          <div className="max-w-3xl mx-auto">
+            <h3 className="text-xl font-semibold text-center mb-10 text-white/80">
+              Kako radimo?
+            </h3>
+            <div className="relative">
+              <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/50 via-blue-500/50 to-transparent" />
+              {TIMELINE.map((step, i) => (
+                <motion.div
+                  key={step.year}
+                  custom={i}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  className={`relative flex items-start gap-6 mb-12 ${
+                    i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                  }`}
+                >
+                  <div className="hidden md:block md:w-1/2" />
+                  <div className="absolute left-6 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-cyan-400 border-4 border-navy-950 z-10 mt-2" />
+                  <div
+                    className={`ml-14 md:ml-0 md:w-1/2 glass-card rounded-2xl p-6 hover:border-cyan-500/30 transition-colors ${
+                      i % 2 === 0 ? "md:pr-10" : "md:pl-10"
+                    }`}
+                  >
+                    <span className="text-cyan-400 text-xs font-semibold tracking-wider uppercase">
+                      {step.year}
+                    </span>
+                    <h4 className="text-lg font-semibold text-white mt-1 mb-2">
+                      {step.title}
+                    </h4>
+                    <p className="text-white/40 text-sm leading-relaxed">
+                      {step.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── USLUGE I CIJENE ─────────────────────────── */}
+      <section id="usluge" className="py-24 px-6 bg-navy-900/50">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-cyan-400 text-xs font-semibold tracking-[3px] uppercase block mb-3">
+              Naša ponuda
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              Usluge i <span className="text-gradient">cijene</span>
+            </h2>
+            <p className="text-white/40 max-w-xl mx-auto text-lg">
+              Transparentne cijene, bez skrivenih troškova.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Standard Plan */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-cyan-500/30 transition-all duration-300"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-semibold mb-6">
+                <Star className="size-3" />
+                Najpopularniji
+              </span>
+              <h3 className="text-2xl font-bold mb-2">Standardna web stranica</h3>
+              <p className="text-white/40 text-sm mb-6">
+                Sve što trebate za profesionalnu online prisutnost.
+              </p>
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="text-5xl font-bold text-gradient">1000€</span>
+                <span className="text-white/30 text-sm">/ godišnje</span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                {[
+                  "Moderan, responzivan dizajn",
+                  "Do 5 stranica",
+                  "SEO optimizacija",
+                  "SSL certifikat",
+                  "Hosting uključen",
+                  "Kontakt forma",
+                  "Google Analytics",
+                  "Podrška i održavanje",
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-3 text-white/60 text-sm"
+                  >
+                    <Check className="size-4 text-cyan-400 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a href="#kontakt">
+                <Button className="w-full">
+                  Zatražite ponudu
+                  <ArrowRight className="inline size-4 ml-2" />
+                </Button>
+              </a>
+            </motion.div>
+
+            {/* Custom Plan */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-card rounded-3xl p-8 relative overflow-hidden group hover:border-violet-500/30 transition-all duration-300 border-violet-500/10"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/5 rounded-full blur-2xl" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 text-violet-400 text-xs font-semibold mb-6">
+                <Sparkles className="size-3" />
+                Premium
+              </span>
+              <h3 className="text-2xl font-bold mb-2">Izrada po dogovoru</h3>
+              <p className="text-white/40 text-sm mb-6">
+                Za projekte koji zahtijevaju posebne funkcionalnosti.
+              </p>
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="text-5xl font-bold bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent">
+                  Custom
+                </span>
+              </div>
+              <ul className="space-y-3 mb-8">
+                {[
+                  "Sve iz standardnog paketa",
+                  "Neograničen broj stranica",
+                  "E-commerce / Web shop",
+                  "Prilagođene funkcionalnosti",
+                  "CMS integracija",
+                  "API integracije",
+                  "Napredna analitika",
+                  "Prioritetna podrška",
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-3 text-white/60 text-sm"
+                  >
+                    <Check className="size-4 text-violet-400 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a href="#kontakt">
+                <Button variant="outline" className="w-full border-violet-500/50 text-violet-400 hover:bg-violet-500/10 hover:border-violet-400">
+                  Razgovarajmo
+                  <ArrowRight className="inline size-4 ml-2" />
+                </Button>
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Why us */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 max-w-4xl mx-auto">
+            {[
+              { num: "50+", label: "Projekata", icon: <Globe className="size-5" /> },
+              { num: "100%", label: "Zadovoljstvo", icon: <Star className="size-5" /> },
+              { num: "24/7", label: "Podrška", icon: <Clock className="size-5" /> },
+              { num: "30+", label: "Klijenata", icon: <Users className="size-5" /> },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                custom={i}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="glass-card rounded-2xl p-6 text-center hover:border-cyan-500/20 transition-colors"
+              >
+                <span className="text-cyan-400 flex justify-center mb-3">
+                  {stat.icon}
+                </span>
+                <span className="text-2xl md:text-3xl font-bold text-white block">
+                  {stat.num}
+                </span>
+                <span className="text-white/30 text-sm">{stat.label}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── PORTFOLIO ──────────────────────────────── */}
+      <section id="portfolio" className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <span className="text-cyan-400 text-xs font-semibold tracking-[3px] uppercase block mb-3">
+              Naši radovi
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              <span className="text-gradient">Portfolio</span>
+            </h2>
+            <p className="text-white/40 max-w-xl mx-auto text-lg">
+              Pogledajte projekte koje smo ostvarili za naše klijente.
+            </p>
+          </motion.div>
+
+          {/* Filter Tabs */}
+          <div className="flex gap-2 mb-10 justify-center flex-wrap">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                  activeCategory === cat
+                    ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
+                    : "text-white/40 hover:text-white/60 border border-transparent hover:border-white/10"
+                }`}
+              >
+                {cat === "sve"
+                  ? "Sve"
+                  : cat === "web-shop"
+                    ? "Web Shop"
+                    : cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Portfolio Grid */}
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+          >
+            <AnimatePresence mode="popLayout">
+              {filteredPortfolio.map((project, i) => (
+                <motion.div
+                  key={project.title}
+                  layout
+                  custom={i}
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="visible"
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="group glass-card rounded-2xl overflow-hidden hover:border-cyan-500/20 transition-all duration-300 cursor-pointer"
+                >
+                  <div
+                    className="h-48 relative overflow-hidden"
+                    style={{ background: project.image }}
+                  >
+                    <div className="absolute inset-0 bg-navy-950/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="flex items-center gap-2 text-white font-semibold text-sm bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+                        <ExternalLink className="size-4" />
+                        Pogledaj projekt
+                      </span>
+                    </div>
+                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <MousePointer className="size-5 text-white/80" />
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="font-semibold text-white mb-3">
+                      {project.title}
+                    </h3>
+                    <div className="flex gap-2 flex-wrap">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs px-2.5 py-1 rounded-md bg-white/5 text-white/40 border border-white/5"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── PLAĆANJE ───────────────────────────────── */}
+      <section id="placanje" className="py-24 px-6 bg-navy-900/50">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <span className="text-cyan-400 text-xs font-semibold tracking-[3px] uppercase block mb-3">
+              Fleksibilno plaćanje
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              Načini <span className="text-gradient">plaćanja</span>
+            </h2>
+            <p className="text-white/40 max-w-xl mx-auto text-lg">
+              Prihvaćamo više načina plaćanja za vašu udobnost.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            {PAYMENT_METHODS.map((method, i) => (
+              <motion.div
+                key={method.title}
+                custom={i}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="glass-card rounded-2xl p-6 text-center hover:border-cyan-500/20 transition-all duration-300 group"
+              >
+                <div
+                  className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${method.color} flex items-center justify-center text-white mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}
+                >
+                  {method.icon}
+                </div>
+                <h3 className="font-semibold text-white text-sm mb-1">
+                  {method.title}
+                </h3>
+                <p className="text-white/30 text-xs">{method.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── KONTAKT ────────────────────────────────── */}
+      <section id="kontakt" className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-cyan-400 text-xs font-semibold tracking-[3px] uppercase block mb-3">
+              Javite nam se
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              Započnite svoj <span className="text-gradient">projekt</span>
+            </h2>
+            <p className="text-white/40 max-w-xl mx-auto text-lg">
+              Ispunite formu i javit ćemo vam se u roku 24h.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-2xl mx-auto"
+          >
+            <form
+              ref={formRef}
+              onSubmit={handleSubmit}
+              className="glass-card rounded-3xl p-8 md:p-10 space-y-6"
+            >
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-white/50 text-sm font-medium mb-2">
+                    Ime i prezime *
+                  </label>
+                  <input
+                    name="name"
+                    type="text"
+                    required
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
+                    placeholder="Vaše ime"
+                  />
+                </div>
+                <div>
+                  <label className="block text-white/50 text-sm font-medium mb-2">
+                    Email adresa *
+                  </label>
+                  <input
+                    name="email"
+                    type="email"
+                    required
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
+                    placeholder="vas@email.com"
+                  />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-white/50 text-sm font-medium mb-2">
+                    Broj telefona
+                  </label>
+                  <input
+                    name="phone"
+                    type="tel"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
+                    placeholder="+385 ..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-white/50 text-sm font-medium mb-2">
+                    Tip projekta
+                  </label>
+                  <select
+                    name="projectType"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors appearance-none cursor-pointer"
+                  >
+                    <option value="" className="bg-navy-900">
+                      Odaberite...
+                    </option>
+                    {PROJECT_TYPES.map((t) => (
+                      <option key={t} value={t} className="bg-navy-900">
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-white/50 text-sm font-medium mb-2">
+                  Budžet
+                </label>
+                <select
+                  name="budget"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors appearance-none cursor-pointer"
+                >
+                  <option value="" className="bg-navy-900">
+                    Odaberite raspon...
+                  </option>
+                  {BUDGETS.map((b) => (
+                    <option key={b} value={b} className="bg-navy-900">
+                      {b}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-white/50 text-sm font-medium mb-2">
+                  Poruka *
+                </label>
+                <textarea
+                  name="message"
+                  required
+                  rows={5}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/20 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors resize-none"
+                  placeholder="Opišite svoj projekt ili ideju..."
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={formStatus === "sending"}
+                className="w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                size="lg"
+              >
+                {formStatus === "sending" ? (
+                  "Šalje se..."
+                ) : formStatus === "sent" ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <Check className="size-4" />
+                    Poruka poslana!
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <Send className="size-4" />
+                    Pošaljite poruku
+                  </span>
+                )}
+              </Button>
+
+              {formStatus === "error" && (
+                <p className="text-red-400 text-sm text-center">{errorMsg}</p>
+              )}
+              {formStatus === "sent" && (
+                <p className="text-emerald-400 text-sm text-center">
+                  Hvala! Javit ćemo vam se u roku 24h.
+                </p>
+              )}
+            </form>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── FOOTER ─────────────────────────────────── */}
+      <footer className="border-t border-white/5 py-12 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-center md:text-left">
+            <a href="#" className="text-xl font-bold tracking-tight">
+              <span className="text-gradient">webli</span>
+              <span className="text-white">rev</span>
+            </a>
+            <p className="text-white/20 text-sm mt-1">
+              Profesionalna izrada web stranica
+            </p>
+          </div>
+          <div className="flex gap-6">
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                className="text-white/30 hover:text-cyan-400 text-sm transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+          <p className="text-white/15 text-xs">
+            &copy; {new Date().getFullYear()} weblirev.com
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

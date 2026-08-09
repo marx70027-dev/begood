@@ -1,20 +1,32 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "BeGood – Fasade, Moleraj, Keramika | Zagreb",
-  description: "Profesionalne usluge fasada, moleraja i keramike u Zagrebu i okolici. Pozovite 099 2263774.",
+  title: "weblirev | Izrada profesionalnih web stranica",
+  description:
+    "Moderni, brzi i responzivni web sajtovi prilagođeni vašem brendu. Od 1000€ godišnje ili po dogovoru.",
+  keywords: [
+    "web stranice",
+    "izrada web stranica",
+    "web dizajn",
+    "web development",
+    "weblirev",
+  ],
+  openGraph: {
+    title: "weblirev | Izrada profesionalnih web stranica",
+    description:
+      "Moderni, brzi i responzivni web sajtovi prilagođeni vašem brendu.",
+    url: "https://weblirev.com",
+    siteName: "weblirev",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -23,11 +35,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="hr" className={`${inter.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col font-[family-name:var(--font-inter)]">
+        {children}
+      </body>
     </html>
   );
 }
