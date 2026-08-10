@@ -137,19 +137,16 @@ export default function Home() {
               weblirev<span className="text-indigo-500">.</span>
             </span>
           </a>
-          <ul className="hidden md:flex gap-8">
+          <ul className="hidden md:flex gap-3">
             {NAV.map((l) => (
               <li key={l.id}>
-                <a href={`#${l.id}`} className="text-[13px] text-slate-500 hover:text-slate-900 transition-colors font-medium">
-                  {l.label}
+                <a href={`#${l.id}`}>
+                  <button className="fancy-btn text-xs">{l.label}</button>
                 </a>
               </li>
             ))}
           </ul>
           <div className="flex items-center gap-3">
-            <a href="#contact" className="hidden md:block">
-              <button className="fancy-btn text-xs">Get in touch</button>
-            </a>
             <button
               className="md:hidden text-slate-500 hover:text-slate-900 p-1"
               onClick={() => setMobileMenu(!mobileMenu)}
@@ -167,13 +164,13 @@ export default function Home() {
               exit={{ opacity: 0, height: 0 }}
               className="md:hidden border-t border-slate-100 overflow-hidden bg-white/95 backdrop-blur-xl"
             >
-              <div className="px-6 py-4 flex flex-col gap-1">
+              <div className="px-6 py-4 flex flex-col gap-2">
                 {NAV.map((l) => (
-                  <a key={l.id} href={`#${l.id}`} className="text-slate-600 hover:text-slate-900 py-2.5 text-sm font-medium" onClick={() => setMobileMenu(false)}>
-                    {l.label}
+                  <a key={l.id} href={`#${l.id}`} onClick={() => setMobileMenu(false)}>
+                    <button className="fancy-btn w-full text-xs">{l.label}</button>
                   </a>
                 ))}
-                <a href="#contact" className="mt-2" onClick={() => setMobileMenu(false)}>
+                <a href="#contact" className="mt-1" onClick={() => setMobileMenu(false)}>
                   <button className="fancy-btn w-full text-xs">Get in touch</button>
                 </a>
               </div>
