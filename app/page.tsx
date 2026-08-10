@@ -1,25 +1,42 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CookieConsent from "@/components/ui/cookie-consent";
 import LaunchButton from "@/components/ui/launch-button";
 import BusinessForm from "@/components/ui/business-form";
-import RocketScene from "@/components/ui/rocket-scene";
 
 type Phase = "cookie" | "rocket" | "launching" | "form";
 
 const headingFont = "'Bodoni MT Black', 'Bodoni MT', 'Didot', 'Georgia', serif";
+const IDLE_END = 1.0;
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("cookie");
-  const [showSmoke, setShowSmoke] = useState(false);
-  const [rocketY, setRocketY] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const accepted = document.cookie.includes("cookies_accepted=true");
     if (accepted) setPhase("rocket");
   }, []);
+
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    if (phase === "rocket") {
+      vid.currentTime = 0;
+      vid.play().catch(() => {});
+
+      const onTime = () => {
+        if (phase === "rocket" && vid.currentTime >= IDLE_END) {
+          vid.currentTime = 0;
+        }
+      };
+      vid.addEventListener("timeupdate", onTime);
+      return () => vid.removeEventListener("timeupdate", onTime);
+    }
+  }, [phase]);
 
   const handleAcceptCookies = useCallback(() => {
     document.cookie = "cookies_accepted=true; max-age=31536000; path=/; SameSite=Strict";
@@ -28,26 +45,17 @@ export default function Home() {
 
   const handleLaunch = useCallback(() => {
     setPhase("launching");
-    setShowSmoke(true);
+    const vid = videoRef.current;
+    if (vid) {
+      vid.currentTime = IDLE_END;
+      vid.play().catch(() => {});
 
-    let start: number | null = null;
-    const duration = 2500;
-
-    function animate(ts: number) {
-      if (!start) start = ts;
-      const elapsed = ts - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setRocketY(-eased * 120);
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setTimeout(() => setPhase("form"), 400);
-      }
+      const onEnd = () => {
+        setPhase("form");
+        vid.removeEventListener("ended", onEnd);
+      };
+      vid.addEventListener("ended", onEnd);
     }
-
-    requestAnimationFrame(animate);
   }, []);
 
   return (
@@ -63,83 +71,68 @@ export default function Home() {
             key="rocket-scene"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.6 } }}
-            className="fixed inset-0 z-50"
+            exit={{ opacity: 0, transition: { duration: 0.8 } }}
+            className="fixed inset-0 z-50 bg-black"
           >
-            {/* Rocket scene with launch animation */}
-            <motion.div
-              className="absolute inset-0"
-              style={{ transform: `translateY(${rocketY}vh)` }}
-            >
-              <RocketScene />
-            </motion.div>
+            <video
+              ref={videoRef}
+              src="/rocket-launch.mp4"
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
 
-            {/* Smoke effect */}
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none" />
+
+            {/* Title + Launch button */}
             <AnimatePresence>
-              {showSmoke && (
+              {phase === "rocket" && (
                 <motion.div
-                  initial={{ opacity: 0, scaleX: 0.5 }}
-                  animate={{ opacity: 1, scaleX: 1.5, y: -20 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  className="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t from-white/40 via-orange-300/20 to-transparent blur-xl pointer-events-none"
-                />
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20, transition: { duration: 0.4 } }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="absolute inset-0 flex flex-col items-center justify-center z-10"
+                >
+                  <div className="text-center mb-8">
+                    <h1
+                      className="text-5xl md:text-7xl text-white mb-3 drop-shadow-2xl"
+                      style={{ fontFamily: headingFont }}
+                    >
+                      web<span className="text-white/50">lirev</span>.com
+                    </h1>
+                    <p className="text-white/60 text-lg md:text-xl">
+                      Your website awaits — press Launch
+                    </p>
+                  </div>
+                  <LaunchButton onClick={handleLaunch} />
+                </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Fire glow during launch */}
+            {/* Launching text */}
             <AnimatePresence>
               {phase === "launching" && (
                 <motion.div
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 1, 0.8, 1] }}
-                  transition={{ duration: 0.5, repeat: 5, repeatType: "reverse" }}
-                  className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[300px] h-[200px] rounded-full bg-orange-500/60 blur-3xl pointer-events-none"
-                />
-              )}
-            </AnimatePresence>
-
-            {/* Title + Launch button */}
-            {phase === "rocket" && (
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="absolute inset-0 flex flex-col items-center justify-center z-10"
-              >
-                <div className="text-center mb-8">
-                  <h1
-                    className="text-5xl md:text-7xl text-white mb-3 drop-shadow-2xl"
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+                >
+                  <motion.p
+                    initial={{ scale: 2, opacity: 0 }}
+                    animate={{ scale: 1, opacity: [0, 1, 1, 0] }}
+                    transition={{ duration: 3, times: [0, 0.1, 0.6, 1] }}
+                    className="text-6xl font-black text-white drop-shadow-2xl"
                     style={{ fontFamily: headingFont }}
                   >
-                    web<span className="text-white/50">lirev</span>.com
-                  </h1>
-                  <p className="text-white/60 text-lg md:text-xl">
-                    Your website awaits — press Launch
-                  </p>
-                </div>
-                <LaunchButton onClick={handleLaunch} />
-              </motion.div>
-            )}
-
-            {/* Launching text */}
-            {phase === "launching" && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
-              >
-                <motion.p
-                  initial={{ scale: 2, opacity: 0 }}
-                  animate={{ scale: 1, opacity: [0, 1, 1, 0] }}
-                  transition={{ duration: 2.5, times: [0, 0.1, 0.7, 1] }}
-                  className="text-6xl font-black text-white drop-shadow-2xl"
-                  style={{ fontFamily: headingFont }}
-                >
-                  Launching...
-                </motion.p>
-              </motion.div>
-            )}
+                    Launching...
+                  </motion.p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
