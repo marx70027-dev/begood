@@ -405,73 +405,158 @@ export default function Home() {
       {/* ── Contact ── */}
       <section id="contact" className="py-32 px-6 bg-slate-50/50">
         <div className="max-w-5xl mx-auto">
-          <SectionHead
-            label="Contact"
-            title="Let's build something great"
-            sub="Fill out the form below and we'll get back to you within 24 hours."
-          />
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+            {/* Left — Info */}
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+              <div className="w-14 h-14 rounded-xl bg-indigo-50 flex items-center justify-center mb-6 shadow-sm">
+                <Send className="size-6 text-indigo-500" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-[-0.03em] mb-4">Contact us</h2>
+              <p className="text-slate-500 text-[15px] leading-relaxed mb-10 max-w-sm">
+                We are always looking for ways to improve our products and services. Contact us and let us know how we can help you.
+              </p>
 
-          <motion.form
-            ref={formRef}
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-lg mx-auto bg-white border border-slate-200/60 rounded-2xl p-7 space-y-4"
-          >
-            <input type="text" name="website" className="absolute -left-[9999px]" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+              <div className="space-y-5">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                    <svg className="size-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400 font-medium mb-0.5">Email</p>
+                    <a href="mailto:contact@weblirev.com" className="text-sm text-slate-700 font-medium hover:text-indigo-600 transition-colors">contact@weblirev.com</a>
+                  </div>
+                </div>
 
-            <div className="grid grid-cols-2 gap-3">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                    <svg className="size-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400 font-medium mb-0.5">Phone</p>
+                    <a href="tel:+385997874239" className="text-sm text-slate-700 font-medium hover:text-indigo-600 transition-colors">+385 99 787 4239</a>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                    <svg className="size-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400 font-medium mb-0.5">Location</p>
+                    <p className="text-sm text-slate-700 font-medium">Croatia, EU</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right — Form */}
+            <motion.form
+              ref={formRef}
+              onSubmit={handleSubmit}
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-white border border-slate-200/60 rounded-2xl p-7 space-y-4 shadow-sm"
+            >
+              <input type="text" name="website" className="absolute -left-[9999px]" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+
               <div>
                 <label className="block text-slate-700 text-xs font-medium mb-1.5">Full name *</label>
                 <input name="name" type="text" required minLength={2} maxLength={100} className={inputCls} placeholder="Your name" />
               </div>
+
               <div>
                 <label className="block text-slate-700 text-xs font-medium mb-1.5">Email *</label>
                 <input name="email" type="email" required maxLength={254} className={inputCls} placeholder="you@email.com" />
               </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-slate-700 text-xs font-medium mb-1.5">Phone</label>
-                <input name="phone" type="tel" className={inputCls} placeholder="+385 ..." />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-700 text-xs font-medium mb-1.5">Phone</label>
+                  <input name="phone" type="tel" className={inputCls} placeholder="+385 ..." />
+                </div>
+                <div>
+                  <label className="block text-slate-700 text-xs font-medium mb-1.5">Project type</label>
+                  <select name="projectType" className={`${inputCls} appearance-none cursor-pointer`}>
+                    <option value="">Select...</option>
+                    {PROJECT_TYPES.map((t) => (<option key={t} value={t}>{t}</option>))}
+                  </select>
+                </div>
               </div>
+
               <div>
-                <label className="block text-slate-700 text-xs font-medium mb-1.5">Project type</label>
-                <select name="projectType" className={`${inputCls} appearance-none cursor-pointer`}>
-                  <option value="">Select...</option>
-                  {PROJECT_TYPES.map((t) => (<option key={t} value={t}>{t}</option>))}
+                <label className="block text-slate-700 text-xs font-medium mb-1.5">Budget</label>
+                <select name="budget" className={`${inputCls} appearance-none cursor-pointer`}>
+                  <option value="">Select range...</option>
+                  {BUDGETS.map((b) => (<option key={b} value={b}>{b}</option>))}
                 </select>
               </div>
+
+              <div>
+                <label className="block text-slate-700 text-xs font-medium mb-1.5">Message *</label>
+                <textarea name="message" required minLength={10} rows={4} className={`${inputCls} resize-none`} placeholder="Tell us about your project..." />
+              </div>
+
+              <button type="submit" disabled={formStatus === "sending"} className="fancy-btn w-full disabled:opacity-40">
+                {formStatus === "sending" ? (
+                  "Sending..."
+                ) : formStatus === "sent" ? (
+                  <span className="flex items-center justify-center gap-2"><Check className="size-4" /> Sent!</span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2"><Send className="size-4" /> Send message</span>
+                )}
+              </button>
+
+              {formStatus === "error" && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
+              {formStatus === "sent" && <p className="text-emerald-600 text-sm text-center">Thank you! We&apos;ll get back to you within 24 hours.</p>}
+            </motion.form>
+          </div>
+
+          {/* World Map */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mt-20 relative"
+          >
+            <div className="bg-white border border-slate-200/60 rounded-2xl p-6 md:p-10 shadow-sm overflow-hidden">
+              <div className="flex items-center gap-2 mb-6">
+                <Globe className="size-4 text-indigo-500" />
+                <span className="text-xs text-slate-400 font-medium uppercase tracking-[0.15em]">We work globally</span>
+              </div>
+              <svg viewBox="0 0 1000 500" className="w-full h-auto opacity-[0.35]" fill="none">
+                <g fill="#94a3b8">
+                  {/* North America */}
+                  <path d="M60 120 C70 80,120 50,160 45 C180 42,200 50,220 55 C240 58,250 65,260 60 C270 55,265 45,275 40 C285 38,290 45,300 50 C295 55,285 65,280 75 C275 85,270 95,265 105 C260 115,258 120,255 130 L250 140 C245 145,240 148,238 155 C235 165,232 170,228 178 L220 185 C215 180,210 175,205 178 C200 182,195 185,192 190 L185 195 C180 198,175 195,172 198 L165 195 C158 190,155 185,148 182 C140 180,135 178,128 175 C120 172,115 170,108 168 C100 165,95 160,90 158 C85 155,80 148,78 142 C75 135,72 130,68 125 Z" />
+                  <path d="M155 195 L160 200 C165 210,168 218,170 225 C172 232,175 238,178 245 C180 252,178 258,175 265 C170 270,165 268,160 270 C155 272,150 275,145 272 C140 268,138 262,135 258 C130 252,125 248,122 242 C118 235,115 228,112 222 C110 218,108 212,108 208 C110 202,115 198,120 195 C128 192,138 192,148 194 Z" />
+                  {/* South America */}
+                  <path d="M220 310 C225 300,228 295,232 290 C235 285,238 280,240 275 C242 270,245 265,248 262 C252 258,258 255,262 260 C268 265,270 272,272 280 C275 290,278 298,280 308 C282 318,280 325,278 335 C275 345,272 352,268 360 C265 368,260 375,255 382 C250 390,245 395,240 400 C235 405,230 408,225 410 C220 408,218 402,215 395 C210 385,208 378,205 368 C202 358,200 348,200 338 C202 328,205 322,210 315 Z" />
+                  {/* Europe */}
+                  <path d="M440 75 C445 72,450 70,455 72 C460 75,462 80,465 85 C468 90,470 95,472 100 C475 108,478 112,480 118 C482 125,485 128,488 132 C490 138,488 142,485 148 C480 152,475 155,470 158 C465 160,460 162,455 160 C450 158,445 155,440 152 C435 148,432 142,430 138 C428 132,425 128,422 122 C420 115,422 108,425 102 C428 95,432 88,435 82 Z" />
+                  <path d="M488 132 C492 130,498 128,502 132 C508 138,510 145,512 152 C515 158,518 162,520 168 C518 172,515 175,510 178 C505 180,500 178,495 175 C490 172,488 168,485 162 C482 155,480 148,482 142 C485 138,488 135,488 132Z" />
+                  {/* Africa */}
+                  <path d="M440 180 C448 175,455 172,462 175 C470 178,475 185,480 192 C485 200,488 208,490 218 C492 228,494 238,495 248 C496 258,498 268,498 278 C498 290,496 300,492 310 C488 320,484 328,478 335 C472 342,466 348,458 352 C450 355,442 356,435 352 C428 348,422 342,418 335 C415 328,412 318,410 308 C408 298,408 288,410 278 C412 268,415 258,418 248 C420 238,422 228,425 218 C428 208,432 198,435 190 Z" />
+                  {/* Asia */}
+                  <path d="M520 55 C530 48,545 42,558 45 C572 48,582 55,592 62 C602 70,610 78,618 85 C628 92,638 98,648 102 C660 108,672 112,682 118 C690 122,698 128,705 132 C712 138,718 142,722 148 C728 155,732 162,735 170 C738 178,740 185,738 192 C735 200,730 205,722 208 C715 210,708 208,700 205 C692 202,685 198,678 195 C668 190,658 188,648 185 C640 182,632 180,625 178 C618 175,610 172,602 170 C595 168,588 165,580 162 C572 158,565 155,558 152 C550 148,542 145,535 140 C528 135,522 128,518 120 C515 112,512 105,512 98 C514 88,518 78,520 68 Z" />
+                  <path d="M648 185 C655 188,660 192,665 198 C670 205,672 212,675 220 C678 228,680 235,682 242 C684 250,685 258,684 265 C682 272,678 278,672 282 C665 285,658 285,650 282 C642 278,635 272,630 265 C625 258,622 250,620 242 C618 235,618 228,620 220 C622 212,628 205,635 198 C640 192,645 188,648 185Z" />
+                  {/* Australia */}
+                  <path d="M720 320 C730 312,742 308,755 310 C768 312,778 318,788 325 C798 332,805 340,810 350 C812 358,812 368,808 375 C802 382,795 388,785 390 C775 392,765 390,755 385 C745 380,738 372,732 362 C728 352,725 342,722 332 Z" />
+                  {/* Greenland */}
+                  <path d="M280 25 C290 20,302 18,312 22 C322 28,328 35,330 45 C330 52,328 58,322 62 C315 65,308 62,300 58 C292 54,285 48,282 40 C280 35,278 30,280 25Z" />
+                </g>
+                {/* Location pin for Croatia */}
+                <g transform="translate(480,145)">
+                  <circle cx="0" cy="0" r="6" fill="#6366f1" opacity="0.2">
+                    <animate attributeName="r" values="6;14;6" dur="2s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.3;0;0.3" dur="2s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="0" cy="0" r="4" fill="#6366f1" />
+                </g>
+              </svg>
             </div>
-
-            <div>
-              <label className="block text-slate-700 text-xs font-medium mb-1.5">Budget</label>
-              <select name="budget" className={`${inputCls} appearance-none cursor-pointer`}>
-                <option value="">Select range...</option>
-                {BUDGETS.map((b) => (<option key={b} value={b}>{b}</option>))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-slate-700 text-xs font-medium mb-1.5">Message *</label>
-              <textarea name="message" required minLength={10} rows={4} className={`${inputCls} resize-none`} placeholder="Tell us about your project..." />
-            </div>
-
-            <button type="submit" disabled={formStatus === "sending"} className="fancy-btn w-full disabled:opacity-40">
-              {formStatus === "sending" ? (
-                "Sending..."
-              ) : formStatus === "sent" ? (
-                <span className="flex items-center justify-center gap-2"><Check className="size-4" /> Sent!</span>
-              ) : (
-                <span className="flex items-center justify-center gap-2"><Send className="size-4" /> Send message</span>
-              )}
-            </button>
-
-            {formStatus === "error" && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
-            {formStatus === "sent" && <p className="text-emerald-600 text-sm text-center">Thank you! We&apos;ll get back to you within 24 hours.</p>}
-          </motion.form>
+          </motion.div>
         </div>
       </section>
 
