@@ -9,10 +9,6 @@ import {
   X,
   ChevronDown,
   CreditCard,
-  Building2,
-  Bitcoin,
-  Receipt,
-  ExternalLink,
   Code2,
   Palette,
   Rocket,
@@ -24,7 +20,6 @@ import {
 } from "lucide-react";
 import { useState, useRef, type FormEvent } from "react";
 import dynamic from "next/dynamic";
-import { GradientButton } from "@/components/ui/gradient-button";
 import { CookieConsent } from "@/components/ui/cookie-consent";
 
 const ScrollVideo = dynamic(() => import("@/components/ui/scroll-video"), { ssr: false });
@@ -57,21 +52,8 @@ const STEPS = [
 ];
 
 const PORTFOLIO = [
-  { title: "E-commerce Platform", cat: "web-shop", tags: ["Next.js", "Stripe", "Tailwind"] },
-  { title: "Corporate Website", cat: "corporate", tags: ["React", "CMS", "SEO"] },
-  { title: "SaaS Dashboard", cat: "app", tags: ["TypeScript", "Charts", "API"] },
-  { title: "Photographer Portfolio", cat: "portfolio", tags: ["Gallery", "Animations", "Lightbox"] },
-  { title: "Restaurant Website", cat: "hospitality", tags: ["Reservations", "Menu", "Map"] },
-  { title: "Fitness App", cat: "app", tags: ["PWA", "Dashboard", "Tracking"] },
-];
-
-const CATS = ["all", "web-shop", "corporate", "app", "portfolio", "hospitality"];
-
-const PAYMENTS = [
-  { icon: <Building2 className="size-5" />, title: "Bank Transfer", sub: "IBAN / Wire transfer" },
-  { icon: <CreditCard className="size-5" />, title: "Cards", sub: "Stripe / Revolut Business" },
-  { icon: <Bitcoin className="size-5" />, title: "Crypto", sub: "By arrangement" },
-  { icon: <Receipt className="size-5" />, title: "Cash / Invoice", sub: "By quote" },
+  { title: "BeGood Fasade", url: "https://begoodfasade.com", cat: "corporate", tags: ["Construction", "Facades", "Responsive"] },
+  { title: "Stop & Go Caffe", url: "https://stopandgocaffe.com", cat: "hospitality", tags: ["Cafe", "Menu", "Branding"] },
 ];
 
 const PROJECT_TYPES = [
@@ -92,12 +74,10 @@ const STATS = [
 
 export default function Home() {
   const [mobileMenu, setMobileMenu] = useState(false);
-  const [activeCat, setActiveCat] = useState("all");
+  const [flipped, setFlipped] = useState<Record<number, boolean>>({});
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
-
-  const filtered = activeCat === "all" ? PORTFOLIO : PORTFOLIO.filter((p) => p.cat === activeCat);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -137,7 +117,6 @@ export default function Home() {
 
   const NAV = [
     { id: "about", label: "About" },
-    { id: "services", label: "Services" },
     { id: "portfolio", label: "Work" },
     { id: "payment", label: "Payment" },
     { id: "contact", label: "Contact" },
@@ -169,7 +148,7 @@ export default function Home() {
           </ul>
           <div className="flex items-center gap-3">
             <a href="#contact" className="hidden md:block">
-              <GradientButton size="sm">Get in touch</GradientButton>
+              <button className="fancy-btn text-xs">Get in touch</button>
             </a>
             <button
               className="md:hidden text-slate-500 hover:text-slate-900 p-1"
@@ -195,7 +174,7 @@ export default function Home() {
                   </a>
                 ))}
                 <a href="#contact" className="mt-2" onClick={() => setMobileMenu(false)}>
-                  <GradientButton size="sm" className="w-full">Get in touch</GradientButton>
+                  <button className="fancy-btn w-full text-xs">Get in touch</button>
                 </a>
               </div>
             </motion.div>
@@ -210,14 +189,7 @@ export default function Home() {
         <div className="absolute top-0 left-0 right-0 h-screen flex items-center z-10 pointer-events-none">
           <div className="max-w-6xl mx-auto px-6 w-full">
             <div className="max-w-2xl pointer-events-auto">
-              <motion.div custom={0} variants={fade} initial="hidden" animate="visible"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-medium tracking-wide mb-8"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Available for new projects
-              </motion.div>
-
-              <motion.h1 custom={1} variants={fade} initial="hidden" animate="visible"
+              <motion.h1 custom={0} variants={fade} initial="hidden" animate="visible"
                 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] mb-6 tracking-[-0.035em] text-white"
               >
                 We build websites
@@ -225,22 +197,22 @@ export default function Home() {
                 that drive growth.
               </motion.h1>
 
-              <motion.p custom={2} variants={fade} initial="hidden" animate="visible"
+              <motion.p custom={1} variants={fade} initial="hidden" animate="visible"
                 className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-md"
               >
                 Modern, performant web experiences designed to convert visitors into customers.
               </motion.p>
 
-              <motion.div custom={3} variants={fade} initial="hidden" animate="visible" className="flex gap-3 flex-wrap">
+              <motion.div custom={2} variants={fade} initial="hidden" animate="visible" className="flex gap-4 flex-wrap">
                 <a href="#contact">
-                  <GradientButton size="lg" className="!bg-white !text-slate-900 hover:!bg-slate-100">
-                    Start a project <ArrowRight className="size-4 ml-1" />
-                  </GradientButton>
+                  <button className="fancy-btn">
+                    Start a project <ArrowRight className="inline size-4 ml-2" />
+                  </button>
                 </a>
                 <a href="#portfolio">
-                  <GradientButton variant="outline" size="lg" className="!border-white/30 !text-white hover:!bg-white/10 hover:!border-white/50">
+                  <button className="fancy-btn" style={{ "--bg": "transparent", "--color": "#ffffff" } as React.CSSProperties}>
                     View our work
-                  </GradientButton>
+                  </button>
                 </a>
               </motion.div>
             </div>
@@ -263,8 +235,8 @@ export default function Home() {
             sub="Combining thoughtful design with modern engineering to deliver results that speak for themselves."
           />
 
-          {/* Skills grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-28 max-w-3xl mx-auto">
+          {/* Skill cards — glow style, click to flip */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-28 max-w-3xl mx-auto">
             {SKILLS.map((s, i) => (
               <motion.div
                 key={s.name}
@@ -273,23 +245,41 @@ export default function Home() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="group border border-slate-200/60 rounded-xl p-5 hover:border-slate-300 hover:shadow-sm transition-all duration-200"
+                className="glow-card h-44"
+                onClick={() => setFlipped((p) => ({ ...p, [i]: !p[i] }))}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
-                    {s.icon}
-                  </div>
-                  <span className="font-mono text-xs text-slate-400 font-medium">{s.pct}%</span>
-                </div>
-                <span className="text-[13px] font-semibold text-slate-800 tracking-[-0.01em]">{s.name}</span>
-                <div className="mt-3 w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full rounded-full bg-slate-900"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${s.pct}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: i * 0.08 }}
-                  />
+                <div className="glow-card-glow" />
+                <div className="glow-card-inner">
+                  <AnimatePresence mode="wait">
+                    {!flipped[i] ? (
+                      <motion.div
+                        key="front"
+                        initial={{ opacity: 0, rotateY: -90 }}
+                        animate={{ opacity: 1, rotateY: 0 }}
+                        exit={{ opacity: 0, rotateY: 90 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex flex-col items-center justify-center gap-3 px-4 text-center"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-cyan-300">
+                          {s.icon}
+                        </div>
+                        <span className="text-[13px] font-semibold text-white/90 tracking-[-0.01em]">{s.name}</span>
+                        <span className="text-[10px] text-white/30 font-mono">Click to reveal</span>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="back"
+                        initial={{ opacity: 0, rotateY: -90 }}
+                        animate={{ opacity: 1, rotateY: 0 }}
+                        exit={{ opacity: 0, rotateY: 90 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex flex-col items-center justify-center gap-2"
+                      >
+                        <span className="font-mono text-4xl font-bold text-cyan-300">{s.pct}%</span>
+                        <span className="text-[12px] text-white/50">{s.name}</span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </motion.div>
             ))}
@@ -315,91 +305,6 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ── Services & Pricing ── */}
-      <section id="services" className="py-32 px-6 bg-slate-50/50">
-        <div className="max-w-5xl mx-auto">
-          <SectionHead
-            label="Pricing"
-            title="Simple, transparent pricing"
-            sub="No hidden fees. Choose the plan that fits your needs."
-          />
-
-          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            {/* Standard */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              className="bg-white border border-slate-200/60 rounded-2xl p-7 hover:shadow-lg hover:shadow-slate-200/40 transition-all duration-300"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <span className="font-mono text-xs text-slate-500 font-medium uppercase tracking-wider">Standard</span>
-              </div>
-              <div className="mb-6">
-                <span className="text-4xl font-bold text-slate-900 tracking-[-0.03em]">1000€</span>
-                <span className="text-slate-400 text-sm ml-1.5">/year</span>
-              </div>
-              <p className="text-[13px] text-slate-500 mb-6 leading-relaxed">Everything you need to establish a professional online presence.</p>
-              <ul className="space-y-2.5 mb-7">
-                {[
-                  "Modern, responsive design",
-                  "Up to 5 pages",
-                  "SEO optimization",
-                  "SSL certificate",
-                  "Hosting included",
-                  "Contact form",
-                  "Google Analytics",
-                  "Support & maintenance",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5 text-slate-600 text-[13px]">
-                    <Check className="size-3.5 text-slate-400 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a href="#contact">
-                <GradientButton className="w-full">
-                  Get started <ArrowRight className="size-3.5 ml-1" />
-                </GradientButton>
-              </a>
-            </motion.div>
-
-            {/* Custom */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-              className="bg-slate-900 border border-slate-800 rounded-2xl p-7 hover:shadow-lg hover:shadow-slate-900/20 transition-all duration-300 relative"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <span className="font-mono text-xs text-slate-400 font-medium uppercase tracking-wider">Custom</span>
-                <span className="text-[11px] text-indigo-300 font-medium bg-indigo-500/15 px-2.5 py-1 rounded-full border border-indigo-500/20">Popular</span>
-              </div>
-              <div className="mb-6">
-                <span className="text-4xl font-bold text-white tracking-[-0.03em]">Custom</span>
-              </div>
-              <p className="text-[13px] text-slate-400 mb-6 leading-relaxed">For complex projects that need custom features and integrations.</p>
-              <ul className="space-y-2.5 mb-7">
-                {[
-                  "Everything in Standard",
-                  "Unlimited pages",
-                  "E-commerce / Web shop",
-                  "Custom functionality",
-                  "CMS integration",
-                  "API integrations",
-                  "Advanced analytics",
-                  "Priority support",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5 text-slate-300 text-[13px]">
-                    <Check className="size-3.5 text-indigo-400 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <a href="#contact">
-                <GradientButton className="w-full !bg-white !text-slate-900 hover:!bg-slate-100">
-                  Let&apos;s talk <ArrowRight className="size-3.5 ml-1" />
-                </GradientButton>
-              </a>
-            </motion.div>
-          </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200/60 rounded-2xl overflow-hidden mt-20 max-w-3xl mx-auto border border-slate-200/60">
@@ -416,100 +321,92 @@ export default function Home() {
       </section>
 
       {/* ── Portfolio ── */}
-      <section id="portfolio" className="py-32 px-6">
+      <section id="portfolio" className="py-32 px-6 bg-slate-50/50">
         <div className="max-w-5xl mx-auto">
           <SectionHead
             label="Work"
-            title="Selected projects"
-            sub="A look at some of the websites we've designed and built."
+            title="Our projects"
+            sub="Real websites we've designed and built for our clients."
           />
 
-          <div className="flex gap-2 mb-10 justify-center flex-wrap">
-            {CATS.map((c) => (
-              <button key={c} onClick={() => setActiveCat(c)}
-                className={`px-3.5 py-1.5 rounded-full text-[12px] transition-all cursor-pointer font-medium ${
-                  activeCat === c
-                    ? "bg-slate-900 text-white"
-                    : "text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200"
-                }`}
+          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+            {PORTFOLIO.map((p, i) => (
+              <motion.a
+                key={p.title}
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                custom={i}
+                variants={fade}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="group border border-slate-200/60 rounded-xl overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all duration-300 bg-white"
               >
-                {c === "all" ? "All" : c === "web-shop" ? "Web Shop" : c.charAt(0).toUpperCase() + c.slice(1)}
-              </button>
+                <div className="h-48 bg-slate-100 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[linear-gradient(135deg,#f1f5f9_25%,#e2e8f0_50%,#f1f5f9_75%)]" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-slate-400 text-sm font-semibold tracking-wide">{p.url.replace("https://", "")}</span>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/60 backdrop-blur-sm">
+                    <span className="flex items-center gap-1.5 text-white text-[12px] font-medium bg-white/15 px-4 py-2 rounded-full border border-white/20">
+                      Visit site <ArrowUpRight className="size-3" />
+                    </span>
+                  </div>
+                </div>
+                <div className="p-5">
+                  <h3 className="text-base font-semibold text-slate-800 mb-2.5 tracking-[-0.01em]">{p.title}</h3>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {p.tags.map((t) => (
+                      <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-medium">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.a>
             ))}
           </div>
-
-          <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            <AnimatePresence mode="popLayout">
-              {filtered.map((p, i) => (
-                <motion.div key={p.title} layout custom={i} variants={fade} initial="hidden" animate="visible"
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  className="group border border-slate-200/60 rounded-xl overflow-hidden hover:border-slate-300 hover:shadow-md transition-all duration-200 cursor-pointer bg-white"
-                >
-                  <div className="h-44 bg-slate-100 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[linear-gradient(135deg,#f1f5f9_25%,#e2e8f0_50%,#f1f5f9_75%)]" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-10 rounded bg-white/80 border border-slate-200/50 shadow-sm" />
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/60 backdrop-blur-sm">
-                      <span className="flex items-center gap-1.5 text-white text-[12px] font-medium bg-white/15 px-4 py-2 rounded-full border border-white/20">
-                        View project <ArrowUpRight className="size-3" />
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-sm font-semibold text-slate-800 mb-2.5 tracking-[-0.01em]">{p.title}</h3>
-                    <div className="flex gap-1.5 flex-wrap">
-                      {p.tags.map((t) => (
-                        <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-medium">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
         </div>
       </section>
 
       {/* ── Payment ── */}
-      <section id="payment" className="py-32 px-6 bg-slate-50/50">
+      <section id="payment" className="py-32 px-6">
         <div className="max-w-5xl mx-auto">
           <SectionHead
             label="Payment"
-            title="Flexible payment options"
-            sub="Choose the payment method that works best for you."
+            title="Online card payments"
+            sub="We accept all major credit and debit cards via secure online processing."
           />
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto mb-10">
-            {PAYMENTS.map((m, i) => (
-              <motion.div key={m.title} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="bg-white border border-slate-200/60 rounded-xl p-5 text-center hover:border-slate-300 hover:shadow-sm transition-all duration-200 group"
-              >
-                <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 mx-auto mb-3 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
-                  {m.icon}
-                </div>
-                <h3 className="text-[13px] font-semibold text-slate-800 mb-0.5 tracking-[-0.01em]">{m.title}</h3>
-                <p className="text-[11px] text-slate-400">{m.sub}</p>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-md mx-auto bg-white border border-slate-200/60 rounded-xl p-6 text-center hover:border-slate-300 hover:shadow-sm transition-all duration-200 mb-8"
+          >
+            <div className="w-14 h-14 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mx-auto mb-4">
+              <CreditCard className="size-6" />
+            </div>
+            <h3 className="text-base font-semibold text-slate-800 mb-1 tracking-[-0.01em]">Card Payments</h3>
+            <p className="text-[13px] text-slate-500 mb-4">Visa, Mastercard, American Express</p>
+            <p className="text-[12px] text-slate-400">Processed securely via Stripe & Revolut Business</p>
+          </motion.div>
 
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            className="max-w-2xl mx-auto bg-white border border-slate-200/60 rounded-xl p-4 flex items-start gap-3"
+            className="max-w-md mx-auto bg-slate-50 border border-slate-200/60 rounded-xl p-4 flex items-start gap-3"
           >
             <Lock className="size-4 text-slate-400 flex-shrink-0 mt-0.5" />
             <p className="text-[13px] text-slate-500 leading-relaxed">
               <span className="font-semibold text-slate-700">Security notice:</span> Payment is arranged after consultation.
-              We never deliver services without a confirmed payment. We use Stripe for secure card processing.
+              We never deliver services without confirmed payment. All transactions are encrypted and PCI-compliant.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* ── Contact ── */}
-      <section id="contact" className="py-32 px-6">
+      <section id="contact" className="py-32 px-6 bg-slate-50/50">
         <div className="max-w-5xl mx-auto">
           <SectionHead
             label="Contact"
@@ -525,7 +422,6 @@ export default function Home() {
             viewport={{ once: true }}
             className="max-w-lg mx-auto bg-white border border-slate-200/60 rounded-2xl p-7 space-y-4"
           >
-            {/* Honeypot */}
             <input type="text" name="website" className="absolute -left-[9999px]" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
             <div className="grid grid-cols-2 gap-3">
@@ -542,7 +438,7 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-slate-700 text-xs font-medium mb-1.5">Phone</label>
-                <input name="phone" type="tel" className={inputCls} placeholder="+1 ..." />
+                <input name="phone" type="tel" className={inputCls} placeholder="+385 ..." />
               </div>
               <div>
                 <label className="block text-slate-700 text-xs font-medium mb-1.5">Project type</label>
@@ -566,15 +462,15 @@ export default function Home() {
               <textarea name="message" required minLength={10} rows={4} className={`${inputCls} resize-none`} placeholder="Tell us about your project..." />
             </div>
 
-            <GradientButton type="submit" disabled={formStatus === "sending"} className="w-full" size="lg">
+            <button type="submit" disabled={formStatus === "sending"} className="fancy-btn w-full disabled:opacity-40">
               {formStatus === "sending" ? (
                 "Sending..."
               ) : formStatus === "sent" ? (
-                <><Check className="size-4" /> Sent!</>
+                <span className="flex items-center justify-center gap-2"><Check className="size-4" /> Sent!</span>
               ) : (
-                <><Send className="size-4" /> Send message</>
+                <span className="flex items-center justify-center gap-2"><Send className="size-4" /> Send message</span>
               )}
-            </GradientButton>
+            </button>
 
             {formStatus === "error" && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
             {formStatus === "sent" && <p className="text-emerald-600 text-sm text-center">Thank you! We&apos;ll get back to you within 24 hours.</p>}

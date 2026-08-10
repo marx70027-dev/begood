@@ -22,3 +22,129 @@
 ::selection {
   background: rgba(99, 102, 241, 0.15);
 }
+
+/* ── Fancy CTA button ── */
+
+.fancy-btn {
+  --border-color: linear-gradient(-45deg, #ffae00, #7e03aa, #00fffb);
+  --border-width: 0.125em;
+  --curve-size: 0.5em;
+  --blur: 30px;
+  --bg: #080312;
+  --color: #afffff;
+  color: var(--color);
+  cursor: pointer;
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  place-content: center;
+  padding: 0.6em 1.8em;
+  font-size: 14px;
+  font-weight: 600;
+  border: 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+  clip-path: polygon(
+    0% var(--curve-size),
+    var(--curve-size) 0,
+    100% 0,
+    100% calc(100% - var(--curve-size)),
+    calc(100% - var(--curve-size)) 100%,
+    0 100%
+  );
+  transition: color 250ms;
+}
+
+.fancy-btn::after,
+.fancy-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.fancy-btn::before {
+  background: var(--border-color);
+  background-size: 300% 300%;
+  animation: fancy-border-move 5s ease infinite;
+  z-index: -2;
+}
+
+@keyframes fancy-border-move {
+  0% { background-position: 31% 0%; }
+  50% { background-position: 70% 100%; }
+  100% { background-position: 31% 0%; }
+}
+
+.fancy-btn::after {
+  background: var(--bg);
+  z-index: -1;
+  clip-path: polygon(
+    var(--border-width) calc(var(--curve-size) + var(--border-width) * 0.5),
+    calc(var(--curve-size) + var(--border-width) * 0.5) var(--border-width),
+    calc(100% - var(--border-width)) var(--border-width),
+    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+    var(--border-width) calc(100% - var(--border-width))
+  );
+  transition: clip-path 500ms;
+}
+
+.fancy-btn:where(:hover, :focus)::after {
+  clip-path: polygon(
+    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+    calc(100% - var(--border-width)) var(--border-width),
+    calc(100% - var(--border-width)) var(--border-width),
+    calc(100% - var(--border-width)) calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+    calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width))
+  );
+  transition: 200ms;
+}
+
+.fancy-btn:where(:hover, :focus) {
+  color: #fff;
+}
+
+/* ── Glow card ── */
+
+.glow-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: #3d3c3d;
+  cursor: pointer;
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+}
+
+.glow-card-inner {
+  position: absolute;
+  inset: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(0.75rem - 2px);
+  background: #323132;
+  z-index: 1;
+  transition: background 300ms;
+}
+
+.glow-card:hover .glow-card-inner {
+  background: #3a393a;
+}
+
+.glow-card-glow {
+  position: absolute;
+  width: 14rem;
+  height: 12rem;
+  background: white;
+  filter: blur(50px);
+  left: -50%;
+  top: -50%;
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+.glow-card:hover .glow-card-glow {
+  opacity: 1;
+}
