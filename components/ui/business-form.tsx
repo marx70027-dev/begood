@@ -38,6 +38,17 @@ const PHONE_REGEX = /^\+?[\d\s\-()]{7,20}$/;
 
 const headingFont = "'Bodoni MT Black', 'Bodoni MT', 'Didot', 'Georgia', serif";
 
+const FAQ = [
+  { q: "How much does a website cost?", a: "Our websites start from $299 for a simple site. A full business website is typically around $599–$999. Custom projects with e-commerce or advanced features are quoted individually." },
+  { q: "How long does it take to build a website?", a: "A Starter site takes about 5–7 business days. Business and Premium sites take 2–4 weeks depending on complexity. We'll give you a timeline after reviewing your needs." },
+  { q: "Do I need to provide content and images?", a: "It helps if you do, but we can also write content and source professional images for you. We'll guide you through the whole process." },
+  { q: "Will my website be mobile-friendly?", a: "Absolutely. Every website we build is fully responsive and looks great on phones, tablets, and desktops." },
+  { q: "Do you offer hosting and maintenance?", a: "Yes. We offer hosting packages starting at $15/month which include SSL, backups, updates, and basic support." },
+  { q: "Can I update the website myself after it's built?", a: "Yes. We build on modern platforms with easy-to-use admin panels. We also provide a quick training session so you can manage your content confidently." },
+  { q: "What if I'm not happy with the design?", a: "We include up to 3 rounds of revisions in every plan. We work closely with you to make sure the final result matches your vision." },
+  { q: "Do you build online stores?", a: "Yes. Our Premium and Custom plans include full e-commerce functionality — product pages, cart, checkout, payment integration, and order management." },
+];
+
 export default function BusinessForm() {
   const [form, setForm] = useState<FormData>({
     phone: "", country: "",
@@ -47,6 +58,7 @@ export default function BusinessForm() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitCount, setSubmitCount] = useState(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const formStartTime = useRef(Date.now());
   const lastSubmitTime = useRef(0);
 
@@ -148,6 +160,40 @@ export default function BusinessForm() {
           <p className="text-white/50 text-lg max-w-lg mx-auto">
             Fill out the form below and we&apos;ll get back to you with a tailored offer for your business.
           </p>
+        </div>
+
+        {/* FAQ */}
+        <div className="mb-10">
+          <h2
+            className="text-2xl font-black text-white mb-5 text-center"
+            style={{ fontFamily: headingFont }}
+          >
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-2">
+            {FAQ.map((item, i) => (
+              <div
+                key={i}
+                className="border border-white/10 rounded-xl overflow-hidden"
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer hover:bg-white/[0.03] transition-colors"
+                >
+                  <span className="text-white text-sm font-bold pr-4">{item.q}</span>
+                  <span className="text-white/40 text-xl flex-shrink-0">
+                    {openFaq === i ? "−" : "+"}
+                  </span>
+                </button>
+                {openFaq === i && (
+                  <div className="px-5 pb-4">
+                    <p className="text-white/50 text-sm leading-relaxed">{item.a}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
         <form
