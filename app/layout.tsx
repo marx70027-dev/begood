@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "weblirev.com – Kreirajmo vašu web stranicu",
-  description: "Profesionalna izrada web stranica za vaš biznis. Odaberite plan i lansiramo vaš projekt.",
+  title: "weblirev.com – Let's Build Your Website",
+  description: "Professional website creation for your business. Choose a plan and we'll launch your project.",
 };
 
 export default function RootLayout({

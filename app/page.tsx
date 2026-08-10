@@ -8,6 +8,8 @@ import BusinessForm from "@/components/ui/business-form";
 
 type Phase = "cookie" | "rocket" | "launching" | "form";
 
+const headingFont = "'Bodoni MT Black', 'Bodoni MT', 'Didot', 'Georgia', serif";
+
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("cookie");
   const [showSmoke, setShowSmoke] = useState(false);
@@ -48,14 +50,12 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-[#0a1628] min-h-screen overflow-hidden">
-      {/* Cookie consent */}
+    <div className="bg-black min-h-screen overflow-hidden">
       <CookieConsent
         visible={phase === "cookie"}
         onAccept={handleAcceptCookies}
       />
 
-      {/* Rocket + Launch phase */}
       <AnimatePresence>
         {(phase === "rocket" || phase === "launching") && (
           <motion.div
@@ -65,24 +65,21 @@ export default function Home() {
             exit={{ opacity: 0, transition: { duration: 0.6 } }}
             className="fixed inset-0 z-50"
           >
-            {/* Background stars */}
-            <div className="absolute inset-0 bg-[#050d1a]">
+            <div className="absolute inset-0 bg-black">
               <div className="stars-bg" />
             </div>
 
-            {/* Rocket image */}
             <motion.div
               className="absolute inset-0 flex items-center justify-center"
               style={{ transform: `translateY(${rocketY}vh)` }}
             >
               <img
                 src="/rocket-launch.jpg"
-                alt="Raketa na lansirnoj rampi"
+                alt="Rocket on launch pad"
                 className="w-full h-full object-cover object-center"
               />
             </motion.div>
 
-            {/* Smoke effect */}
             <AnimatePresence>
               {showSmoke && (
                 <motion.div
@@ -95,7 +92,6 @@ export default function Home() {
               )}
             </AnimatePresence>
 
-            {/* Fire/glow at bottom during launch */}
             <AnimatePresence>
               {phase === "launching" && (
                 <motion.div
@@ -107,10 +103,8 @@ export default function Home() {
               )}
             </AnimatePresence>
 
-            {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/70 via-transparent to-[#0a1628]/30 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
 
-            {/* Title + Launch button */}
             {phase === "rocket" && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -119,18 +113,20 @@ export default function Home() {
                 className="absolute inset-0 flex flex-col items-center justify-center z-10"
               >
                 <div className="text-center mb-8">
-                  <h1 className="text-5xl md:text-7xl font-black text-white mb-3 drop-shadow-2xl">
-                    web<span className="text-yellow-400">lirev</span>.com
+                  <h1
+                    className="text-5xl md:text-7xl text-white mb-3 drop-shadow-2xl"
+                    style={{ fontFamily: headingFont }}
+                  >
+                    web<span className="text-white/50">lirev</span>.com
                   </h1>
                   <p className="text-white/60 text-lg md:text-xl">
-                    Vaša web stranica čeka — pritisnite Launch
+                    Your website awaits — press Launch
                   </p>
                 </div>
                 <LaunchButton onClick={handleLaunch} />
               </motion.div>
             )}
 
-            {/* Countdown during launch */}
             {phase === "launching" && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -141,9 +137,10 @@ export default function Home() {
                   initial={{ scale: 2, opacity: 0 }}
                   animate={{ scale: 1, opacity: [0, 1, 1, 0] }}
                   transition={{ duration: 2.5, times: [0, 0.1, 0.7, 1] }}
-                  className="text-6xl font-black text-yellow-400 drop-shadow-2xl"
+                  className="text-6xl font-black text-white drop-shadow-2xl"
+                  style={{ fontFamily: headingFont }}
                 >
-                  🚀 Lansiranje...
+                  Launching...
                 </motion.p>
               </motion.div>
             )}
@@ -151,7 +148,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Form phase */}
       <AnimatePresence>
         {phase === "form" && (
           <motion.div
@@ -165,7 +161,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Star background CSS */}
       <style jsx>{`
         .stars-bg {
           position: absolute;
