@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CookieConsent from "@/components/ui/cookie-consent";
 import LaunchButton from "@/components/ui/launch-button";
 import BusinessForm from "@/components/ui/business-form";
+import RocketScene from "@/components/ui/rocket-scene";
 
 type Phase = "cookie" | "rocket" | "launching" | "form";
 
@@ -65,21 +66,15 @@ export default function Home() {
             exit={{ opacity: 0, transition: { duration: 0.6 } }}
             className="fixed inset-0 z-50"
           >
-            <div className="absolute inset-0 bg-black">
-              <div className="stars-bg" />
-            </div>
-
+            {/* Rocket scene with launch animation */}
             <motion.div
-              className="absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0"
               style={{ transform: `translateY(${rocketY}vh)` }}
             >
-              <img
-                src="/rocket-launch.jpg"
-                alt="Rocket on launch pad"
-                className="w-full h-full object-cover object-center"
-              />
+              <RocketScene />
             </motion.div>
 
+            {/* Smoke effect */}
             <AnimatePresence>
               {showSmoke && (
                 <motion.div
@@ -92,6 +87,7 @@ export default function Home() {
               )}
             </AnimatePresence>
 
+            {/* Fire glow during launch */}
             <AnimatePresence>
               {phase === "launching" && (
                 <motion.div
@@ -103,8 +99,7 @@ export default function Home() {
               )}
             </AnimatePresence>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
-
+            {/* Title + Launch button */}
             {phase === "rocket" && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -127,6 +122,7 @@ export default function Home() {
               </motion.div>
             )}
 
+            {/* Launching text */}
             {phase === "launching" && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -148,6 +144,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
+      {/* Form phase */}
       <AnimatePresence>
         {phase === "form" && (
           <motion.div
@@ -160,35 +157,6 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <style jsx>{`
-        .stars-bg {
-          position: absolute;
-          inset: 0;
-          background-image:
-            radial-gradient(2px 2px at 20px 30px, white, transparent),
-            radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-            radial-gradient(1px 1px at 90px 40px, white, transparent),
-            radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-            radial-gradient(2px 2px at 160px 30px, white, transparent),
-            radial-gradient(1px 1px at 200px 60px, rgba(255,255,255,0.7), transparent),
-            radial-gradient(1px 1px at 50px 120px, white, transparent),
-            radial-gradient(2px 2px at 100px 150px, rgba(255,255,255,0.5), transparent),
-            radial-gradient(1px 1px at 180px 140px, white, transparent),
-            radial-gradient(1px 1px at 250px 90px, rgba(255,255,255,0.8), transparent),
-            radial-gradient(2px 2px at 300px 50px, white, transparent),
-            radial-gradient(1px 1px at 350px 120px, rgba(255,255,255,0.6), transparent),
-            radial-gradient(1px 1px at 400px 30px, white, transparent),
-            radial-gradient(2px 2px at 450px 80px, rgba(255,255,255,0.7), transparent),
-            radial-gradient(1px 1px at 500px 140px, white, transparent);
-          background-size: 500px 160px;
-          animation: twinkle 4s ease-in-out infinite alternate;
-        }
-        @keyframes twinkle {
-          0% { opacity: 0.6; }
-          100% { opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }
