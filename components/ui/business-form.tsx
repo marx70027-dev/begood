@@ -27,20 +27,16 @@ const PLANS = [
 interface FormData {
   phone: string;
   country: string;
-  facebook: string;
-  instagram: string;
   businessType: string;
   plan: string;
   message: string;
-  honey: string; // honeypot
+  honey: string;
 }
 
 const PHONE_REGEX = /^\+?[\d\s\-()]{7,20}$/;
-const SOCIAL_REGEX = /^[a-zA-Z0-9._@/:-]{0,200}$/;
-
 export default function BusinessForm() {
   const [form, setForm] = useState<FormData>({
-    phone: "", country: "", facebook: "", instagram: "",
+    phone: "", country: "",
     businessType: "", plan: "", message: "", honey: "",
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
@@ -59,8 +55,6 @@ export default function BusinessForm() {
     if (!form.phone.trim()) e.phone = "Broj mobitela je obavezan";
     else if (!PHONE_REGEX.test(form.phone.trim())) e.phone = "Nevažeći format broja";
     if (!form.country) e.country = "Odaberite državu";
-    if (form.facebook && !SOCIAL_REGEX.test(form.facebook)) e.facebook = "Nevažeći format";
-    if (form.instagram && !SOCIAL_REGEX.test(form.instagram)) e.instagram = "Nevažeći format";
     if (!form.businessType) e.businessType = "Odaberite vrstu biznisa";
     if (!form.plan) e.plan = "Odaberite plan";
     if (form.message.length > 1000) e.message = "Poruka je preduga (max 1000 znakova)";
@@ -195,37 +189,6 @@ export default function BusinessForm() {
             {errors.country && <p className="text-red-400 text-xs mt-1">{errors.country}</p>}
           </div>
 
-          {/* Social media */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-white/80 text-sm font-bold mb-2">
-                Facebook
-              </label>
-              <input
-                type="text"
-                value={form.facebook}
-                onChange={(e) => update("facebook", e.target.value)}
-                placeholder="facebook.com/vašstranica"
-                maxLength={200}
-                className={`w-full bg-white/[0.06] border ${errors.facebook ? "border-red-400" : "border-white/10"} rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-yellow-400/50 transition-colors`}
-              />
-              {errors.facebook && <p className="text-red-400 text-xs mt-1">{errors.facebook}</p>}
-            </div>
-            <div>
-              <label className="block text-white/80 text-sm font-bold mb-2">
-                Instagram
-              </label>
-              <input
-                type="text"
-                value={form.instagram}
-                onChange={(e) => update("instagram", e.target.value)}
-                placeholder="@vašprofil"
-                maxLength={200}
-                className={`w-full bg-white/[0.06] border ${errors.instagram ? "border-red-400" : "border-white/10"} rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-yellow-400/50 transition-colors`}
-              />
-              {errors.instagram && <p className="text-red-400 text-xs mt-1">{errors.instagram}</p>}
-            </div>
-          </div>
 
           {/* Business type */}
           <div>
