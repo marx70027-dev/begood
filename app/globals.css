@@ -1,39 +1,24 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-dark-950: #000000;
-  --color-dark-900: #0a0a0a;
-  --color-dark-800: #111111;
-  --color-dark-700: #1a1a1a;
-  --color-dark-600: #222222;
-  --color-dark-500: #333333;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
 }
 
 @layer base {
   * {
-    @apply border-gray-200;
+    @apply border-slate-200;
   }
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply bg-white text-gray-900;
+    @apply bg-white text-slate-900;
   }
 }
 
 ::selection {
-  background: rgba(59, 130, 246, 0.2);
-}
-
-@keyframes gradient-spin {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes float-gentle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  background: rgba(99, 102, 241, 0.15);
 }

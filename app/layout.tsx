@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, Syne } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
   display: "swap",
 });
 
-const syne = Syne({
-  variable: "--font-syne",
+const mono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "weblirev | Professional Web Development",
+  title: "weblirev — Web Development Studio",
   description:
-    "Modern, fast, and responsive websites tailored to your brand. From 1000€/year or custom pricing.",
+    "We design and engineer modern websites that drive growth. Premium web development from 1000€/year.",
   keywords: [
     "web development",
     "website design",
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     "professional websites",
   ],
   openGraph: {
-    title: "weblirev | Professional Web Development",
+    title: "weblirev — Web Development Studio",
     description:
-      "Modern, fast, and responsive websites tailored to your brand.",
+      "We design and engineer modern websites that drive growth.",
     url: "https://weblirev.com",
     siteName: "weblirev",
     type: "website",
@@ -42,8 +42,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${syne.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-[family-name:var(--font-inter)]">
+    <html lang="en" className={`${jakarta.variable} ${mono.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col font-[family-name:var(--font-jakarta)]">
         {children}
       </body>
     </html>

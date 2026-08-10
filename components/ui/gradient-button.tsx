@@ -15,14 +15,14 @@ const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "relative inline-flex items-center justify-center font-semibold rounded-full transition-all duration-300 cursor-pointer",
+          "relative inline-flex items-center justify-center font-semibold rounded-full transition-all duration-200 cursor-pointer",
           variant === "default"
-            ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98]"
-            : "bg-white text-gray-900 border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600 hover:shadow-md active:scale-[0.98]",
-          size === "sm" && "text-sm px-5 py-2.5",
-          size === "default" && "text-sm px-7 py-3",
-          size === "lg" && "text-[15px] px-9 py-3.5",
-          "disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:hover:scale-100",
+            ? "bg-slate-900 text-white hover:bg-slate-800 active:scale-[0.97] shadow-sm"
+            : "bg-transparent text-slate-700 border border-slate-300 hover:border-slate-400 hover:text-slate-900 active:scale-[0.97]",
+          size === "sm" && "text-[13px] px-5 py-2",
+          size === "default" && "text-[13px] px-6 py-2.5",
+          size === "lg" && "text-sm px-8 py-3",
+          "disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-slate-900",
           className
         )}
         {...props}

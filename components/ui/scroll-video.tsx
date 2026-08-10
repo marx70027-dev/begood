@@ -50,7 +50,7 @@ export default function ScrollVideo() {
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/70" />
       </div>
     </div>
   );
