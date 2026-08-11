@@ -141,8 +141,8 @@ export default function ShowcasePage() {
       {/* SPOTLIGHT REVEAL */}
       <section className="px-[5%] pb-20 max-w-[1100px] mx-auto">
         <SpotlightReveal
-          baseSrc="/black_motorcycle.jpg"
-          revealSrc="/white_motorcycle.jpg"
+          baseSrc="/black_motorcycle.png"
+          revealSrc="/white_motorcycle.png"
           radius={50}
           lerpFactor={0.15}
           hudColor="rgba(0, 230, 255, 0.8)"
