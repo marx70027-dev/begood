@@ -5,6 +5,7 @@ import { Playfair_Display, DM_Sans } from "next/font/google";
 import SpotlightReveal from "@/components/ui/spotlight-reveal";
 import Video360Scrub from "@/components/ui/video-360-scrub";
 import { useState } from "react";
+import styles from "./showcase.module.css";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -71,24 +72,19 @@ const FEATURES = [
   {
     title: "Kill the ABS",
     text: "One button. Rear ABS off. Full ABS off. Your call. Dirt, ice, gravel — ride it your way.",
+    color: "#3d6aff",
   },
   {
     title: "43mm USD Forks",
     text: "Fully adjustable upside-down forks that swallow rocks, ruts, and jumps like breakfast.",
+    color: "#a855f7",
   },
   {
     title: "Rally Position",
     text: "Stand on the pegs. Grip the tank. Total control at any speed, any terrain. Built for standing riders.",
+    color: "#ec4899",
   },
 ];
-
-function GlowButton({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <button className={`glow-btn ${className}`}>
-      {children}
-    </button>
-  );
-}
 
 export default function ShowcasePage() {
   const [activeSpec, setActiveSpec] = useState<number | null>(null);
@@ -99,83 +95,6 @@ export default function ShowcasePage() {
       className={`${playfair.variable} ${dmSans.variable} min-h-screen overflow-x-hidden`}
       style={{ background: "#ffffff", color: "#111111" }}
     >
-      <style jsx global>{`
-        .glow-btn {
-          position: relative;
-          padding: 14px 32px;
-          border-radius: 7px;
-          border: 1px solid rgb(61, 106, 255);
-          font-size: 12px;
-          text-transform: uppercase;
-          font-weight: 700;
-          letter-spacing: 3px;
-          background: transparent;
-          color: #111;
-          overflow: hidden;
-          box-shadow: 0 0 0 0 transparent;
-          transition: all 0.2s ease-in;
-          cursor: pointer;
-          font-family: var(--font-dm);
-        }
-        .glow-btn:hover {
-          background: rgb(61, 106, 255);
-          color: #fff;
-          box-shadow: 0 0 30px 5px rgba(61, 106, 255, 0.4);
-          transition: all 0.2s ease-out;
-        }
-        .glow-btn:hover::before {
-          animation: btn-shine 0.5s 0s linear;
-        }
-        .glow-btn::before {
-          content: '';
-          display: block;
-          width: 0px;
-          height: 86%;
-          position: absolute;
-          top: 7%;
-          left: 0%;
-          opacity: 0;
-          background: #fff;
-          box-shadow: 0 0 50px 30px #fff;
-          transform: skewX(-20deg);
-        }
-        @keyframes btn-shine {
-          from { opacity: 0; left: 0%; }
-          50% { opacity: 1; }
-          to { opacity: 0; left: 100%; }
-        }
-        .glow-btn:active {
-          box-shadow: 0 0 0 0 transparent;
-          transition: box-shadow 0.2s ease-in;
-        }
-        .spec-card {
-          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .spec-card:hover {
-          transform: translateY(-4px);
-          border-color: rgb(61, 106, 255) !important;
-          box-shadow: 0 12px 40px rgba(61, 106, 255, 0.12);
-        }
-        .fact-card {
-          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-          cursor: pointer;
-        }
-        .fact-card:hover {
-          border-color: rgba(61, 106, 255, 0.4) !important;
-          background: rgba(61, 106, 255, 0.03) !important;
-        }
-        .feature-card {
-          transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .feature-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 24px 48px rgba(0,0,0,0.08);
-        }
-        .counter-value {
-          font-variant-numeric: tabular-nums;
-        }
-      `}</style>
-
       {/* NAV */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5%] h-16"
@@ -189,9 +108,11 @@ export default function ShowcasePage() {
           className="text-sm font-bold tracking-[4px] uppercase"
           style={{ fontFamily: "var(--font-dm)", color: "#111" }}
         >
-          Ténéré <span style={{ color: "rgb(61, 106, 255)" }}>700</span>
+          Ténéré <span className={styles.gradientText}>700</span>
         </span>
-        <GlowButton>Explore</GlowButton>
+        <button className={styles.glowBtn} style={{ fontFamily: "var(--font-dm)" }}>
+          Explore
+        </button>
       </nav>
 
       {/* HERO */}
@@ -204,7 +125,7 @@ export default function ShowcasePage() {
           >
             <span
               className="text-xs tracking-[6px] uppercase font-medium block mb-6"
-              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
+              style={{ color: "#3d6aff", fontFamily: "var(--font-dm)" }}
             >
               Yamaha — Adventure Series
             </span>
@@ -214,7 +135,9 @@ export default function ShowcasePage() {
             >
               Born from<br />
               the{" "}
-              <em className="font-normal" style={{ fontStyle: "italic" }}>Sahara.</em>
+              <em className={styles.gradientText} style={{ fontStyle: "italic", fontWeight: 400 }}>
+                Sahara.
+              </em>
             </h1>
             <div className="flex items-end justify-between flex-wrap gap-8">
               <p
@@ -228,7 +151,9 @@ export default function ShowcasePage() {
                 Built to go anywhere. Hover the image to peek at the alternate colorway hiding underneath.
               </p>
               <div className="flex gap-4">
-                <GlowButton>See Specs</GlowButton>
+                <button className={styles.glowBtn} style={{ fontFamily: "var(--font-dm)" }}>
+                  See Specs
+                </button>
                 <button
                   className="px-7 py-3.5 rounded-lg text-xs uppercase font-bold tracking-[3px] transition-all duration-200 hover:bg-black hover:text-white"
                   style={{
@@ -270,7 +195,7 @@ export default function ShowcasePage() {
 
       {/* DIVIDER */}
       <div className="max-w-[1200px] mx-auto px-[5%]">
-        <div style={{ height: "1px", background: "rgba(0,0,0,0.08)" }} />
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(61,106,255,0.3), rgba(168,85,247,0.3), transparent)" }} />
       </div>
 
       {/* SPECS */}
@@ -284,7 +209,7 @@ export default function ShowcasePage() {
         >
           <span
             className="text-xs tracking-[6px] uppercase font-medium block mb-4"
-            style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
+            style={{ color: "#3d6aff", fontFamily: "var(--font-dm)" }}
           >
             The Numbers
           </span>
@@ -292,7 +217,7 @@ export default function ShowcasePage() {
             className="text-5xl sm:text-6xl font-black"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Raw <em style={{ fontStyle: "italic", fontWeight: 400 }}>Specs</em>
+            Raw <em className={styles.gradientText} style={{ fontStyle: "italic", fontWeight: 400 }}>Specs</em>
           </h2>
         </motion.div>
 
@@ -305,7 +230,7 @@ export default function ShowcasePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="spec-card rounded-xl p-6 cursor-pointer"
+              className={`${styles.specCard} rounded-xl p-6`}
               style={{
                 background: activeSpec === i ? "rgba(61, 106, 255, 0.04)" : "#fafafa",
                 border: activeSpec === i
@@ -321,7 +246,7 @@ export default function ShowcasePage() {
                 {spec.label}
               </span>
               <span
-                className="text-3xl font-black block counter-value"
+                className={`text-3xl font-black block ${styles.counterValue}`}
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
                 {spec.value}
@@ -331,7 +256,7 @@ export default function ShowcasePage() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   className="text-xs block mt-2 font-medium"
-                  style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
+                  style={{ color: "#3d6aff", fontFamily: "var(--font-dm)" }}
                 >
                   {spec.detail}
                 </motion.span>
@@ -343,7 +268,7 @@ export default function ShowcasePage() {
 
       {/* DIVIDER */}
       <div className="max-w-[1200px] mx-auto px-[5%]">
-        <div style={{ height: "1px", background: "rgba(0,0,0,0.08)" }} />
+        <div style={{ height: "1px", background: "linear-gradient(90deg, transparent, rgba(168,85,247,0.3), rgba(236,72,153,0.3), transparent)" }} />
       </div>
 
       {/* 360 VIDEO */}
@@ -357,7 +282,7 @@ export default function ShowcasePage() {
         >
           <span
             className="text-xs tracking-[6px] uppercase font-medium block mb-4"
-            style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
+            style={{ color: "#a855f7", fontFamily: "var(--font-dm)" }}
           >
             Interactive
           </span>
@@ -365,7 +290,7 @@ export default function ShowcasePage() {
             className="text-5xl sm:text-6xl font-black mb-4"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Spin it <em style={{ fontStyle: "italic", fontWeight: 400 }}>around.</em>
+            Spin it <em className={styles.gradientText} style={{ fontStyle: "italic", fontWeight: 400 }}>around.</em>
           </h2>
           <p
             className="text-base max-w-md"
@@ -391,7 +316,7 @@ export default function ShowcasePage() {
       {/* DARK SECTION — FUN FACTS */}
       <section
         className="py-28"
-        style={{ background: "#111", color: "#fff" }}
+        style={{ background: "linear-gradient(135deg, #0a0a12, #151520)", color: "#fff" }}
       >
         <div className="px-[5%] max-w-[1200px] mx-auto">
           <motion.div
@@ -403,7 +328,7 @@ export default function ShowcasePage() {
           >
             <span
               className="text-xs tracking-[6px] uppercase font-medium block mb-4"
-              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
+              style={{ color: "#ec4899", fontFamily: "var(--font-dm)" }}
             >
               Deep Cuts
             </span>
@@ -412,7 +337,7 @@ export default function ShowcasePage() {
               style={{ fontFamily: "var(--font-playfair)" }}
             >
               Things you didn&apos;t{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400 }}>know.</em>
+              <em className={styles.gradientText} style={{ fontStyle: "italic", fontWeight: 400 }}>know.</em>
             </h2>
           </motion.div>
 
@@ -425,13 +350,13 @@ export default function ShowcasePage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="fact-card rounded-xl overflow-hidden"
+                className={`${styles.factCard} rounded-xl overflow-hidden`}
                 style={{
                   background: expandedFact === i
-                    ? "rgba(61, 106, 255, 0.08)"
+                    ? "rgba(100, 140, 255, 0.08)"
                     : "rgba(255,255,255,0.04)",
                   border: expandedFact === i
-                    ? "1px solid rgba(61, 106, 255, 0.3)"
+                    ? "1px solid rgba(100, 140, 255, 0.3)"
                     : "1px solid rgba(255,255,255,0.08)",
                 }}
                 onClick={() => setExpandedFact(expandedFact === i ? null : i)}
@@ -441,8 +366,8 @@ export default function ShowcasePage() {
                     <span
                       className="px-3 py-1 rounded-full font-bold tracking-[2px] uppercase"
                       style={{
-                        background: "rgba(61, 106, 255, 0.15)",
-                        color: "rgb(61, 106, 255)",
+                        background: `rgba(${i % 2 === 0 ? "61, 106, 255" : "168, 85, 247"}, 0.15)`,
+                        color: i % 2 === 0 ? "#648cff" : "#c084fc",
                         fontFamily: "var(--font-dm)",
                         fontSize: "9px",
                       }}
@@ -497,7 +422,7 @@ export default function ShowcasePage() {
         >
           <span
             className="text-xs tracking-[6px] uppercase font-medium block mb-4"
-            style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
+            style={{ color: "#f97316", fontFamily: "var(--font-dm)" }}
           >
             What Sets It Apart
           </span>
@@ -506,7 +431,7 @@ export default function ShowcasePage() {
             style={{ fontFamily: "var(--font-playfair)" }}
           >
             Why this bike hits{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 400 }}>different.</em>
+            <em className={styles.gradientText} style={{ fontStyle: "italic", fontWeight: 400 }}>different.</em>
           </h2>
         </motion.div>
 
@@ -519,21 +444,16 @@ export default function ShowcasePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="feature-card rounded-2xl p-8"
+              className={`${styles.featureCard} rounded-2xl p-8`}
               style={{
                 background: "#fafafa",
                 border: "1px solid rgba(0,0,0,0.06)",
               }}
             >
-              <span
-                className="text-5xl font-black block mb-5"
-                style={{
-                  fontFamily: "var(--font-playfair)",
-                  color: "rgba(61, 106, 255, 0.15)",
-                }}
-              >
-                0{i + 1}
-              </span>
+              <div
+                className="w-12 h-1 rounded-full mb-6"
+                style={{ background: feat.color }}
+              />
               <h3
                 className="text-xl font-black mb-3"
                 style={{ fontFamily: "var(--font-playfair)" }}
@@ -560,7 +480,7 @@ export default function ShowcasePage() {
           transition={{ duration: 0.8 }}
           className="py-24 rounded-3xl"
           style={{
-            background: "#111",
+            background: "linear-gradient(135deg, #0a0a12, #151520)",
             color: "#fff",
           }}
         >
@@ -568,7 +488,7 @@ export default function ShowcasePage() {
             className="text-5xl sm:text-6xl font-black mb-5"
             style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Ready to <em style={{ fontStyle: "italic", fontWeight: 400 }}>ride?</em>
+            Ready to <em className={styles.gradientText} style={{ fontStyle: "italic", fontWeight: 400 }}>ride?</em>
           </h2>
           <p
             className="text-base mb-10 max-w-md mx-auto"
@@ -576,10 +496,7 @@ export default function ShowcasePage() {
           >
             The desert is calling. Answer it.
           </p>
-          <button
-            className="glow-btn"
-            style={{ color: "#fff" }}
-          >
+          <button className={styles.glowBtnDark} style={{ fontFamily: "var(--font-dm)" }}>
             Find a dealer
           </button>
         </motion.div>

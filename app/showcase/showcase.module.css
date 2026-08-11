@@ -1,0 +1,95 @@
+.glowBtn {
+  position: relative;
+  padding: 14px 32px;
+  border-radius: 7px;
+  border: 1px solid rgb(61, 106, 255);
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 3px;
+  background: transparent;
+  color: #111;
+  overflow: hidden;
+  box-shadow: 0 0 0 0 transparent;
+  transition: all 0.2s ease-in;
+  cursor: pointer;
+}
+.glowBtn:hover {
+  background: rgb(61, 106, 255);
+  color: #fff;
+  box-shadow: 0 0 30px 5px rgba(61, 106, 255, 0.5);
+  transition: all 0.2s ease-out;
+}
+.glowBtn:hover::before {
+  animation: btnShine 0.5s 0s linear;
+}
+.glowBtn::before {
+  content: '';
+  display: block;
+  width: 0px;
+  height: 86%;
+  position: absolute;
+  top: 7%;
+  left: 0%;
+  opacity: 0;
+  background: #fff;
+  box-shadow: 0 0 50px 30px #fff;
+  transform: skewX(-20deg);
+}
+@keyframes btnShine {
+  from { opacity: 0; left: 0%; }
+  50% { opacity: 1; }
+  to { opacity: 0; left: 100%; }
+}
+.glowBtn:active {
+  box-shadow: 0 0 0 0 transparent;
+  transition: box-shadow 0.2s ease-in;
+}
+
+.glowBtnDark {
+  composes: glowBtn;
+  color: #fff;
+  border-color: rgb(100, 140, 255);
+}
+.glowBtnDark:hover {
+  background: rgb(100, 140, 255);
+  box-shadow: 0 0 30px 5px rgba(100, 140, 255, 0.5);
+}
+
+.specCard {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+.specCard:hover {
+  transform: translateY(-4px);
+  border-color: rgb(61, 106, 255) !important;
+  box-shadow: 0 12px 40px rgba(61, 106, 255, 0.12);
+}
+
+.factCard {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+.factCard:hover {
+  border-color: rgba(100, 140, 255, 0.4) !important;
+  background: rgba(100, 140, 255, 0.06) !important;
+}
+
+.featureCard {
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.featureCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.08);
+}
+
+.gradientText {
+  background: linear-gradient(135deg, #3d6aff, #a855f7, #ec4899, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.counterValue {
+  font-variant-numeric: tabular-nums;
+}

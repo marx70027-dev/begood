@@ -14,17 +14,17 @@ export default function Video360Scrub({ src, className = "" }: Video360ScrubProp
   const lastX = useRef(0);
   const [ready, setReady] = useState(false);
   const [hint, setHint] = useState(true);
+  const [grabbing, setGrabbing] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
     video.pause();
-    const onLoaded = () => {
-      video.currentTime = 0;
-      setReady(true);
-    };
-    video.addEventListener("loadedmetadata", onLoaded);
-    return () => video.removeEventListener("loadedmetadata", onLoaded);
+    video.currentTime = 0;
+    const onCanPlay = () => setReady(true);
+    video.addEventListener("canplay", onCanPlay);
+    if (video.readyState >= 3) setReady(true);
+    return () => video.removeEventListener("canplay", onCanPlay);
   }, [src]);
 
   const scrub = useCallback((deltaX: number) => {
@@ -37,54 +37,35 @@ export default function Video360Scrub({ src, className = "" }: Video360ScrubProp
     video.currentTime = newTime;
   }, []);
 
-  const onMouseDown = useCallback((e: React.MouseEvent) => {
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
     isDragging.current = true;
     lastX.current = e.clientX;
     setHint(false);
+    setGrabbing(true);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
   }, []);
 
-  const onMouseMove = useCallback((e: React.MouseEvent) => {
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging.current) return;
     const delta = e.clientX - lastX.current;
     lastX.current = e.clientX;
     scrub(delta);
   }, [scrub]);
 
-  const onMouseUp = useCallback(() => {
+  const onPointerUp = useCallback(() => {
     isDragging.current = false;
-  }, []);
-
-  const onTouchStart = useCallback((e: React.TouchEvent) => {
-    if (e.touches.length > 0) {
-      isDragging.current = true;
-      lastX.current = e.touches[0].clientX;
-      setHint(false);
-    }
-  }, []);
-
-  const onTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!isDragging.current || e.touches.length === 0) return;
-    const delta = e.touches[0].clientX - lastX.current;
-    lastX.current = e.touches[0].clientX;
-    scrub(delta);
-  }, [scrub]);
-
-  const onTouchEnd = useCallback(() => {
-    isDragging.current = false;
+    setGrabbing(false);
   }, []);
 
   return (
     <div
       ref={containerRef}
-      className={`relative select-none overflow-hidden rounded-2xl ${className}`}
-      style={{ cursor: isDragging.current ? "grabbing" : "grab", touchAction: "none" }}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={onMouseUp}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
+      className={`relative select-none overflow-hidden ${className}`}
+      style={{ cursor: grabbing ? "grabbing" : "grab", touchAction: "none" }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
     >
       <video
         ref={videoRef}
@@ -100,9 +81,9 @@ export default function Video360Scrub({ src, className = "" }: Video360ScrubProp
           <div
             className="flex items-center gap-3 px-6 py-3 rounded-full text-sm font-medium tracking-wide uppercase animate-pulse"
             style={{
-              background: "rgba(0,0,0,0.6)",
+              background: "rgba(0,0,0,0.7)",
               backdropFilter: "blur(8px)",
-              color: "rgba(255,255,255,0.8)",
+              color: "#fff",
               border: "1px solid rgba(255,255,255,0.15)",
             }}
           >
@@ -114,8 +95,11 @@ export default function Video360Scrub({ src, className = "" }: Video360ScrubProp
         </div>
       )}
       {!ready && (
-        <div className="absolute inset-0 flex items-center justify-center" style={{ background: "#111" }}>
-          <div className="w-8 h-8 border-2 border-white/20 border-t-white/80 rounded-full animate-spin" />
+        <div className="absolute inset-0 flex items-center justify-center" style={{ background: "#f5f5f5" }}>
+          <div
+            className="w-8 h-8 rounded-full animate-spin"
+            style={{ border: "2px solid rgba(0,0,0,0.1)", borderTopColor: "rgb(61, 106, 255)" }}
+          />
         </div>
       )}
     </div>
