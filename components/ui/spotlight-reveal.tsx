@@ -23,8 +23,8 @@ export default function SpotlightReveal({
   revealAlt: _revealAlt,
   radius = 40,
   lerpFactor = 0.2,
-  hudColor = "rgba(0, 230, 255, 0.8)",
-  hudLabel = "REVEAL",
+  hudColor: _hudColor = "rgba(0, 230, 255, 0.8)",
+  hudLabel: _hudLabel = "REVEAL",
   title,
   subtitle,
   className = "",
@@ -67,8 +67,6 @@ export default function SpotlightReveal({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const tick = 6;
-
     function animate() {
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
 
@@ -84,44 +82,6 @@ export default function SpotlightReveal({
         ctx!.clip();
         ctx!.drawImage(revealImgRef.current, 0, 0, canvas!.width, canvas!.height);
         ctx!.restore();
-
-        ctx!.save();
-
-        ctx!.beginPath();
-        ctx!.arc(cur.x, cur.y, radius, 0, Math.PI * 2);
-        ctx!.strokeStyle = hudColor;
-        ctx!.lineWidth = 2;
-        ctx!.stroke();
-
-        const parsedColor = hudColor.includes("rgba")
-          ? hudColor
-          : hudColor;
-        const solidColor = parsedColor.replace(/[\d.]+\)$/, "1)");
-
-        ctx!.strokeStyle = solidColor;
-        ctx!.lineWidth = 1.5;
-        ctx!.beginPath();
-        ctx!.moveTo(cur.x, cur.y - radius - tick);
-        ctx!.lineTo(cur.x, cur.y - radius + 2);
-        ctx!.moveTo(cur.x, cur.y + radius + tick);
-        ctx!.lineTo(cur.x, cur.y + radius - 2);
-        ctx!.moveTo(cur.x - radius - tick, cur.y);
-        ctx!.lineTo(cur.x - radius + 2, cur.y);
-        ctx!.moveTo(cur.x + radius + tick, cur.y);
-        ctx!.lineTo(cur.x + radius - 2, cur.y);
-        ctx!.stroke();
-
-        ctx!.fillStyle = solidColor;
-        ctx!.font = "10px monospace";
-        ctx!.fillText(
-          `X:${Math.round(cur.x)} Y:${Math.round(cur.y)}`,
-          cur.x + radius + 8,
-          cur.y - 4
-        );
-        ctx!.fillStyle = "#ffffff";
-        ctx!.fillText(hudLabel, cur.x + radius + 8, cur.y + 10);
-
-        ctx!.restore();
       }
 
       animFrameRef.current = requestAnimationFrame(animate);
@@ -129,7 +89,7 @@ export default function SpotlightReveal({
 
     animFrameRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [loaded, radius, lerpFactor, hudColor, hudLabel]);
+  }, [loaded, radius, lerpFactor]);
 
   const handlePointerMove = useCallback(
     (clientX: number, clientY: number) => {
@@ -191,7 +151,7 @@ export default function SpotlightReveal({
       <div
         ref={stageRef}
         className="relative rounded-xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.7),0_0_15px_rgba(0,230,255,0.1)] border border-white/10"
-        style={{ cursor: "none", touchAction: "none" }}
+        style={{ touchAction: "none" }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         onTouchStart={handleTouchStart}
