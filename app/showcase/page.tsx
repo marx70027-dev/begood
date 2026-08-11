@@ -1,7 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Space_Grotesk, Inter } from "next/font/google";
 import SpotlightReveal from "@/components/ui/spotlight-reveal";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-space-grotesk",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-inter",
+});
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -29,7 +42,7 @@ const FUN_FACTS = [
     text: "The distinctive 4-LED headlight setup is directly styled after Yamaha's Dakar Rally race bikes — form meets function.",
   },
   {
-    title: 'What\'s in a Name?',
+    title: "What's in a Name?",
     text: '"Ténéré" comes from a vast desert region in the south-central Sahara. Yamaha has used it since the 1980s for its desert-proven dual-sport bikes.',
   },
   {
@@ -64,12 +77,8 @@ const STANDOUT_FEATURES = [
 export default function ShowcasePage() {
   return (
     <div
-      className="min-h-screen overflow-x-hidden"
-      style={{
-        fontFamily: "Arial, Helvetica, sans-serif",
-        background: "#0a0a0f",
-        color: "#ffffff",
-      }}
+      className={`${spaceGrotesk.variable} ${inter.variable} min-h-screen overflow-x-hidden`}
+      style={{ background: "#0a0a0f", color: "#ffffff" }}
     >
       {/* NAV */}
       <nav
@@ -82,13 +91,13 @@ export default function ShowcasePage() {
       >
         <span
           className="text-lg font-bold tracking-widest uppercase"
-          style={{ fontFamily: "'Arial Black', Arial, sans-serif", color: "#00e6ff" }}
+          style={{ fontFamily: "var(--font-space-grotesk)", color: "#00e6ff" }}
         >
           T7 Showcase
         </span>
         <span
           className="text-xs tracking-wider uppercase"
-          style={{ color: "rgba(255,255,255,0.4)", fontFamily: "Arial, sans-serif" }}
+          style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-inter)" }}
         >
           Yamaha Ténéré 700
         </span>
@@ -102,26 +111,26 @@ export default function ShowcasePage() {
           transition={{ duration: 0.8 }}
         >
           <span
-            className="inline-block text-xs tracking-[4px] uppercase px-4 py-1.5 rounded-full mb-6"
+            className="inline-block text-xs tracking-[4px] uppercase px-4 py-1.5 rounded-full mb-6 font-medium"
             style={{
               background: "rgba(0, 230, 255, 0.1)",
               border: "1px solid rgba(0, 230, 255, 0.3)",
               color: "#00e6ff",
-              fontFamily: "Arial, sans-serif",
+              fontFamily: "var(--font-inter)",
             }}
           >
             Adventure Redefined
           </span>
           <h1
             className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-4"
-            style={{ fontFamily: "'Arial Black', Arial, sans-serif" }}
+            style={{ fontFamily: "var(--font-space-grotesk)" }}
           >
             Yamaha Ténéré{" "}
             <span style={{ color: "#00e6ff" }}>700</span>
           </h1>
           <p
             className="text-lg max-w-2xl mx-auto leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.5)", fontFamily: "Arial, sans-serif" }}
+            style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-inter)" }}
           >
             Born from the Sahara. Built for everywhere else. Hover over the image
             below to reveal the Raven Black colorway beneath the Competition White.
@@ -141,7 +150,7 @@ export default function ShowcasePage() {
         />
         <p
           className="text-center mt-4 text-xs tracking-wider uppercase"
-          style={{ color: "rgba(255,255,255,0.3)", fontFamily: "Arial, sans-serif" }}
+          style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-inter)" }}
         >
           Move your cursor / drag to reveal the alternate colorway
         </p>
@@ -157,14 +166,14 @@ export default function ShowcasePage() {
           className="mb-10"
         >
           <span
-            className="text-xs tracking-[4px] uppercase block mb-2"
-            style={{ color: "#00e6ff", fontFamily: "Arial, sans-serif" }}
+            className="text-xs tracking-[4px] uppercase block mb-2 font-medium"
+            style={{ color: "#00e6ff", fontFamily: "var(--font-inter)" }}
           >
             Technical Data
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold"
-            style={{ fontFamily: "'Arial Black', Arial, sans-serif" }}
+            style={{ fontFamily: "var(--font-space-grotesk)" }}
           >
             Key Specifications
           </h2>
@@ -186,14 +195,14 @@ export default function ShowcasePage() {
               }}
             >
               <span
-                className="text-xs tracking-wider uppercase block mb-2"
-                style={{ color: "rgba(255,255,255,0.35)", fontFamily: "Arial, sans-serif" }}
+                className="text-xs tracking-wider uppercase block mb-2 font-medium"
+                style={{ color: "rgba(255,255,255,0.35)", fontFamily: "var(--font-inter)" }}
               >
                 {spec.label}
               </span>
               <span
                 className="text-lg font-bold block"
-                style={{ fontFamily: "'Arial Black', Arial, sans-serif", color: "#ffffff" }}
+                style={{ fontFamily: "var(--font-space-grotesk)", color: "#ffffff" }}
               >
                 {spec.value}
               </span>
@@ -212,14 +221,14 @@ export default function ShowcasePage() {
           className="mb-10"
         >
           <span
-            className="text-xs tracking-[4px] uppercase block mb-2"
-            style={{ color: "#00e6ff", fontFamily: "Arial, sans-serif" }}
+            className="text-xs tracking-[4px] uppercase block mb-2 font-medium"
+            style={{ color: "#00e6ff", fontFamily: "var(--font-inter)" }}
           >
             Did You Know?
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold"
-            style={{ fontFamily: "'Arial Black', Arial, sans-serif" }}
+            style={{ fontFamily: "var(--font-space-grotesk)" }}
           >
             5 Fun Facts
           </h2>
@@ -245,7 +254,7 @@ export default function ShowcasePage() {
                 style={{
                   background: "rgba(0, 230, 255, 0.1)",
                   color: "#00e6ff",
-                  fontFamily: "'Arial Black', Arial, sans-serif",
+                  fontFamily: "var(--font-space-grotesk)",
                 }}
               >
                 {i + 1}
@@ -253,13 +262,13 @@ export default function ShowcasePage() {
               <div>
                 <h3
                   className="text-base font-bold mb-1"
-                  style={{ fontFamily: "'Arial Black', Arial, sans-serif" }}
+                  style={{ fontFamily: "var(--font-space-grotesk)" }}
                 >
                   {fact.title}
                 </h3>
                 <p
                   className="text-sm leading-relaxed"
-                  style={{ color: "rgba(255,255,255,0.5)", fontFamily: "Arial, sans-serif" }}
+                  style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-inter)" }}
                 >
                   {fact.text}
                 </p>
@@ -279,14 +288,14 @@ export default function ShowcasePage() {
           className="mb-10"
         >
           <span
-            className="text-xs tracking-[4px] uppercase block mb-2"
-            style={{ color: "#00e6ff", fontFamily: "Arial, sans-serif" }}
+            className="text-xs tracking-[4px] uppercase block mb-2 font-medium"
+            style={{ color: "#00e6ff", fontFamily: "var(--font-inter)" }}
           >
             What Sets It Apart
           </span>
           <h2
             className="text-3xl sm:text-4xl font-bold"
-            style={{ fontFamily: "'Arial Black', Arial, sans-serif" }}
+            style={{ fontFamily: "var(--font-space-grotesk)" }}
           >
             Standout Features
           </h2>
@@ -309,13 +318,13 @@ export default function ShowcasePage() {
             >
               <h3
                 className="text-lg font-bold mb-2"
-                style={{ fontFamily: "'Arial Black', Arial, sans-serif", color: "#00e6ff" }}
+                style={{ fontFamily: "var(--font-space-grotesk)", color: "#00e6ff" }}
               >
                 {feat.title}
               </h3>
               <p
                 className="text-sm leading-relaxed"
-                style={{ color: "rgba(255,255,255,0.55)", fontFamily: "Arial, sans-serif" }}
+                style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-inter)" }}
               >
                 {feat.text}
               </p>
@@ -329,7 +338,7 @@ export default function ShowcasePage() {
         className="text-center py-6 border-t"
         style={{
           borderColor: "rgba(255,255,255,0.06)",
-          fontFamily: "Arial, sans-serif",
+          fontFamily: "var(--font-inter)",
         }}
       >
         <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
