@@ -1,182 +1,322 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Outfit, Sora } from "next/font/google";
 import SpotlightReveal from "@/components/ui/spotlight-reveal";
+import Video360Scrub from "@/components/ui/video-360-scrub";
+import { useState } from "react";
 
-const spaceGrotesk = Space_Grotesk({
+const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["500", "700"],
-  variable: "--font-space-grotesk",
+  weight: ["400", "600", "800"],
+  variable: "--font-outfit",
 });
 
-const inter = Inter({
+const sora = Sora({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-inter",
+  weight: ["300", "400", "600"],
+  variable: "--font-sora",
 });
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 40 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: "easeOut" as const },
+    transition: { duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
   }),
 };
 
 const SPECS = [
-  { label: "Engine", value: "689cc CP2 Parallel-Twin" },
-  { label: "Power", value: "72 hp" },
-  { label: "Torque", value: "68 Nm (50 lb-ft)" },
-  { label: "Transmission", value: "6-Speed" },
-  { label: "Weight", value: "204 kg (450 lbs)" },
-  { label: "Seat Height", value: "875 mm (34.4 in)" },
-  { label: "Fuel Tank", value: "16 L (4.2 gal)" },
-  { label: "Ground Clearance", value: "240 mm (9.5 in)" },
+  { label: "Engine", value: "689cc", detail: "CP2 Parallel-Twin", icon: "⚡" },
+  { label: "Power", value: "72 hp", detail: "@ 9,000 RPM", icon: "🔥" },
+  { label: "Torque", value: "68 Nm", detail: "50 lb-ft", icon: "💪" },
+  { label: "Gears", value: "6-Speed", detail: "Transmission", icon: "⚙️" },
+  { label: "Weight", value: "204 kg", detail: "450 lbs wet", icon: "⚖️" },
+  { label: "Seat", value: "875 mm", detail: "34.4 inches", icon: "🏍️" },
+  { label: "Fuel", value: "16 L", detail: "4.2 gallons", icon: "⛽" },
+  { label: "Clearance", value: "240 mm", detail: "9.5 inches", icon: "🏔️" },
 ];
 
 const FUN_FACTS = [
   {
-    title: "Rally-Inspired Headlight",
-    text: "The distinctive 4-LED headlight setup is directly styled after Yamaha's Dakar Rally race bikes — form meets function.",
+    title: "Rally DNA",
+    text: "That 4-LED headlight? Straight from Yamaha's Dakar Rally machines. Not just looks — it's built to cut through Saharan dust storms.",
+    tag: "Heritage",
   },
   {
-    title: "What's in a Name?",
-    text: '"Ténéré" comes from a vast desert region in the south-central Sahara. Yamaha has used it since the 1980s for its desert-proven dual-sport bikes.',
+    title: "Desert Name",
+    text: "\"Ténéré\" = one of the most brutal desert regions on Earth. Yamaha's been slapping this name on their toughest bikes since the '80s.",
+    tag: "Origins",
   },
   {
-    title: '"Keep It Simple" Philosophy',
-    text: "Unlike modern adventure bikes loaded with electronics, the T7 was built intentionally simple: raw throttle, long-travel suspension, pure mechanical feel.",
+    title: "No Nonsense",
+    text: "While others pile on electronics, Yamaha went raw. Pure throttle. Long-travel suspension. The kind of bike that makes you feel the road.",
+    tag: "Philosophy",
   },
   {
-    title: "Indestructible Engine",
-    text: "The CP2 engine is the same parallel-twin used in the MT-07 — famous worldwide for being virtually bulletproof and ultra-reliable.",
+    title: "Unkillable Engine",
+    text: "Same CP2 engine as the MT-07 — a parallel-twin so reliable that mechanics worldwide call it bulletproof. Seriously.",
+    tag: "Engineering",
   },
   {
-    title: "Off-Road Built",
-    text: "21-inch front / 18-inch rear wheels — the gold standard sizing for serious off-road dirt bike tires.",
+    title: "Dirt Ready",
+    text: "21\" front, 18\" rear — that's proper dirt bike sizing. Not \"adventure-lite\" — this thing was born to eat trails.",
+    tag: "Off-Road",
   },
 ];
 
-const STANDOUT_FEATURES = [
+const FEATURES = [
   {
-    title: "Switchable ABS",
-    text: "Disable the rear ABS (or full ABS) at the press of a button for dirt, ice, or loose gravel.",
+    title: "Kill the ABS",
+    text: "One button. Rear ABS off. Full ABS off. Your call. Dirt, ice, gravel — ride it your way.",
+    gradient: "from-blue-500/20 to-purple-500/20",
   },
   {
-    title: "USD Forks",
-    text: "Heavy-duty 43mm fully adjustable upside-down front forks — built to absorb rocks, bumps, and jumps.",
+    title: "43mm USD Forks",
+    text: "Fully adjustable upside-down forks that swallow rocks, ruts, and jumps like breakfast.",
+    gradient: "from-purple-500/20 to-pink-500/20",
   },
   {
-    title: "Rally Cockpit",
-    text: "Upright riding position designed for standing on the footpegs with total control on rugged trails.",
+    title: "Rally Position",
+    text: "Stand on the pegs. Grip the tank. Total control at any speed, any terrain. Built for standing riders.",
+    gradient: "from-pink-500/20 to-orange-500/20",
   },
 ];
+
+function GlowButton({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <button className={`glow-btn ${className}`}>
+      {children}
+    </button>
+  );
+}
 
 export default function ShowcasePage() {
+  const [activeSpec, setActiveSpec] = useState<number | null>(null);
+  const [expandedFact, setExpandedFact] = useState<number | null>(null);
+
   return (
     <div
-      className={`${spaceGrotesk.variable} ${inter.variable} min-h-screen overflow-x-hidden`}
-      style={{ background: "#0a0a0f", color: "#ffffff" }}
+      className={`${outfit.variable} ${sora.variable} min-h-screen overflow-x-hidden`}
+      style={{ background: "#08080c", color: "#e8e8ee" }}
     >
+      <style jsx global>{`
+        .glow-btn {
+          position: relative;
+          padding: 12px 28px;
+          border-radius: 7px;
+          border: 1px solid rgb(61, 106, 255);
+          font-size: 13px;
+          text-transform: uppercase;
+          font-weight: 600;
+          letter-spacing: 2px;
+          background: transparent;
+          color: #fff;
+          overflow: hidden;
+          box-shadow: 0 0 0 0 transparent;
+          transition: all 0.2s ease-in;
+          cursor: pointer;
+          font-family: var(--font-sora);
+        }
+        .glow-btn:hover {
+          background: rgb(61, 106, 255);
+          box-shadow: 0 0 30px 5px rgba(61, 106, 255, 0.5);
+          transition: all 0.2s ease-out;
+        }
+        .glow-btn:hover::before {
+          animation: btn-shine 0.5s 0s linear;
+        }
+        .glow-btn::before {
+          content: '';
+          display: block;
+          width: 0px;
+          height: 86%;
+          position: absolute;
+          top: 7%;
+          left: 0%;
+          opacity: 0;
+          background: #fff;
+          box-shadow: 0 0 50px 30px #fff;
+          transform: skewX(-20deg);
+        }
+        @keyframes btn-shine {
+          from { opacity: 0; left: 0%; }
+          50% { opacity: 1; }
+          to { opacity: 0; left: 100%; }
+        }
+        .glow-btn:active {
+          box-shadow: 0 0 0 0 transparent;
+          transition: box-shadow 0.2s ease-in;
+        }
+        .spec-card {
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .spec-card:hover {
+          transform: translateY(-4px) scale(1.02);
+          border-color: rgba(61, 106, 255, 0.4) !important;
+          box-shadow: 0 8px 32px rgba(61, 106, 255, 0.15);
+        }
+        .fact-card {
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+          cursor: pointer;
+        }
+        .fact-card:hover {
+          border-color: rgba(61, 106, 255, 0.3) !important;
+        }
+        .feature-card {
+          transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .feature-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        .counter-value {
+          font-variant-numeric: tabular-nums;
+        }
+      `}</style>
+
       {/* NAV */}
       <nav
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5%] h-16 border-b"
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5%] h-16"
         style={{
-          background: "rgba(10, 10, 15, 0.92)",
-          backdropFilter: "blur(12px)",
-          borderColor: "rgba(0, 230, 255, 0.15)",
+          background: "rgba(8, 8, 12, 0.85)",
+          backdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
         }}
       >
         <span
-          className="text-lg font-bold tracking-widest uppercase"
-          style={{ fontFamily: "var(--font-space-grotesk)", color: "#00e6ff" }}
+          className="text-base font-extrabold tracking-[3px] uppercase"
+          style={{ fontFamily: "var(--font-outfit)" }}
         >
-          T7 Showcase
+          <span style={{ color: "rgb(61, 106, 255)" }}>T7</span>
+          <span style={{ color: "rgba(255,255,255,0.5)" }}> / </span>
+          <span>Showcase</span>
         </span>
-        <span
-          className="text-xs tracking-wider uppercase"
-          style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-inter)" }}
-        >
-          Yamaha Ténéré 700
-        </span>
+        <GlowButton>Explore</GlowButton>
       </nav>
 
       {/* HERO */}
-      <section className="pt-28 pb-16 px-[5%] text-center">
+      <section className="pt-32 pb-20 px-[5%]">
+        <div className="max-w-[1200px] mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="flex items-center gap-3 mb-8">
+              <div className="h-px flex-1 max-w-[60px]" style={{ background: "rgb(61, 106, 255)" }} />
+              <span
+                className="text-xs tracking-[5px] uppercase font-semibold"
+                style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
+              >
+                Yamaha 2024
+              </span>
+            </div>
+            <h1
+              className="text-6xl sm:text-7xl md:text-8xl font-extrabold leading-[0.9] mb-6"
+              style={{ fontFamily: "var(--font-outfit)" }}
+            >
+              Ténéré
+              <br />
+              <span
+                className="inline-block"
+                style={{
+                  background: "linear-gradient(135deg, rgb(61, 106, 255), #a855f7, #ec4899)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                700
+              </span>
+            </h1>
+            <p
+              className="text-lg max-w-xl leading-relaxed mb-10"
+              style={{
+                color: "rgba(255,255,255,0.45)",
+                fontFamily: "var(--font-sora)",
+                fontWeight: 300,
+              }}
+            >
+              Born from the Sahara. Built to go anywhere.
+              Hover the image to reveal the alternate colorway.
+            </p>
+            <div className="flex gap-4">
+              <GlowButton>See Specs</GlowButton>
+              <button
+                className="px-7 py-3 rounded-lg text-xs uppercase font-semibold tracking-widest transition-all duration-200 hover:bg-white/10"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  color: "rgba(255,255,255,0.6)",
+                  fontFamily: "var(--font-sora)",
+                }}
+              >
+                360° View
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* SPOTLIGHT REVEAL */}
+      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span
-            className="inline-block text-xs tracking-[4px] uppercase px-4 py-1.5 rounded-full mb-6 font-medium"
-            style={{
-              background: "rgba(0, 230, 255, 0.1)",
-              border: "1px solid rgba(0, 230, 255, 0.3)",
-              color: "#00e6ff",
-              fontFamily: "var(--font-inter)",
-            }}
-          >
-            Adventure Redefined
-          </span>
-          <h1
-            className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-4"
-            style={{ fontFamily: "var(--font-space-grotesk)" }}
-          >
-            Yamaha Ténéré{" "}
-            <span style={{ color: "#00e6ff" }}>700</span>
-          </h1>
+          <SpotlightReveal
+            baseSrc="/black_motorcycle.png"
+            revealSrc="/white_motorcycle.png"
+            radius={60}
+            lerpFactor={0.12}
+          />
           <p
-            className="text-lg max-w-2xl mx-auto leading-relaxed"
-            style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-inter)" }}
+            className="text-center mt-5 text-xs tracking-[3px] uppercase"
+            style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-sora)" }}
           >
-            Born from the Sahara. Built for everywhere else. Hover over the image
-            below to reveal the Raven Black colorway beneath the Competition White.
+            Hover to reveal Competition White beneath Raven Black
           </p>
         </motion.div>
       </section>
 
-      {/* SPOTLIGHT REVEAL */}
-      <section className="px-[5%] pb-20 max-w-[1100px] mx-auto">
-        <SpotlightReveal
-          baseSrc="/black_motorcycle.png"
-          revealSrc="/white_motorcycle.png"
-          radius={50}
-          lerpFactor={0.15}
-          hudColor="rgba(0, 230, 255, 0.8)"
-          hudLabel="RALLY LIVERY"
-        />
-        <p
-          className="text-center mt-4 text-xs tracking-wider uppercase"
-          style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-inter)" }}
-        >
-          Move your cursor / drag to reveal the alternate colorway
-        </p>
-      </section>
-
-      {/* SPECS GRID */}
-      <section className="px-[5%] pb-20 max-w-[1100px] mx-auto">
+      {/* SPECS */}
+      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-10"
+          className="flex items-end justify-between mb-12"
         >
-          <span
-            className="text-xs tracking-[4px] uppercase block mb-2 font-medium"
-            style={{ color: "#00e6ff", fontFamily: "var(--font-inter)" }}
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px w-8" style={{ background: "rgb(61, 106, 255)" }} />
+              <span
+                className="text-xs tracking-[4px] uppercase font-semibold"
+                style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
+              >
+                Numbers
+              </span>
+            </div>
+            <h2
+              className="text-4xl sm:text-5xl font-extrabold"
+              style={{ fontFamily: "var(--font-outfit)" }}
+            >
+              Raw Specs
+            </h2>
+          </div>
+          <p
+            className="hidden md:block text-sm max-w-xs text-right"
+            style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
           >
-            Technical Data
-          </span>
-          <h2
-            className="text-3xl sm:text-4xl font-bold"
-            style={{ fontFamily: "var(--font-space-grotesk)" }}
-          >
-            Key Specifications
-          </h2>
+            Click any card to expand
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -188,53 +328,117 @@ export default function ShowcasePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="rounded-xl p-5"
+              className="spec-card rounded-xl p-5 cursor-pointer"
               style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: activeSpec === i
+                  ? "rgba(61, 106, 255, 0.08)"
+                  : "rgba(255,255,255,0.02)",
+                border: activeSpec === i
+                  ? "1px solid rgba(61, 106, 255, 0.3)"
+                  : "1px solid rgba(255,255,255,0.06)",
               }}
+              onClick={() => setActiveSpec(activeSpec === i ? null : i)}
             >
+              <div className="text-2xl mb-3">{spec.icon}</div>
               <span
-                className="text-xs tracking-wider uppercase block mb-2 font-medium"
-                style={{ color: "rgba(255,255,255,0.35)", fontFamily: "var(--font-inter)" }}
+                className="text-[10px] tracking-[3px] uppercase block mb-1"
+                style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-sora)" }}
               >
                 {spec.label}
               </span>
               <span
-                className="text-lg font-bold block"
-                style={{ fontFamily: "var(--font-space-grotesk)", color: "#ffffff" }}
+                className="text-2xl font-extrabold block counter-value"
+                style={{ fontFamily: "var(--font-outfit)" }}
               >
                 {spec.value}
               </span>
+              {activeSpec === i && (
+                <motion.span
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  className="text-xs block mt-2"
+                  style={{ color: "rgba(61, 106, 255, 0.8)", fontFamily: "var(--font-sora)" }}
+                >
+                  {spec.detail}
+                </motion.span>
+              )}
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* FUN FACTS */}
-      <section className="px-[5%] pb-20 max-w-[1100px] mx-auto">
+      {/* 360 VIDEO */}
+      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-10"
+          className="mb-12"
         >
-          <span
-            className="text-xs tracking-[4px] uppercase block mb-2 font-medium"
-            style={{ color: "#00e6ff", fontFamily: "var(--font-inter)" }}
-          >
-            Did You Know?
-          </span>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-px w-8" style={{ background: "rgb(61, 106, 255)" }} />
+            <span
+              className="text-xs tracking-[4px] uppercase font-semibold"
+              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
+            >
+              Interactive
+            </span>
+          </div>
           <h2
-            className="text-3xl sm:text-4xl font-bold"
-            style={{ fontFamily: "var(--font-space-grotesk)" }}
+            className="text-4xl sm:text-5xl font-extrabold mb-3"
+            style={{ fontFamily: "var(--font-outfit)" }}
           >
-            5 Fun Facts
+            360° View
+          </h2>
+          <p
+            className="text-sm"
+            style={{ color: "rgba(255,255,255,0.35)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
+          >
+            Drag left or right to spin the bike around. Full control.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <Video360Scrub
+            src="/t7-360.mp4"
+            className="border border-white/6 shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+          />
+        </motion.div>
+      </section>
+
+      {/* FUN FACTS */}
+      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-12"
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-px w-8" style={{ background: "rgb(61, 106, 255)" }} />
+            <span
+              className="text-xs tracking-[4px] uppercase font-semibold"
+              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
+            >
+              Deep Cuts
+            </span>
+          </div>
+          <h2
+            className="text-4xl sm:text-5xl font-extrabold"
+            style={{ fontFamily: "var(--font-outfit)" }}
+          >
+            Things You Didn&apos;t Know
           </h2>
         </motion.div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {FUN_FACTS.map((fact, i) => (
             <motion.div
               key={fact.title}
@@ -243,66 +447,94 @@ export default function ShowcasePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="flex gap-5 rounded-xl p-6"
+              className="fact-card rounded-xl overflow-hidden"
               style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: expandedFact === i
+                  ? "rgba(61, 106, 255, 0.06)"
+                  : "rgba(255,255,255,0.02)",
+                border: expandedFact === i
+                  ? "1px solid rgba(61, 106, 255, 0.2)"
+                  : "1px solid rgba(255,255,255,0.06)",
               }}
+              onClick={() => setExpandedFact(expandedFact === i ? null : i)}
             >
-              <span
-                className="text-2xl font-bold shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{
-                  background: "rgba(0, 230, 255, 0.1)",
-                  color: "#00e6ff",
-                  fontFamily: "var(--font-space-grotesk)",
-                }}
-              >
-                {i + 1}
-              </span>
-              <div>
-                <h3
-                  className="text-base font-bold mb-1"
-                  style={{ fontFamily: "var(--font-space-grotesk)" }}
+              <div className="flex items-center justify-between p-5">
+                <div className="flex items-center gap-4">
+                  <span
+                    className="text-xs px-3 py-1 rounded-full font-semibold tracking-wider uppercase"
+                    style={{
+                      background: "rgba(61, 106, 255, 0.12)",
+                      color: "rgb(61, 106, 255)",
+                      fontFamily: "var(--font-sora)",
+                      fontSize: "10px",
+                    }}
+                  >
+                    {fact.tag}
+                  </span>
+                  <h3
+                    className="text-base font-bold"
+                    style={{ fontFamily: "var(--font-outfit)" }}
+                  >
+                    {fact.title}
+                  </h3>
+                </div>
+                <span
+                  className="text-lg transition-transform duration-300"
+                  style={{
+                    transform: expandedFact === i ? "rotate(45deg)" : "rotate(0deg)",
+                    color: "rgba(255,255,255,0.3)",
+                  }}
                 >
-                  {fact.title}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-inter)" }}
-                >
-                  {fact.text}
-                </p>
+                  +
+                </span>
               </div>
+              {expandedFact === i && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  className="px-5 pb-5"
+                >
+                  <p
+                    className="text-sm leading-relaxed pl-[calc(3rem+16px)]"
+                    style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
+                  >
+                    {fact.text}
+                  </p>
+                </motion.div>
+              )}
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* STANDOUT FEATURES */}
-      <section className="px-[5%] pb-24 max-w-[1100px] mx-auto">
+      {/* FEATURES */}
+      <section className="px-[5%] pb-28 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-10"
+          className="mb-12"
         >
-          <span
-            className="text-xs tracking-[4px] uppercase block mb-2 font-medium"
-            style={{ color: "#00e6ff", fontFamily: "var(--font-inter)" }}
-          >
-            What Sets It Apart
-          </span>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="h-px w-8" style={{ background: "rgb(61, 106, 255)" }} />
+            <span
+              className="text-xs tracking-[4px] uppercase font-semibold"
+              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
+            >
+              Standout
+            </span>
+          </div>
           <h2
-            className="text-3xl sm:text-4xl font-bold"
-            style={{ fontFamily: "var(--font-space-grotesk)" }}
+            className="text-4xl sm:text-5xl font-extrabold"
+            style={{ fontFamily: "var(--font-outfit)" }}
           >
-            Standout Features
+            Why This Bike Hits Different
           </h2>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-4">
-          {STANDOUT_FEATURES.map((feat, i) => (
+          {FEATURES.map((feat, i) => (
             <motion.div
               key={feat.title}
               custom={i}
@@ -310,21 +542,29 @@ export default function ShowcasePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="rounded-xl p-6 transition-all duration-300 hover:-translate-y-1"
+              className={`feature-card rounded-2xl p-7 bg-gradient-to-br ${feat.gradient}`}
               style={{
-                background: "rgba(0, 230, 255, 0.04)",
-                border: "1px solid rgba(0, 230, 255, 0.15)",
+                border: "1px solid rgba(255,255,255,0.08)",
               }}
             >
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center mb-5 text-lg"
+                style={{
+                  background: "rgba(61, 106, 255, 0.15)",
+                  color: "rgb(61, 106, 255)",
+                }}
+              >
+                {i === 0 ? "⛔" : i === 1 ? "🔧" : "🏁"}
+              </div>
               <h3
-                className="text-lg font-bold mb-2"
-                style={{ fontFamily: "var(--font-space-grotesk)", color: "#00e6ff" }}
+                className="text-xl font-extrabold mb-3"
+                style={{ fontFamily: "var(--font-outfit)" }}
               >
                 {feat.title}
               </h3>
               <p
                 className="text-sm leading-relaxed"
-                style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-inter)" }}
+                style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
               >
                 {feat.text}
               </p>
@@ -333,16 +573,45 @@ export default function ShowcasePage() {
         </div>
       </section>
 
+      {/* CTA */}
+      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="py-20 rounded-3xl"
+          style={{
+            background: "linear-gradient(135deg, rgba(61, 106, 255, 0.08), rgba(168, 85, 247, 0.06))",
+            border: "1px solid rgba(61, 106, 255, 0.12)",
+          }}
+        >
+          <h2
+            className="text-4xl sm:text-5xl font-extrabold mb-4"
+            style={{ fontFamily: "var(--font-outfit)" }}
+          >
+            Ready to ride?
+          </h2>
+          <p
+            className="text-base mb-8 max-w-md mx-auto"
+            style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
+          >
+            The desert is calling. Answer it.
+          </p>
+          <GlowButton>Find a dealer</GlowButton>
+        </motion.div>
+      </section>
+
       {/* FOOTER */}
       <footer
-        className="text-center py-6 border-t"
+        className="text-center py-8"
         style={{
-          borderColor: "rgba(255,255,255,0.06)",
-          fontFamily: "var(--font-inter)",
+          borderTop: "1px solid rgba(255,255,255,0.04)",
+          fontFamily: "var(--font-sora)",
         }}
       >
-        <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
-          Yamaha Ténéré 700 Interactive Showcase &middot; 689cc CP2 &middot; 72 hp &middot; Built for Adventure
+        <p className="text-[11px] tracking-wider" style={{ color: "rgba(255,255,255,0.2)" }}>
+          Yamaha Ténéré 700 &middot; Interactive Showcase &middot; 689cc CP2 &middot; Built for Adventure
         </p>
       </footer>
     </div>
