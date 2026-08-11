@@ -18,18 +18,10 @@ const BUSINESS_TYPES = [
   "Real Estate", "Tourism / Hospitality", "Other",
 ];
 
-const PLANS = [
-  { id: "starter", name: "Starter", desc: "Simple website, up to 5 pages", price: "from $299" },
-  { id: "business", name: "Business", desc: "Professional site, up to 10 pages + blog", price: "from $599" },
-  { id: "premium", name: "Premium", desc: "Complex site, e-commerce, custom features", price: "from $999" },
-  { id: "custom", name: "Custom", desc: "Tailored to your needs — let's talk", price: "Custom quote" },
-];
-
 interface FormData {
   phone: string;
   country: string;
   businessType: string;
-  plan: string;
   message: string;
   honey: string;
 }
@@ -39,20 +31,20 @@ const PHONE_REGEX = /^\+?[\d\s\-()]{7,20}$/;
 const headingFont = "'Bodoni MT Black', 'Bodoni MT', 'Didot', 'Georgia', serif";
 
 const FAQ = [
-  { q: "How much does a website cost?", a: "Our websites start from $299 for a simple site. A full business website is typically around $599–$999. Custom projects with e-commerce or advanced features are quoted individually." },
-  { q: "How long does it take to build a website?", a: "A Starter site takes about 5–7 business days. Business and Premium sites take 2–4 weeks depending on complexity. We'll give you a timeline after reviewing your needs." },
+  { q: "How much does a website cost?", a: "A professional website starts from €1,000. The final price depends on complexity, number of pages, and features you need. Contact us for a personalized quote." },
+  { q: "How long does it take to build a website?", a: "Most websites take 2–4 weeks depending on complexity. We'll give you a clear timeline after reviewing your needs." },
   { q: "Do I need to provide content and images?", a: "It helps if you do, but we can also write content and source professional images for you. We'll guide you through the whole process." },
   { q: "Will my website be mobile-friendly?", a: "Absolutely. Every website we build is fully responsive and looks great on phones, tablets, and desktops." },
-  { q: "Do you offer hosting and maintenance?", a: "Yes. We offer hosting packages starting at $15/month which include SSL, backups, updates, and basic support." },
+  { q: "Do you offer hosting and maintenance?", a: "Yes. We offer hosting and maintenance packages that include SSL, backups, updates, and support. Ask us for details." },
   { q: "Can I update the website myself after it's built?", a: "Yes. We build on modern platforms with easy-to-use admin panels. We also provide a quick training session so you can manage your content confidently." },
-  { q: "What if I'm not happy with the design?", a: "We include up to 3 rounds of revisions in every plan. We work closely with you to make sure the final result matches your vision." },
-  { q: "Do you build online stores?", a: "Yes. Our Premium and Custom plans include full e-commerce functionality — product pages, cart, checkout, payment integration, and order management." },
+  { q: "What if I'm not happy with the design?", a: "We include up to 3 rounds of revisions. We work closely with you to make sure the final result matches your vision." },
+  { q: "Do you build online stores?", a: "Yes. We can build full e-commerce functionality — product pages, cart, checkout, payment integration, and order management." },
 ];
 
 export default function BusinessForm() {
   const [form, setForm] = useState<FormData>({
     phone: "", country: "",
-    businessType: "", plan: "", message: "", honey: "",
+    businessType: "", message: "", honey: "",
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -72,7 +64,6 @@ export default function BusinessForm() {
     else if (!PHONE_REGEX.test(form.phone.trim())) e.phone = "Invalid phone format";
     if (!form.country) e.country = "Please select a country";
     if (!form.businessType) e.businessType = "Please select a business type";
-    if (!form.plan) e.plan = "Please select a plan";
     if (form.message.length > 1000) e.message = "Message is too long (max 1000 characters)";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -132,7 +123,6 @@ export default function BusinessForm() {
             <p className="text-white text-sm">📱 {form.phone}</p>
             <p className="text-white text-sm">🌍 {form.country}</p>
             <p className="text-white text-sm">💼 {form.businessType}</p>
-            <p className="text-white text-sm">📋 {PLANS.find((p) => p.id === form.plan)?.name}</p>
           </div>
         </div>
       </motion.div>
@@ -259,35 +249,6 @@ export default function BusinessForm() {
               ))}
             </select>
             {errors.businessType && <p className="text-red-400 text-xs mt-1">{errors.businessType}</p>}
-          </div>
-
-          <div>
-            <label
-              className="block text-white/80 text-sm font-bold mb-3"
-            >
-              Choose a Plan <span className="text-red-400">*</span>
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {PLANS.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => update("plan", p.id)}
-                  className={`text-left p-4 rounded-xl border-2 transition-all cursor-pointer ${
-                    form.plan === p.id
-                      ? "border-white bg-white/10"
-                      : "border-white/10 bg-white/[0.03] hover:border-white/20"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-white font-bold text-sm">{p.name}</span>
-                    <span className="text-white/70 font-black text-xs">{p.price}</span>
-                  </div>
-                  <p className="text-white/40 text-xs">{p.desc}</p>
-                </button>
-              ))}
-            </div>
-            {errors.plan && <p className="text-red-400 text-xs mt-1">{errors.plan}</p>}
           </div>
 
           <div>
