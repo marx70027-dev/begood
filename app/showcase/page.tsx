@@ -86,6 +86,10 @@ const FEATURES = [
   },
 ];
 
+function scrollTo(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+}
+
 export default function ShowcasePage() {
   const [activeSpec, setActiveSpec] = useState<number | null>(null);
   const [expandedFact, setExpandedFact] = useState<number | null>(null);
@@ -110,7 +114,7 @@ export default function ShowcasePage() {
         >
           Ténéré <span className={styles.gradientText}>700</span>
         </span>
-        <button className={styles.glowBtn} style={{ fontFamily: "var(--font-dm)" }}>
+        <button className={styles.glowBtn} style={{ fontFamily: "var(--font-dm)" }} onClick={() => scrollTo("specs")}>
           Explore
         </button>
       </nav>
@@ -151,7 +155,7 @@ export default function ShowcasePage() {
                 Built to go anywhere. Hover the image to peek at the alternate colorway hiding underneath.
               </p>
               <div className="flex gap-4">
-                <button className={styles.glowBtn} style={{ fontFamily: "var(--font-dm)" }}>
+                <button className={styles.glowBtn} style={{ fontFamily: "var(--font-dm)" }} onClick={() => scrollTo("specs")}>
                   See Specs
                 </button>
                 <button
@@ -161,6 +165,7 @@ export default function ShowcasePage() {
                     color: "#111",
                     fontFamily: "var(--font-dm)",
                   }}
+                  onClick={() => scrollTo("video360")}
                 >
                   360° View
                 </button>
@@ -199,7 +204,7 @@ export default function ShowcasePage() {
       </div>
 
       {/* SPECS */}
-      <section className="px-[5%] py-28 max-w-[1200px] mx-auto">
+      <section id="specs" className="px-[5%] py-28 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -272,7 +277,7 @@ export default function ShowcasePage() {
       </div>
 
       {/* 360 VIDEO */}
-      <section className="px-[5%] py-28 max-w-[1200px] mx-auto">
+      <section id="video360" className="px-[5%] py-28 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
