@@ -35,7 +35,7 @@ const FAQ = [
   { q: "How long does it take to build a website?", a: "Most websites take 2–4 weeks depending on complexity. We'll give you a clear timeline after reviewing your needs." },
   { q: "Do I need to provide content and images?", a: "It helps if you do, but we can also write content and source professional images for you. We'll guide you through the whole process." },
   { q: "Will my website be mobile-friendly?", a: "Absolutely. Every website we build is fully responsive and looks great on phones, tablets, and desktops." },
-  { q: "Do you offer hosting and maintenance?", a: "Yes. We offer hosting and maintenance packages that include SSL, backups, updates, and support. Ask us for details." },
+  { q: "Do you offer hosting and maintenance?", a: "Yes — hosting and maintenance are included in the price. SSL, backups, updates, and support are all covered at no extra cost." },
   { q: "Can I update the website myself after it's built?", a: "Yes. We build on modern platforms with easy-to-use admin panels. We also provide a quick training session so you can manage your content confidently." },
   { q: "What if I'm not happy with the design?", a: "We include up to 3 rounds of revisions. We work closely with you to make sure the final result matches your vision." },
   { q: "Do you build online stores?", a: "Yes. We can build full e-commerce functionality — product pages, cart, checkout, payment integration, and order management." },
