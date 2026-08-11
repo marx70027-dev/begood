@@ -1,21 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Outfit, Sora } from "next/font/google";
+import { Playfair_Display, DM_Sans } from "next/font/google";
 import SpotlightReveal from "@/components/ui/spotlight-reveal";
 import Video360Scrub from "@/components/ui/video-360-scrub";
 import { useState } from "react";
 
-const outfit = Outfit({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: ["400", "600", "800"],
-  variable: "--font-outfit",
+  weight: ["400", "700", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-playfair",
 });
 
-const sora = Sora({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "600"],
-  variable: "--font-sora",
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-dm",
 });
 
 const fadeUp = {
@@ -28,14 +29,14 @@ const fadeUp = {
 };
 
 const SPECS = [
-  { label: "Engine", value: "689cc", detail: "CP2 Parallel-Twin", icon: "⚡" },
-  { label: "Power", value: "72 hp", detail: "@ 9,000 RPM", icon: "🔥" },
-  { label: "Torque", value: "68 Nm", detail: "50 lb-ft", icon: "💪" },
-  { label: "Gears", value: "6-Speed", detail: "Transmission", icon: "⚙️" },
-  { label: "Weight", value: "204 kg", detail: "450 lbs wet", icon: "⚖️" },
-  { label: "Seat", value: "875 mm", detail: "34.4 inches", icon: "🏍️" },
-  { label: "Fuel", value: "16 L", detail: "4.2 gallons", icon: "⛽" },
-  { label: "Clearance", value: "240 mm", detail: "9.5 inches", icon: "🏔️" },
+  { label: "Engine", value: "689cc", detail: "CP2 Parallel-Twin" },
+  { label: "Power", value: "72 hp", detail: "@ 9,000 RPM" },
+  { label: "Torque", value: "68 Nm", detail: "50 lb-ft" },
+  { label: "Gears", value: "6-Speed", detail: "Transmission" },
+  { label: "Weight", value: "204 kg", detail: "450 lbs wet" },
+  { label: "Seat", value: "875 mm", detail: "34.4 inches" },
+  { label: "Fuel", value: "16 L", detail: "4.2 gallons" },
+  { label: "Clearance", value: "240 mm", detail: "9.5 inches" },
 ];
 
 const FUN_FACTS = [
@@ -70,17 +71,14 @@ const FEATURES = [
   {
     title: "Kill the ABS",
     text: "One button. Rear ABS off. Full ABS off. Your call. Dirt, ice, gravel — ride it your way.",
-    gradient: "from-blue-500/20 to-purple-500/20",
   },
   {
     title: "43mm USD Forks",
     text: "Fully adjustable upside-down forks that swallow rocks, ruts, and jumps like breakfast.",
-    gradient: "from-purple-500/20 to-pink-500/20",
   },
   {
     title: "Rally Position",
     text: "Stand on the pegs. Grip the tank. Total control at any speed, any terrain. Built for standing riders.",
-    gradient: "from-pink-500/20 to-orange-500/20",
   },
 ];
 
@@ -98,30 +96,31 @@ export default function ShowcasePage() {
 
   return (
     <div
-      className={`${outfit.variable} ${sora.variable} min-h-screen overflow-x-hidden`}
-      style={{ background: "#08080c", color: "#e8e8ee" }}
+      className={`${playfair.variable} ${dmSans.variable} min-h-screen overflow-x-hidden`}
+      style={{ background: "#ffffff", color: "#111111" }}
     >
       <style jsx global>{`
         .glow-btn {
           position: relative;
-          padding: 12px 28px;
+          padding: 14px 32px;
           border-radius: 7px;
           border: 1px solid rgb(61, 106, 255);
-          font-size: 13px;
+          font-size: 12px;
           text-transform: uppercase;
-          font-weight: 600;
-          letter-spacing: 2px;
+          font-weight: 700;
+          letter-spacing: 3px;
           background: transparent;
-          color: #fff;
+          color: #111;
           overflow: hidden;
           box-shadow: 0 0 0 0 transparent;
           transition: all 0.2s ease-in;
           cursor: pointer;
-          font-family: var(--font-sora);
+          font-family: var(--font-dm);
         }
         .glow-btn:hover {
           background: rgb(61, 106, 255);
-          box-shadow: 0 0 30px 5px rgba(61, 106, 255, 0.5);
+          color: #fff;
+          box-shadow: 0 0 30px 5px rgba(61, 106, 255, 0.4);
           transition: all 0.2s ease-out;
         }
         .glow-btn:hover::before {
@@ -153,27 +152,24 @@ export default function ShowcasePage() {
           transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .spec-card:hover {
-          transform: translateY(-4px) scale(1.02);
-          border-color: rgba(61, 106, 255, 0.4) !important;
-          box-shadow: 0 8px 32px rgba(61, 106, 255, 0.15);
+          transform: translateY(-4px);
+          border-color: rgb(61, 106, 255) !important;
+          box-shadow: 0 12px 40px rgba(61, 106, 255, 0.12);
         }
         .fact-card {
           transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
           cursor: pointer;
         }
         .fact-card:hover {
-          border-color: rgba(61, 106, 255, 0.3) !important;
+          border-color: rgba(61, 106, 255, 0.4) !important;
+          background: rgba(61, 106, 255, 0.03) !important;
         }
         .feature-card {
           transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .feature-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-8px); }
+          transform: translateY(-8px);
+          box-shadow: 0 24px 48px rgba(0,0,0,0.08);
         }
         .counter-value {
           font-variant-numeric: tabular-nums;
@@ -184,86 +180,73 @@ export default function ShowcasePage() {
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5%] h-16"
         style={{
-          background: "rgba(8, 8, 12, 0.85)",
+          background: "rgba(255, 255, 255, 0.9)",
           backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
+          borderBottom: "1px solid rgba(0,0,0,0.06)",
         }}
       >
         <span
-          className="text-base font-extrabold tracking-[3px] uppercase"
-          style={{ fontFamily: "var(--font-outfit)" }}
+          className="text-sm font-bold tracking-[4px] uppercase"
+          style={{ fontFamily: "var(--font-dm)", color: "#111" }}
         >
-          <span style={{ color: "rgb(61, 106, 255)" }}>T7</span>
-          <span style={{ color: "rgba(255,255,255,0.5)" }}> / </span>
-          <span>Showcase</span>
+          Ténéré <span style={{ color: "rgb(61, 106, 255)" }}>700</span>
         </span>
         <GlowButton>Explore</GlowButton>
       </nav>
 
       {/* HERO */}
-      <section className="pt-32 pb-20 px-[5%]">
+      <section className="pt-36 pb-20 px-[5%]">
         <div className="max-w-[1200px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="flex items-center gap-3 mb-8">
-              <div className="h-px flex-1 max-w-[60px]" style={{ background: "rgb(61, 106, 255)" }} />
-              <span
-                className="text-xs tracking-[5px] uppercase font-semibold"
-                style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
-              >
-                Yamaha 2024
-              </span>
-            </div>
+            <span
+              className="text-xs tracking-[6px] uppercase font-medium block mb-6"
+              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
+            >
+              Yamaha — Adventure Series
+            </span>
             <h1
-              className="text-6xl sm:text-7xl md:text-8xl font-extrabold leading-[0.9] mb-6"
-              style={{ fontFamily: "var(--font-outfit)" }}
+              className="text-6xl sm:text-7xl md:text-[7rem] font-black leading-[0.85] mb-8"
+              style={{ fontFamily: "var(--font-playfair)", color: "#111" }}
             >
-              Ténéré
-              <br />
-              <span
-                className="inline-block"
-                style={{
-                  background: "linear-gradient(135deg, rgb(61, 106, 255), #a855f7, #ec4899)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
-                700
-              </span>
+              Born from<br />
+              the{" "}
+              <em className="font-normal" style={{ fontStyle: "italic" }}>Sahara.</em>
             </h1>
-            <p
-              className="text-lg max-w-xl leading-relaxed mb-10"
-              style={{
-                color: "rgba(255,255,255,0.45)",
-                fontFamily: "var(--font-sora)",
-                fontWeight: 300,
-              }}
-            >
-              Born from the Sahara. Built to go anywhere.
-              Hover the image to reveal the alternate colorway.
-            </p>
-            <div className="flex gap-4">
-              <GlowButton>See Specs</GlowButton>
-              <button
-                className="px-7 py-3 rounded-lg text-xs uppercase font-semibold tracking-widest transition-all duration-200 hover:bg-white/10"
+            <div className="flex items-end justify-between flex-wrap gap-8">
+              <p
+                className="text-lg max-w-md leading-relaxed"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  color: "rgba(255,255,255,0.6)",
-                  fontFamily: "var(--font-sora)",
+                  color: "rgba(0,0,0,0.45)",
+                  fontFamily: "var(--font-dm)",
+                  fontWeight: 300,
                 }}
               >
-                360° View
-              </button>
+                Built to go anywhere. Hover the image to peek at the alternate colorway hiding underneath.
+              </p>
+              <div className="flex gap-4">
+                <GlowButton>See Specs</GlowButton>
+                <button
+                  className="px-7 py-3.5 rounded-lg text-xs uppercase font-bold tracking-[3px] transition-all duration-200 hover:bg-black hover:text-white"
+                  style={{
+                    border: "1px solid rgba(0,0,0,0.15)",
+                    color: "#111",
+                    fontFamily: "var(--font-dm)",
+                  }}
+                >
+                  360° View
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* SPOTLIGHT REVEAL */}
-      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto">
+      <section className="px-[5%] pb-28 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -277,49 +260,43 @@ export default function ShowcasePage() {
             lerpFactor={0.12}
           />
           <p
-            className="text-center mt-5 text-xs tracking-[3px] uppercase"
-            style={{ color: "rgba(255,255,255,0.25)", fontFamily: "var(--font-sora)" }}
+            className="text-center mt-5 text-xs tracking-[4px] uppercase"
+            style={{ color: "rgba(0,0,0,0.25)", fontFamily: "var(--font-dm)" }}
           >
-            Hover to reveal Competition White beneath Raven Black
+            Hover to reveal &middot; Competition White beneath Raven Black
           </p>
         </motion.div>
       </section>
 
+      {/* DIVIDER */}
+      <div className="max-w-[1200px] mx-auto px-[5%]">
+        <div style={{ height: "1px", background: "rgba(0,0,0,0.08)" }} />
+      </div>
+
       {/* SPECS */}
-      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto">
+      <section className="px-[5%] py-28 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex items-end justify-between mb-12"
+          className="mb-14"
         >
-          <div>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="h-px w-8" style={{ background: "rgb(61, 106, 255)" }} />
-              <span
-                className="text-xs tracking-[4px] uppercase font-semibold"
-                style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
-              >
-                Numbers
-              </span>
-            </div>
-            <h2
-              className="text-4xl sm:text-5xl font-extrabold"
-              style={{ fontFamily: "var(--font-outfit)" }}
-            >
-              Raw Specs
-            </h2>
-          </div>
-          <p
-            className="hidden md:block text-sm max-w-xs text-right"
-            style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
+          <span
+            className="text-xs tracking-[6px] uppercase font-medium block mb-4"
+            style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
           >
-            Click any card to expand
-          </p>
+            The Numbers
+          </span>
+          <h2
+            className="text-5xl sm:text-6xl font-black"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
+            Raw <em style={{ fontStyle: "italic", fontWeight: 400 }}>Specs</em>
+          </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {SPECS.map((spec, i) => (
             <motion.div
               key={spec.label}
@@ -328,27 +305,24 @@ export default function ShowcasePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="spec-card rounded-xl p-5 cursor-pointer"
+              className="spec-card rounded-xl p-6 cursor-pointer"
               style={{
-                background: activeSpec === i
-                  ? "rgba(61, 106, 255, 0.08)"
-                  : "rgba(255,255,255,0.02)",
+                background: activeSpec === i ? "rgba(61, 106, 255, 0.04)" : "#fafafa",
                 border: activeSpec === i
                   ? "1px solid rgba(61, 106, 255, 0.3)"
-                  : "1px solid rgba(255,255,255,0.06)",
+                  : "1px solid rgba(0,0,0,0.06)",
               }}
               onClick={() => setActiveSpec(activeSpec === i ? null : i)}
             >
-              <div className="text-2xl mb-3">{spec.icon}</div>
               <span
-                className="text-[10px] tracking-[3px] uppercase block mb-1"
-                style={{ color: "rgba(255,255,255,0.3)", fontFamily: "var(--font-sora)" }}
+                className="text-[10px] tracking-[3px] uppercase block mb-2 font-medium"
+                style={{ color: "rgba(0,0,0,0.35)", fontFamily: "var(--font-dm)" }}
               >
                 {spec.label}
               </span>
               <span
-                className="text-2xl font-extrabold block counter-value"
-                style={{ fontFamily: "var(--font-outfit)" }}
+                className="text-3xl font-black block counter-value"
+                style={{ fontFamily: "var(--font-playfair)" }}
               >
                 {spec.value}
               </span>
@@ -356,8 +330,8 @@ export default function ShowcasePage() {
                 <motion.span
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="text-xs block mt-2"
-                  style={{ color: "rgba(61, 106, 255, 0.8)", fontFamily: "var(--font-sora)" }}
+                  className="text-xs block mt-2 font-medium"
+                  style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
                 >
                   {spec.detail}
                 </motion.span>
@@ -367,35 +341,37 @@ export default function ShowcasePage() {
         </div>
       </section>
 
+      {/* DIVIDER */}
+      <div className="max-w-[1200px] mx-auto px-[5%]">
+        <div style={{ height: "1px", background: "rgba(0,0,0,0.08)" }} />
+      </div>
+
       {/* 360 VIDEO */}
-      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto">
+      <section className="px-[5%] py-28 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-14"
         >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="h-px w-8" style={{ background: "rgb(61, 106, 255)" }} />
-            <span
-              className="text-xs tracking-[4px] uppercase font-semibold"
-              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
-            >
-              Interactive
-            </span>
-          </div>
-          <h2
-            className="text-4xl sm:text-5xl font-extrabold mb-3"
-            style={{ fontFamily: "var(--font-outfit)" }}
+          <span
+            className="text-xs tracking-[6px] uppercase font-medium block mb-4"
+            style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
           >
-            360° View
+            Interactive
+          </span>
+          <h2
+            className="text-5xl sm:text-6xl font-black mb-4"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
+            Spin it <em style={{ fontStyle: "italic", fontWeight: 400 }}>around.</em>
           </h2>
           <p
-            className="text-sm"
-            style={{ color: "rgba(255,255,255,0.35)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
+            className="text-base max-w-md"
+            style={{ color: "rgba(0,0,0,0.4)", fontFamily: "var(--font-dm)", fontWeight: 300 }}
           >
-            Drag left or right to spin the bike around. Full control.
+            Drag left or right to rotate the bike. Full 360 degrees of control.
           </p>
         </motion.div>
 
@@ -407,133 +383,134 @@ export default function ShowcasePage() {
         >
           <Video360Scrub
             src="/t7-360.mp4"
-            className="border border-white/6 shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+            className="border border-black/8 shadow-[0_20px_60px_rgba(0,0,0,0.08)] rounded-2xl"
           />
         </motion.div>
       </section>
 
-      {/* FUN FACTS */}
-      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="h-px w-8" style={{ background: "rgb(61, 106, 255)" }} />
+      {/* DARK SECTION — FUN FACTS */}
+      <section
+        className="py-28"
+        style={{ background: "#111", color: "#fff" }}
+      >
+        <div className="px-[5%] max-w-[1200px] mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-14"
+          >
             <span
-              className="text-xs tracking-[4px] uppercase font-semibold"
-              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
+              className="text-xs tracking-[6px] uppercase font-medium block mb-4"
+              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
             >
               Deep Cuts
             </span>
-          </div>
-          <h2
-            className="text-4xl sm:text-5xl font-extrabold"
-            style={{ fontFamily: "var(--font-outfit)" }}
-          >
-            Things You Didn&apos;t Know
-          </h2>
-        </motion.div>
-
-        <div className="space-y-3">
-          {FUN_FACTS.map((fact, i) => (
-            <motion.div
-              key={fact.title}
-              custom={i}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="fact-card rounded-xl overflow-hidden"
-              style={{
-                background: expandedFact === i
-                  ? "rgba(61, 106, 255, 0.06)"
-                  : "rgba(255,255,255,0.02)",
-                border: expandedFact === i
-                  ? "1px solid rgba(61, 106, 255, 0.2)"
-                  : "1px solid rgba(255,255,255,0.06)",
-              }}
-              onClick={() => setExpandedFact(expandedFact === i ? null : i)}
+            <h2
+              className="text-5xl sm:text-6xl font-black"
+              style={{ fontFamily: "var(--font-playfair)" }}
             >
-              <div className="flex items-center justify-between p-5">
-                <div className="flex items-center gap-4">
+              Things you didn&apos;t{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400 }}>know.</em>
+            </h2>
+          </motion.div>
+
+          <div className="space-y-3">
+            {FUN_FACTS.map((fact, i) => (
+              <motion.div
+                key={fact.title}
+                custom={i}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="fact-card rounded-xl overflow-hidden"
+                style={{
+                  background: expandedFact === i
+                    ? "rgba(61, 106, 255, 0.08)"
+                    : "rgba(255,255,255,0.04)",
+                  border: expandedFact === i
+                    ? "1px solid rgba(61, 106, 255, 0.3)"
+                    : "1px solid rgba(255,255,255,0.08)",
+                }}
+                onClick={() => setExpandedFact(expandedFact === i ? null : i)}
+              >
+                <div className="flex items-center justify-between p-6">
+                  <div className="flex items-center gap-5">
+                    <span
+                      className="px-3 py-1 rounded-full font-bold tracking-[2px] uppercase"
+                      style={{
+                        background: "rgba(61, 106, 255, 0.15)",
+                        color: "rgb(61, 106, 255)",
+                        fontFamily: "var(--font-dm)",
+                        fontSize: "9px",
+                      }}
+                    >
+                      {fact.tag}
+                    </span>
+                    <h3
+                      className="text-lg font-bold"
+                      style={{ fontFamily: "var(--font-playfair)" }}
+                    >
+                      {fact.title}
+                    </h3>
+                  </div>
                   <span
-                    className="text-xs px-3 py-1 rounded-full font-semibold tracking-wider uppercase"
+                    className="text-xl font-light transition-transform duration-300"
                     style={{
-                      background: "rgba(61, 106, 255, 0.12)",
-                      color: "rgb(61, 106, 255)",
-                      fontFamily: "var(--font-sora)",
-                      fontSize: "10px",
+                      transform: expandedFact === i ? "rotate(45deg)" : "rotate(0deg)",
+                      color: "rgba(255,255,255,0.3)",
                     }}
                   >
-                    {fact.tag}
+                    +
                   </span>
-                  <h3
-                    className="text-base font-bold"
-                    style={{ fontFamily: "var(--font-outfit)" }}
-                  >
-                    {fact.title}
-                  </h3>
                 </div>
-                <span
-                  className="text-lg transition-transform duration-300"
-                  style={{
-                    transform: expandedFact === i ? "rotate(45deg)" : "rotate(0deg)",
-                    color: "rgba(255,255,255,0.3)",
-                  }}
-                >
-                  +
-                </span>
-              </div>
-              {expandedFact === i && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="px-5 pb-5"
-                >
-                  <p
-                    className="text-sm leading-relaxed pl-[calc(3rem+16px)]"
-                    style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
+                {expandedFact === i && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="px-6 pb-6"
                   >
-                    {fact.text}
-                  </p>
-                </motion.div>
-              )}
-            </motion.div>
-          ))}
+                    <p
+                      className="text-sm leading-[1.8] pl-[calc(3rem+20px)]"
+                      style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-dm)", fontWeight: 300 }}
+                    >
+                      {fact.text}
+                    </p>
+                  </motion.div>
+                )}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* FEATURES */}
-      <section className="px-[5%] pb-28 max-w-[1200px] mx-auto">
+      <section className="px-[5%] py-28 max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-14"
         >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="h-px w-8" style={{ background: "rgb(61, 106, 255)" }} />
-            <span
-              className="text-xs tracking-[4px] uppercase font-semibold"
-              style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-sora)" }}
-            >
-              Standout
-            </span>
-          </div>
-          <h2
-            className="text-4xl sm:text-5xl font-extrabold"
-            style={{ fontFamily: "var(--font-outfit)" }}
+          <span
+            className="text-xs tracking-[6px] uppercase font-medium block mb-4"
+            style={{ color: "rgb(61, 106, 255)", fontFamily: "var(--font-dm)" }}
           >
-            Why This Bike Hits Different
+            What Sets It Apart
+          </span>
+          <h2
+            className="text-5xl sm:text-6xl font-black"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
+            Why this bike hits{" "}
+            <em style={{ fontStyle: "italic", fontWeight: 400 }}>different.</em>
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-5">
           {FEATURES.map((feat, i) => (
             <motion.div
               key={feat.title}
@@ -542,29 +519,30 @@ export default function ShowcasePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className={`feature-card rounded-2xl p-7 bg-gradient-to-br ${feat.gradient}`}
+              className="feature-card rounded-2xl p-8"
               style={{
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "#fafafa",
+                border: "1px solid rgba(0,0,0,0.06)",
               }}
             >
-              <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center mb-5 text-lg"
+              <span
+                className="text-5xl font-black block mb-5"
                 style={{
-                  background: "rgba(61, 106, 255, 0.15)",
-                  color: "rgb(61, 106, 255)",
+                  fontFamily: "var(--font-playfair)",
+                  color: "rgba(61, 106, 255, 0.15)",
                 }}
               >
-                {i === 0 ? "⛔" : i === 1 ? "🔧" : "🏁"}
-              </div>
+                0{i + 1}
+              </span>
               <h3
-                className="text-xl font-extrabold mb-3"
-                style={{ fontFamily: "var(--font-outfit)" }}
+                className="text-xl font-black mb-3"
+                style={{ fontFamily: "var(--font-playfair)" }}
               >
                 {feat.title}
               </h3>
               <p
-                className="text-sm leading-relaxed"
-                style={{ color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
+                className="text-sm leading-[1.8]"
+                style={{ color: "rgba(0,0,0,0.45)", fontFamily: "var(--font-dm)", fontWeight: 300 }}
               >
                 {feat.text}
               </p>
@@ -574,43 +552,48 @@ export default function ShowcasePage() {
       </section>
 
       {/* CTA */}
-      <section className="px-[5%] pb-24 max-w-[1200px] mx-auto text-center">
+      <section className="px-[5%] pb-28 max-w-[1200px] mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="py-20 rounded-3xl"
+          className="py-24 rounded-3xl"
           style={{
-            background: "linear-gradient(135deg, rgba(61, 106, 255, 0.08), rgba(168, 85, 247, 0.06))",
-            border: "1px solid rgba(61, 106, 255, 0.12)",
+            background: "#111",
+            color: "#fff",
           }}
         >
           <h2
-            className="text-4xl sm:text-5xl font-extrabold mb-4"
-            style={{ fontFamily: "var(--font-outfit)" }}
+            className="text-5xl sm:text-6xl font-black mb-5"
+            style={{ fontFamily: "var(--font-playfair)" }}
           >
-            Ready to ride?
+            Ready to <em style={{ fontStyle: "italic", fontWeight: 400 }}>ride?</em>
           </h2>
           <p
-            className="text-base mb-8 max-w-md mx-auto"
-            style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-sora)", fontWeight: 300 }}
+            className="text-base mb-10 max-w-md mx-auto"
+            style={{ color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-dm)", fontWeight: 300 }}
           >
             The desert is calling. Answer it.
           </p>
-          <GlowButton>Find a dealer</GlowButton>
+          <button
+            className="glow-btn"
+            style={{ color: "#fff" }}
+          >
+            Find a dealer
+          </button>
         </motion.div>
       </section>
 
       {/* FOOTER */}
       <footer
-        className="text-center py-8"
+        className="text-center py-10"
         style={{
-          borderTop: "1px solid rgba(255,255,255,0.04)",
-          fontFamily: "var(--font-sora)",
+          borderTop: "1px solid rgba(0,0,0,0.06)",
+          fontFamily: "var(--font-dm)",
         }}
       >
-        <p className="text-[11px] tracking-wider" style={{ color: "rgba(255,255,255,0.2)" }}>
+        <p className="text-[11px] tracking-[3px] uppercase" style={{ color: "rgba(0,0,0,0.25)" }}>
           Yamaha Ténéré 700 &middot; Interactive Showcase &middot; 689cc CP2 &middot; Built for Adventure
         </p>
       </footer>
