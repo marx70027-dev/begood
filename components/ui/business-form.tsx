@@ -49,6 +49,7 @@ export default function BusinessForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [submitCount, setSubmitCount] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const formStartTime = useRef(Date.now());
@@ -85,13 +86,30 @@ export default function BusinessForm() {
     if (!validate()) return;
 
     setSubmitting(true);
+    setSubmitError("");
     lastSubmitTime.current = now;
     setSubmitCount((c) => c + 1);
 
-    setTimeout(() => {
-      setSubmitting(false);
-      setSubmitted(true);
-    }, 1500);
+    fetch("/api/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        phone: form.phone.trim(),
+        country: form.country,
+        businessType: form.businessType,
+        message: form.message.trim(),
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed");
+        setSubmitted(true);
+      })
+      .catch(() => {
+        setSubmitError("Something went wrong. Please try again.");
+      })
+      .finally(() => {
+        setSubmitting(false);
+      });
   };
 
   const update = (field: keyof FormData, value: string) => {
@@ -265,6 +283,8 @@ export default function BusinessForm() {
             />
             <p className="text-white/20 text-xs text-right mt-1">{form.message.length}/1000</p>
           </div>
+
+          {submitError && <p className="text-red-400 text-sm text-center">{submitError}</p>}
 
           <button
             type="submit"
