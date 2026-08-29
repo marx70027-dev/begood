@@ -16,10 +16,9 @@ export default function LaunchButton({ onClick, disabled }: LaunchButtonProps) {
       type="button"
     >
       <span className="launch-btn-top">
-        <span className="launch-btn-label">🚀 LAUNCH</span>
+        <span className="launch-btn-label">LAUNCH</span>
       </span>
-      <span className="launch-btn-bottom" />
-      <span className="launch-btn-base" />
+      <span className="launch-btn-ring" />
     </button>
   );
 }
