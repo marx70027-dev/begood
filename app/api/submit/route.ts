@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     const { error } = await getResend().emails.send({
       from: "weblirev.com <onboarding@resend.dev>",
-      to: "mateostopic2703@gmail.com",
+      to: process.env.CONTACT_EMAIL || "mateostopic2703@gmail.com",
       subject: `New Website Request — ${businessType}`,
       html: `
         <h2>New Website Request from weblirev.com</h2>
