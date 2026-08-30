@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BeGood – Fasade, Moleraj, Keramika | Zagreb",
-  description: "Profesionalne usluge fasada, moleraja i keramike u Zagrebu i okolici. Pozovite 099 2263774.",
+  title: "weblirev.com – Let's Build Your Website",
+  description: "Professional website creation for your business. Choose a plan and we'll launch your project.",
 };
 
 export default function RootLayout({

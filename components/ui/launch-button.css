@@ -1,0 +1,105 @@
+.launch-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  font: inherit;
+}
+
+.launch-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.launch-btn-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 18px 48px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #ff4d4d 0%, #ff1a1a 50%, #cc0000 100%);
+  box-shadow:
+    0 0 20px rgba(255, 40, 40, 0.4),
+    0 0 60px rgba(255, 40, 40, 0.2),
+    0 8px 0 #8b0000,
+    0 10px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(0);
+  transition: all 0.15s ease;
+  overflow: hidden;
+}
+
+.launch-btn-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: launch-shine 3s ease-in-out infinite;
+}
+
+@keyframes launch-shine {
+  0% { left: -100%; }
+  50% { left: 150%; }
+  100% { left: 150%; }
+}
+
+.launch-btn:hover:not(:disabled) .launch-btn-top {
+  box-shadow:
+    0 0 30px rgba(255, 40, 40, 0.6),
+    0 0 80px rgba(255, 40, 40, 0.3),
+    0 8px 0 #8b0000,
+    0 10px 25px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.launch-btn:active:not(:disabled) .launch-btn-top {
+  box-shadow:
+    0 0 15px rgba(255, 40, 40, 0.4),
+    0 0 40px rgba(255, 40, 40, 0.2),
+    0 2px 0 #8b0000,
+    0 4px 10px rgba(0, 0, 0, 0.4);
+  transform: translateY(6px);
+}
+
+.launch-btn-label {
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.launch-btn-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 53px;
+  border: 2px solid rgba(255, 100, 100, 0.3);
+  animation: launch-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes launch-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.04);
+  }
+}
