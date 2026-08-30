@@ -5,5 +5,11 @@
   "pages_build_output_dir": ".open-next/assets",
   "observability": {
     "enabled": true
-  }
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "weblirev"
+    }
+  ]
 }
