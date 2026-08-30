@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resend: Resend;
+function getResend() {
+  if (!resend) resend = new Resend(process.env.RESEND_API_KEY);
+  return resend;
+}
 
 const PHONE_REGEX = /^\+?[\d\s\-()]{7,20}$/;
 
@@ -20,7 +24,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Business type required" }, { status: 400 });
     }
 
-    const { error } = await resend.emails.send({
+    const { error } = await getResend().emails.send({
       from: "weblirev.com <onboarding@resend.dev>",
       to: "mateostopic2703@gmail.com",
       subject: `New Website Request — ${businessType}`,
