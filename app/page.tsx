@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CookieConsent from "@/components/ui/cookie-consent";
 import LaunchButton from "@/components/ui/launch-button";
 import BusinessForm from "@/components/ui/business-form";
+import Logo from "@/components/ui/logo";
 
 type Phase = "cookie" | "rocket" | "launching" | "form";
 
@@ -77,6 +78,12 @@ export default function Home() {
 
   return (
     <div className="bg-black min-h-screen overflow-hidden">
+      {phase !== "cookie" && (
+        <div className="fixed top-6 left-6 z-[60]">
+          <Logo />
+        </div>
+      )}
+
       <CookieConsent
         visible={phase === "cookie"}
         onAccept={handleAcceptCookies}
