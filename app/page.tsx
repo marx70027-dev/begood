@@ -98,13 +98,13 @@ export default function Home() {
                 >
                   <div className="text-center mb-8">
                     <h1
-                      className="text-5xl md:text-7xl text-white mb-3 drop-shadow-2xl"
+                      className="text-4xl md:text-6xl text-white mb-3 drop-shadow-2xl"
                       style={{ fontFamily: headingFont }}
                     >
-                      web<span className="text-white/50">lirev</span>.com
+                      Izrada web stranica Zagreb - 1000€ za bilo koji web
                     </h1>
                     <p className="text-white/60 text-lg md:text-xl">
-                      Your website awaits — press Launch
+                      Mala ili ogromna stranica, ista cijena. Domena, hosting, dizajn i SEO - sve uključeno za 1000€.
                     </p>
                   </div>
                   <LaunchButton onClick={handleLaunch} />
