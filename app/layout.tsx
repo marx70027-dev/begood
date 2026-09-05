@@ -25,6 +25,11 @@ export const metadata: Metadata = {
     },
   },
   robots: "index, follow",
+  verification: {
+    other: {
+      "msvalidate.01": "3E05E3045FAD2EA530B4859A1D6A75FC",
+    },
+  },
 };
 
 const structuredData = {
