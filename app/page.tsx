@@ -11,6 +11,23 @@ type Phase = "cookie" | "rocket" | "launching" | "form";
 const headingFont = "'Bodoni MT Black', 'Bodoni MT', 'Didot', 'Georgia', serif";
 const IDLE_END = 1.0;
 
+const CITIES = [
+  "Zagreb",
+  "Split",
+  "Rijeka",
+  "Osijek",
+  "Zadar",
+  "Slavonski Brod",
+  "Pula",
+  "Sesvete",
+  "Karlovac",
+  "Varaždin",
+  "Dubrovnik",
+  "Šibenik",
+  "Sisak",
+  "Velika Gorica",
+];
+
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("cookie");
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -101,10 +118,13 @@ export default function Home() {
                       className="text-4xl md:text-6xl text-white mb-3 drop-shadow-2xl"
                       style={{ fontFamily: headingFont }}
                     >
-                      Izrada web stranica Zagreb - 1000€ za bilo koji web
+                      Izrada web stranica za cijelu Hrvatsku - 1000€ za bilo koji web
                     </h1>
                     <p className="text-white/60 text-lg md:text-xl">
-                      Mala ili ogromna stranica, ista cijena. Domena, hosting, dizajn i SEO - sve uključeno za 1000€.
+                      Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik... Mala ili ogromna stranica, ista cijena 1000€. Domena, hosting, dizajn i SEO - sve uključeno.
+                    </p>
+                    <p className="text-white/40 text-sm md:text-base mt-2">
+                      Any website anywhere in Croatia — same flat price 1000€.
                     </p>
                   </div>
                   <LaunchButton onClick={handleLaunch} />
@@ -147,6 +167,25 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <BusinessForm />
+
+            <section className="border-t border-white/10 py-16 px-6 text-center">
+              <h2
+                className="text-2xl md:text-3xl text-white mb-6"
+                style={{ fontFamily: headingFont }}
+              >
+                Radimo u svim gradovima
+              </h2>
+              <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
+                {CITIES.map((city) => (
+                  <span
+                    key={city}
+                    className="text-white/60 text-sm md:text-base px-4 py-2 rounded-full border border-white/10"
+                  >
+                    {city}
+                  </span>
+                ))}
+              </div>
+            </section>
           </motion.div>
         )}
       </AnimatePresence>
