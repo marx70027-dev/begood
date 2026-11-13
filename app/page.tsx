@@ -6,6 +6,8 @@ import CookieConsent from "@/components/ui/cookie-consent";
 import LaunchButton from "@/components/ui/launch-button";
 import BusinessForm from "@/components/ui/business-form";
 import Logo from "@/components/ui/logo";
+import LanguageToggle from "@/components/ui/language-toggle";
+import { LanguageProvider, useLanguage } from "@/lib/i18n";
 
 type Phase = "cookie" | "rocket" | "launching" | "form";
 
@@ -30,6 +32,15 @@ const CITIES = [
 ];
 
 export default function Home() {
+  return (
+    <LanguageProvider>
+      <HomeContent />
+    </LanguageProvider>
+  );
+}
+
+function HomeContent() {
+  const { t } = useLanguage();
   const [phase, setPhase] = useState<Phase>("cookie");
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -79,9 +90,14 @@ export default function Home() {
   return (
     <div className="bg-black min-h-screen overflow-hidden">
       {phase !== "cookie" && (
-        <div className="fixed top-6 left-6 z-[60]">
-          <Logo />
-        </div>
+        <>
+          <div className="fixed top-6 left-6 z-[60]">
+            <Logo />
+          </div>
+          <div className="fixed top-6 right-6 z-[60]">
+            <LanguageToggle />
+          </div>
+        </>
       )}
 
       <CookieConsent
@@ -118,20 +134,23 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20, transition: { duration: 0.4 } }}
                   transition={{ delay: 0.5, duration: 0.8 }}
-                  className="absolute inset-0 flex flex-col items-center justify-center z-10"
+                  className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6"
                 >
-                  <div className="text-center mb-8">
+                  <div className="text-center mb-10 max-w-2xl mx-auto bg-black/25 backdrop-blur-sm rounded-3xl px-6 py-10 border border-white/10">
+                    <span className="inline-block bg-white text-black text-[10px] md:text-xs font-black tracking-[3px] uppercase px-3 py-1.5 rounded-full mb-5">
+                      WebliRev — Web Design
+                    </span>
                     <h1
-                      className="text-4xl md:text-6xl text-white mb-3 drop-shadow-2xl"
+                      className="text-3xl md:text-5xl lg:text-6xl text-white mb-4 leading-tight drop-shadow-2xl"
                       style={{ fontFamily: headingFont }}
                     >
-                      Izrada web stranica za cijelu Hrvatsku - 1000€ za bilo koji web
+                      {t.heroTitle}
                     </h1>
-                    <p className="text-white/60 text-lg md:text-xl">
-                      Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik... Mala ili ogromna stranica, ista cijena 1000€. Domena, hosting, dizajn i SEO - sve uključeno.
+                    <p className="text-white/60 text-base md:text-lg">
+                      {t.heroSubtitle}
                     </p>
-                    <p className="text-white/40 text-sm md:text-base mt-2">
-                      Any website anywhere in Croatia — same flat price 1000€.
+                    <p className="text-white/40 text-sm md:text-base mt-3 italic">
+                      {t.heroEnLine}
                     </p>
                   </div>
                   <LaunchButton onClick={handleLaunch} />
@@ -180,7 +199,7 @@ export default function Home() {
                 className="text-2xl md:text-3xl text-white mb-6"
                 style={{ fontFamily: headingFont }}
               >
-                Radimo u svim gradovima
+                {t.citiesTitle}
               </h2>
               <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
                 {CITIES.map((city) => (
