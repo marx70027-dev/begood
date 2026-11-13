@@ -8,6 +8,10 @@ import BusinessForm from "@/components/ui/business-form";
 import Logo from "@/components/ui/logo";
 import LanguageToggle from "@/components/ui/language-toggle";
 import AiSection from "@/components/ui/ai-section";
+import ScrollProgress from "@/components/ui/scroll-progress";
+import StickyCta from "@/components/ui/sticky-cta";
+import BackToTop from "@/components/ui/back-to-top";
+import StatsSection from "@/components/ui/stats-section";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
 
 type Phase = "cookie" | "rocket" | "launching" | "form";
@@ -90,6 +94,7 @@ function HomeContent() {
 
   return (
     <div className="bg-black min-h-screen overflow-hidden">
+      {phase !== "cookie" && <ScrollProgress />}
       {phase !== "cookie" && (
         <>
           <div className="fixed top-6 left-6 z-[60]">
@@ -98,6 +103,12 @@ function HomeContent() {
           <div className="fixed top-6 right-6 z-[60]">
             <LanguageToggle />
           </div>
+        </>
+      )}
+      {phase === "form" && (
+        <>
+          <StickyCta />
+          <BackToTop />
         </>
       )}
 
@@ -156,11 +167,7 @@ function HomeContent() {
                       className="text-3xl md:text-5xl lg:text-6xl text-white mb-5 leading-tight tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]"
                       style={{ fontFamily: headingFont }}
                     >
-                      {t.heroTitlePre}
-                      <span className="text-[#ff3b3b] drop-shadow-[0_0_25px_rgba(255,59,59,0.6)]">
-                        {t.heroTitlePrice}
-                      </span>
-                      {t.heroTitlePost}
+                      {t.heroTitle}
                     </h1>
                     <p className="text-white/70 text-base md:text-lg drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                       {t.heroSubtitle}
@@ -255,6 +262,8 @@ function HomeContent() {
                 ))}
               </div>
             </section>
+
+            <StatsSection />
 
             <AiSection />
           </motion.div>

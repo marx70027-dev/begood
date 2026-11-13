@@ -9,22 +9,27 @@ export interface FaqItem {
   a: string;
 }
 
+export interface StatItem {
+  value: number;
+  suffix: string;
+  label: string;
+}
+
 interface Dict {
-  heroTitlePre: string;
-  heroTitlePrice: string;
-  heroTitlePost: string;
+  heroTitle: string;
   heroSubtitle: string;
   heroEnLine: string;
+  scrollHint: string;
   citiesTitle: string;
   citiesSubtitle: string;
   citiesCount: string;
+  stats: StatItem[];
   aiTag: string;
   aiTitle: string;
   aiBody: string;
   aiCommandLabel: string;
   aiResultLine1: string;
   aiResultLine2: string;
-  aiResultLine3: string;
   portfolioTag: string;
   portfolioTitle: string;
   portfolioHint: string;
@@ -57,48 +62,54 @@ interface Dict {
   errorCountryRequired: string;
   errorBusinessRequired: string;
   errorMessageTooLong: string;
+  backToTop: string;
+  stickyCta: string;
 }
 
 const faqHr: FaqItem[] = [
-  { q: "Koliko košta izrada web stranice?", a: "Profesionalna web stranica kreće od 1.000€. Konačna cijena ovisi o složenosti, broju stranica i funkcionalnostima koje trebaš. Javi nam se za personaliziranu ponudu." },
-  { q: "Koliko dugo traje izrada web stranice?", a: "Većina stranica je gotova za 2-4 tjedna, ovisno o složenosti. Dat ćemo ti jasan vremenski okvir nakon što vidimo tvoje potrebe." },
+  { q: "Koliko traje izrada web stranice?", a: "Većina stranica je gotova za 2-4 tjedna, ovisno o složenosti. Dat ćemo ti jasan vremenski okvir nakon što vidimo tvoje potrebe." },
   { q: "Moram li ja osigurati sadržaj i slike?", a: "Pomaže ako ih imaš, ali možemo i mi napisati sadržaj i pronaći profesionalne slike. Vodit ćemo te kroz cijeli proces." },
   { q: "Hoće li moja stranica raditi na mobitelu?", a: "Apsolutno. Svaka stranica koju napravimo je potpuno responzivna i izgleda odlično na mobitelima, tabletima i računalima." },
-  { q: "Nudite li hosting i održavanje?", a: "Da — hosting i održavanje su uključeni u cijenu. SSL, sigurnosne kopije, ažuriranja i podrška su pokriveni bez dodatne naplate." },
+  { q: "Nudite li hosting i održavanje?", a: "Da — hosting i održavanje su uključeni. SSL, sigurnosne kopije, ažuriranja i podrška su pokriveni bez dodatne naplate." },
   { q: "Mogu li sam mijenjati stranicu nakon izrade?", a: "Da. Gradimo na modernim platformama s jednostavnim admin sučeljima. Također osiguravamo kratku obuku kako bi samouvjereno upravljao sadržajem." },
   { q: "Što ako nisam zadovoljan dizajnom?", a: "Uključujemo do 3 kruga revizija. Blisko surađujemo s tobom kako bi finalni rezultat odgovarao tvojoj viziji." },
   { q: "Radite li online trgovine?", a: "Da. Možemo napraviti punu e-commerce funkcionalnost — stranice proizvoda, košaricu, plaćanje i upravljanje narudžbama." },
+  { q: "Kako te kontaktiramo nakon upita?", a: "Javljamo se telefonom ili porukom u roku od 24 sata kako bismo dogovorili detalje i sljedeće korake." },
 ];
 
 const faqEn: FaqItem[] = [
-  { q: "How much does a website cost?", a: "A professional website starts from €1,000. The final price depends on complexity, number of pages, and features you need. Contact us for a personalized quote." },
   { q: "How long does it take to build a website?", a: "Most websites take 2–4 weeks depending on complexity. We'll give you a clear timeline after reviewing your needs." },
   { q: "Do I need to provide content and images?", a: "It helps if you do, but we can also write content and source professional images for you. We'll guide you through the whole process." },
   { q: "Will my website be mobile-friendly?", a: "Absolutely. Every website we build is fully responsive and looks great on phones, tablets, and desktops." },
-  { q: "Do you offer hosting and maintenance?", a: "Yes — hosting and maintenance are included in the price. SSL, backups, updates, and support are all covered at no extra cost." },
+  { q: "Do you offer hosting and maintenance?", a: "Yes — hosting and maintenance are included. SSL, backups, updates, and support are all covered at no extra cost." },
   { q: "Can I update the website myself after it's built?", a: "Yes. We build on modern platforms with easy-to-use admin panels. We also provide a quick training session so you can manage your content confidently." },
   { q: "What if I'm not happy with the design?", a: "We include up to 3 rounds of revisions. We work closely with you to make sure the final result matches your vision." },
   { q: "Do you build online stores?", a: "Yes. We can build full e-commerce functionality — product pages, cart, checkout, payment integration, and order management." },
+  { q: "How do you reach out after I submit the form?", a: "We'll contact you by phone or message within 24 hours to go over the details and next steps." },
 ];
 
 const dictionaries: Record<Lang, Dict> = {
   hr: {
-    heroTitlePre: "Izrada web stranica za cijelu Hrvatsku - ",
-    heroTitlePrice: "1000€",
-    heroTitlePost: " za bilo koji web",
+    heroTitle: "Izrada web stranica za cijelu Hrvatsku",
     heroSubtitle:
-      "Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik... Mala ili ogromna stranica, ista cijena 1000€. Domena, hosting, dizajn i SEO - sve uključeno.",
-    heroEnLine: "Any website anywhere in Croatia — same flat price 1000€.",
+      "Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik... Mala ili ogromna stranica. Domena, hosting, dizajn i SEO - sve uključeno.",
+    heroEnLine: "Any website, anywhere in Croatia.",
+    scrollHint: "Skrolaj za više",
     citiesTitle: "Radimo u svim gradovima",
     citiesSubtitle: "Bez obzira jesi li u glavnom gradu ili manjem mjestu — dolazimo do tebe, online i uživo.",
     citiesCount: "14+ gradova diljem Hrvatske",
+    stats: [
+      { value: 14, suffix: "+", label: "Gradova pokriveno" },
+      { value: 24, suffix: "h", label: "Vrijeme odgovora" },
+      { value: 100, suffix: "%", label: "Responzivan dizajn" },
+      { value: 2, suffix: " jezika", label: "Hrvatski i engleski" },
+    ],
     aiTag: "AI Vidljivost",
     aiTitle: "Tvoju stranicu prepoznaje i umjetna inteligencija",
-    aiBody: "Svaka stranica koju napravimo dolazi s llms.txt datotekom koja AI alatima (ChatGPT, Claude, Perplexity...) jasno govori tko si, čime se baviš i kako te kontaktirati — tako te lakše pronalaze i preporučuju.",
+    aiBody: "Svaka stranica koju napravimo dolazi s llms.txt datotekom koja AI alatima (ChatGPT, Claude, Perplexity...) jasno govori tko si i čime se baviš — tako te lakše pronalaze i preporučuju.",
     aiCommandLabel: "AI čita weblirev.com/llms.txt",
     aiResultLine1: "Usluga: Izrada web stranica za cijelu Hrvatsku",
-    aiResultLine2: "Cijena: 1000€ flat",
-    aiResultLine3: "Status: Prepoznato ✓",
+    aiResultLine2: "Status: Prepoznato ✓",
     portfolioTag: "Naši radovi",
     portfolioTitle: "Pogledaj što smo već napravili",
     portfolioHint: "Pređi mišem preko kartice",
@@ -131,24 +142,30 @@ const dictionaries: Record<Lang, Dict> = {
     errorCountryRequired: "Molimo odaberi državu",
     errorBusinessRequired: "Molimo odaberi vrstu biznisa",
     errorMessageTooLong: "Poruka je predugačka (max 1000 znakova)",
+    backToTop: "Na vrh",
+    stickyCta: "Pošalji upit",
   },
   en: {
-    heroTitlePre: "Website design for all of Croatia - flat ",
-    heroTitlePrice: "1000€",
-    heroTitlePost: " for any website",
+    heroTitle: "Website design for all of Croatia",
     heroSubtitle:
-      "Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik... Small or huge website, same flat price 1000€. Domain, hosting, design and SEO - all included.",
-    heroEnLine: "Bilo koji web, bilo gdje u Hrvatskoj — ista cijena 1000€.",
+      "Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik... Small or huge website. Domain, hosting, design and SEO - all included.",
+    heroEnLine: "Bilo koji web, bilo gdje u Hrvatskoj.",
+    scrollHint: "Scroll for more",
     citiesTitle: "We work in every city",
     citiesSubtitle: "Whether you're in the capital or a smaller town — we come to you, online and in person.",
     citiesCount: "14+ cities across Croatia",
+    stats: [
+      { value: 14, suffix: "+", label: "Cities covered" },
+      { value: 24, suffix: "h", label: "Response time" },
+      { value: 100, suffix: "%", label: "Responsive design" },
+      { value: 2, suffix: " languages", label: "Croatian and English" },
+    ],
     aiTag: "AI Visibility",
     aiTitle: "Your website gets recognized by AI too",
-    aiBody: "Every website we build ships with an llms.txt file that tells AI tools (ChatGPT, Claude, Perplexity...) exactly who you are, what you do, and how to reach you — so they find and recommend you more easily.",
+    aiBody: "Every website we build ships with an llms.txt file that tells AI tools (ChatGPT, Claude, Perplexity...) exactly who you are and what you do — so they find and recommend you more easily.",
     aiCommandLabel: "AI reads weblirev.com/llms.txt",
     aiResultLine1: "Service: Website design for all of Croatia",
-    aiResultLine2: "Price: 1000€ flat",
-    aiResultLine3: "Status: Recognized ✓",
+    aiResultLine2: "Status: Recognized ✓",
     portfolioTag: "Our Work",
     portfolioTitle: "See what we've already built",
     portfolioHint: "Hover over a tile to preview",
@@ -181,6 +198,8 @@ const dictionaries: Record<Lang, Dict> = {
     errorCountryRequired: "Please select a country",
     errorBusinessRequired: "Please select a business type",
     errorMessageTooLong: "Message is too long (max 1000 characters)",
+    backToTop: "Back to top",
+    stickyCta: "Submit Request",
   },
 };
 

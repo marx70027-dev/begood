@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WebliRev - Izrada web stranica Hrvatska | Web Design Croatia | Flat 1000€ za bilo koji web",
+  title: "WebliRev - Izrada web stranica Hrvatska | Web Design Croatia",
   description:
-    "Izrada web stranica za cijelu Hrvatsku za flat 1000€. Bilo koji grad - Zagreb, Split, Rijeka, Osijek, Zadar, Pula. One flat price 1000€ for any website in Croatia.",
+    "Izrada web stranica za cijelu Hrvatsku. Bilo koji grad - Zagreb, Split, Rijeka, Osijek, Zadar, Pula. Website design for any city in Croatia.",
   alternates: {
     canonical: "https://weblirev.com/",
     languages: {
@@ -39,7 +39,7 @@ const structuredData = {
   alternateName: "WebliRev Croatia Web Design",
   url: "https://weblirev.com",
   description:
-    "Izrada web stranica za cijelu Hrvatsku - Zagreb, Split, Rijeka, Osijek, Zadar, Dubrovnik, Pula, Šibenik. Flat cijena 1000€ za bilo koji web. Web design agency for whole Croatia.",
+    "Izrada web stranica za cijelu Hrvatsku - Zagreb, Split, Rijeka, Osijek, Zadar, Dubrovnik, Pula, Šibenik. Web design agency for whole Croatia.",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Zagreb",
@@ -57,16 +57,13 @@ const structuredData = {
     { "@type": "City", name: "Dubrovnik" },
     { "@type": "City", name: "Šibenik" },
   ],
-  priceRange: "1000€",
   inLanguage: ["hr", "en"],
   offers: {
     "@type": "Offer",
-    name: "Izrada bilo koje web stranice u Hrvatskoj / Any Website in Croatia - Flat 1000€",
-    price: "1000",
-    priceCurrency: "EUR",
+    name: "Izrada bilo koje web stranice u Hrvatskoj / Any Website in Croatia",
     availability: "https://schema.org/InStock",
     description:
-      "Flat 1000€ for any website anywhere in Croatia - Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik. Bilo koji web, bilo gdje u HR za 1000€",
+      "Website design for any city in Croatia - Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik. Bilo koji web, bilo gdje u HR.",
   },
 };
 

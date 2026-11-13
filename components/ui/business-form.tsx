@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
+import Confetti from "./confetti";
 
 const COUNTRIES = [
   "United States", "United Kingdom", "Canada", "Australia", "Germany",
@@ -115,6 +116,7 @@ export default function BusinessForm() {
         animate={{ opacity: 1, scale: 1 }}
         className="min-h-screen bg-black flex items-center justify-center p-6"
       >
+        <Confetti />
         <div className="text-center max-w-md">
           <motion.div
             initial={{ scale: 0 }}
@@ -143,7 +145,7 @@ export default function BusinessForm() {
   }
 
   return (
-    <div className="min-h-screen bg-black py-12 px-4">
+    <div id="contact-form" className="min-h-screen bg-black py-12 px-4">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

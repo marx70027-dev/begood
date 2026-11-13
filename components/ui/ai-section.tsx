@@ -26,9 +26,17 @@ export default function AiSection() {
   const { t } = useLanguage();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const command = useTypewriter(`curl weblirev.com/llms.txt`, inView, 35);
   const showResults = inView && command.length >= `curl weblirev.com/llms.txt`.length;
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: py * -10, y: px * 10 });
+  };
 
   return (
     <section ref={ref} className="border-t border-white/10 py-20 px-6">
@@ -56,6 +64,10 @@ export default function AiSection() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.15 }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={() => setTilt({ x: 0, y: 0 })}
+          animate={{ rotateX: tilt.x, rotateY: tilt.y }}
+          style={{ transformPerspective: 800 }}
           className="bg-black border border-white/15 rounded-2xl p-5 font-mono text-xs md:text-sm shadow-[0_0_40px_rgba(255,59,59,0.08)]"
         >
           <div className="flex gap-1.5 mb-4">
@@ -84,16 +96,13 @@ export default function AiSection() {
               <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
                 {t.aiResultLine1}
               </motion.p>
-              <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
-                {t.aiResultLine2}
-              </motion.p>
               <motion.p
                 initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
+                transition={{ delay: 0.6 }}
                 className="text-green-400 font-bold"
               >
-                {t.aiResultLine3}
+                {t.aiResultLine2}
               </motion.p>
             </motion.div>
           )}
