@@ -67,7 +67,7 @@ interface Dict {
 }
 
 const faqHr: FaqItem[] = [
-  { q: "Koliko traje izrada web stranice?", a: "Većina stranica je gotova za 2-4 tjedna, ovisno o složenosti. Dat ćemo ti jasan vremenski okvir nakon što vidimo tvoje potrebe." },
+  { q: "Koliko traje izrada web stranice?", a: "Većina stranica je gotova za 3-5 dana, ovisno o složenosti. Dat ćemo ti jasan vremenski okvir nakon što vidimo tvoje potrebe." },
   { q: "Moram li ja osigurati sadržaj i slike?", a: "Pomaže ako ih imaš, ali možemo i mi napisati sadržaj i pronaći profesionalne slike. Vodit ćemo te kroz cijeli proces." },
   { q: "Hoće li moja stranica raditi na mobitelu?", a: "Apsolutno. Svaka stranica koju napravimo je potpuno responzivna i izgleda odlično na mobitelima, tabletima i računalima." },
   { q: "Nudite li hosting i održavanje?", a: "Da — hosting i održavanje su uključeni. SSL, sigurnosne kopije, ažuriranja i podrška su pokriveni bez dodatne naplate." },
@@ -78,7 +78,7 @@ const faqHr: FaqItem[] = [
 ];
 
 const faqEn: FaqItem[] = [
-  { q: "How long does it take to build a website?", a: "Most websites take 2–4 weeks depending on complexity. We'll give you a clear timeline after reviewing your needs." },
+  { q: "How long does it take to build a website?", a: "Most websites take 3-5 days depending on complexity. We'll give you a clear timeline after reviewing your needs." },
   { q: "Do I need to provide content and images?", a: "It helps if you do, but we can also write content and source professional images for you. We'll guide you through the whole process." },
   { q: "Will my website be mobile-friendly?", a: "Absolutely. Every website we build is fully responsive and looks great on phones, tablets, and desktops." },
   { q: "Do you offer hosting and maintenance?", a: "Yes — hosting and maintenance are included. SSL, backups, updates, and support are all covered at no extra cost." },
