@@ -6,24 +6,34 @@ import { useLanguage } from "@/lib/i18n";
 
 export default function StickyCta() {
   const { t } = useLanguage();
-  const [visible, setVisible] = useState(false);
+  const [formVisible, setFormVisible] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      const form = document.getElementById("contact-form");
-      if (!form) return;
-      const rect = form.getBoundingClientRect();
-      // Show once the page has scrolled a bit, hide once the form itself is on screen
-      setVisible(window.scrollY > 400 && rect.top > window.innerHeight * 0.5);
-    };
+    const form = document.getElementById("contact-form");
+    if (!form) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setFormVisible(entry.isIntersecting),
+      { threshold: 0.15 }
+    );
+    observer.observe(form);
+
+    const onScroll = () => setScrolled(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   const scrollToForm = () => {
     document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  const visible = scrolled && !formVisible;
 
   return (
     <AnimatePresence>
