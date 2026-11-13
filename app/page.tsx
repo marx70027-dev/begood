@@ -7,6 +7,7 @@ import LaunchButton from "@/components/ui/launch-button";
 import BusinessForm from "@/components/ui/business-form";
 import Logo from "@/components/ui/logo";
 import LanguageToggle from "@/components/ui/language-toggle";
+import AiSection from "@/components/ui/ai-section";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
 
 type Phase = "cookie" | "rocket" | "launching" | "form";
@@ -210,16 +211,34 @@ function HomeContent() {
             <BusinessForm />
 
             <section className="border-t border-white/10 py-16 px-6 text-center">
+              <motion.span
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="inline-block bg-white/10 text-white/70 text-xs font-bold tracking-[2px] uppercase px-3 py-1.5 rounded-full mb-4 border border-white/10"
+              >
+                {t.citiesCount}
+              </motion.span>
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="text-2xl md:text-3xl text-white mb-6"
+                className="text-2xl md:text-3xl text-white mb-3"
                 style={{ fontFamily: headingFont }}
               >
                 {t.citiesTitle}
               </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-white/40 text-sm md:text-base max-w-xl mx-auto mb-8"
+              >
+                {t.citiesSubtitle}
+              </motion.p>
               <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
                 {CITIES.map((city, i) => (
                   <motion.span
@@ -236,6 +255,8 @@ function HomeContent() {
                 ))}
               </div>
             </section>
+
+            <AiSection />
           </motion.div>
         )}
       </AnimatePresence>

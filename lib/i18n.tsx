@@ -16,6 +16,15 @@ interface Dict {
   heroSubtitle: string;
   heroEnLine: string;
   citiesTitle: string;
+  citiesSubtitle: string;
+  citiesCount: string;
+  aiTag: string;
+  aiTitle: string;
+  aiBody: string;
+  aiCommandLabel: string;
+  aiResultLine1: string;
+  aiResultLine2: string;
+  aiResultLine3: string;
   portfolioTag: string;
   portfolioTitle: string;
   portfolioHint: string;
@@ -81,6 +90,15 @@ const dictionaries: Record<Lang, Dict> = {
       "Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik... Mala ili ogromna stranica, ista cijena 1000€. Domena, hosting, dizajn i SEO - sve uključeno.",
     heroEnLine: "Any website anywhere in Croatia — same flat price 1000€.",
     citiesTitle: "Radimo u svim gradovima",
+    citiesSubtitle: "Bez obzira jesi li u glavnom gradu ili manjem mjestu — dolazimo do tebe, online i uživo.",
+    citiesCount: "14+ gradova diljem Hrvatske",
+    aiTag: "AI Vidljivost",
+    aiTitle: "Tvoju stranicu prepoznaje i umjetna inteligencija",
+    aiBody: "Svaka stranica koju napravimo dolazi s llms.txt datotekom koja AI alatima (ChatGPT, Claude, Perplexity...) jasno govori tko si, čime se baviš i kako te kontaktirati — tako te lakše pronalaze i preporučuju.",
+    aiCommandLabel: "AI čita weblirev.com/llms.txt",
+    aiResultLine1: "Usluga: Izrada web stranica za cijelu Hrvatsku",
+    aiResultLine2: "Cijena: 1000€ flat",
+    aiResultLine3: "Status: Prepoznato ✓",
     portfolioTag: "Naši radovi",
     portfolioTitle: "Pogledaj što smo već napravili",
     portfolioHint: "Pređi mišem preko kartice",
@@ -122,6 +140,15 @@ const dictionaries: Record<Lang, Dict> = {
       "Zagreb, Split, Rijeka, Osijek, Zadar, Pula, Dubrovnik... Small or huge website, same flat price 1000€. Domain, hosting, design and SEO - all included.",
     heroEnLine: "Bilo koji web, bilo gdje u Hrvatskoj — ista cijena 1000€.",
     citiesTitle: "We work in every city",
+    citiesSubtitle: "Whether you're in the capital or a smaller town — we come to you, online and in person.",
+    citiesCount: "14+ cities across Croatia",
+    aiTag: "AI Visibility",
+    aiTitle: "Your website gets recognized by AI too",
+    aiBody: "Every website we build ships with an llms.txt file that tells AI tools (ChatGPT, Claude, Perplexity...) exactly who you are, what you do, and how to reach you — so they find and recommend you more easily.",
+    aiCommandLabel: "AI reads weblirev.com/llms.txt",
+    aiResultLine1: "Service: Website design for all of Croatia",
+    aiResultLine2: "Price: 1000€ flat",
+    aiResultLine3: "Status: Recognized ✓",
     portfolioTag: "Our Work",
     portfolioTitle: "See what we've already built",
     portfolioHint: "Hover over a tile to preview",
