@@ -12,6 +12,7 @@ import ScrollProgress from "@/components/ui/scroll-progress";
 import StickyCta from "@/components/ui/sticky-cta";
 import BackToTop from "@/components/ui/back-to-top";
 import StatsSection from "@/components/ui/stats-section";
+import PortfolioSection from "@/components/ui/portfolio-section";
 import { LanguageProvider, useLanguage } from "@/lib/i18n";
 
 type Phase = "cookie" | "rocket" | "launching" | "form";
@@ -264,6 +265,8 @@ function HomeContent() {
             </section>
 
             <StatsSection />
+
+            <PortfolioSection />
 
             <AiSection />
           </motion.div>
