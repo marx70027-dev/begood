@@ -136,20 +136,35 @@ function HomeContent() {
                   transition={{ delay: 0.5, duration: 0.8 }}
                   className="absolute inset-0 flex flex-col items-center justify-center z-10 px-6"
                 >
-                  <div className="text-center mb-10 max-w-2xl mx-auto bg-black/25 backdrop-blur-sm rounded-3xl px-6 py-10 border border-white/10">
-                    <span className="inline-block bg-white text-black text-[10px] md:text-xs font-black tracking-[3px] uppercase px-3 py-1.5 rounded-full mb-5">
+                  <div className="text-center mb-10 max-w-2xl mx-auto px-4 relative">
+                    <div
+                      className="absolute inset-0 -z-10 blur-3xl opacity-60"
+                      style={{
+                        background:
+                          "radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, transparent 70%)",
+                      }}
+                    />
+                    <motion.span
+                      animate={{ boxShadow: ["0 0 0px rgba(255,255,255,0)", "0 0 20px rgba(255,255,255,0.4)", "0 0 0px rgba(255,255,255,0)"] }}
+                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="inline-block bg-white text-black text-[10px] md:text-xs font-black tracking-[3px] uppercase px-3 py-1.5 rounded-full mb-6"
+                    >
                       WebliRev — Web Design
-                    </span>
+                    </motion.span>
                     <h1
-                      className="text-3xl md:text-5xl lg:text-6xl text-white mb-4 leading-tight drop-shadow-2xl"
+                      className="text-3xl md:text-5xl lg:text-6xl text-white mb-5 leading-tight tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]"
                       style={{ fontFamily: headingFont }}
                     >
-                      {t.heroTitle}
+                      {t.heroTitlePre}
+                      <span className="text-[#ff3b3b] drop-shadow-[0_0_25px_rgba(255,59,59,0.6)]">
+                        {t.heroTitlePrice}
+                      </span>
+                      {t.heroTitlePost}
                     </h1>
-                    <p className="text-white/60 text-base md:text-lg">
+                    <p className="text-white/70 text-base md:text-lg drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                       {t.heroSubtitle}
                     </p>
-                    <p className="text-white/40 text-sm md:text-base mt-3 italic">
+                    <p className="text-white/40 text-xs md:text-sm mt-4 uppercase tracking-[0.2em]">
                       {t.heroEnLine}
                     </p>
                   </div>
@@ -195,20 +210,29 @@ function HomeContent() {
             <BusinessForm />
 
             <section className="border-t border-white/10 py-16 px-6 text-center">
-              <h2
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
                 className="text-2xl md:text-3xl text-white mb-6"
                 style={{ fontFamily: headingFont }}
               >
                 {t.citiesTitle}
-              </h2>
+              </motion.h2>
               <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
-                {CITIES.map((city) => (
-                  <span
+                {CITIES.map((city, i) => (
+                  <motion.span
                     key={city}
-                    className="text-white/60 text-sm md:text-base px-4 py-2 rounded-full border border-white/10"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: i * 0.04 }}
+                    whileHover={{ scale: 1.08, backgroundColor: "rgba(255,255,255,0.1)", borderColor: "rgba(255,255,255,0.4)" }}
+                    className="text-white/60 hover:text-white text-sm md:text-base px-4 py-2 rounded-full border border-white/10 cursor-default transition-colors"
                   >
                     {city}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </section>

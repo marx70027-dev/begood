@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/lib/i18n";
 
 const COUNTRIES = [
   "United States", "United Kingdom", "Canada", "Australia", "Germany",
@@ -30,18 +31,8 @@ const PHONE_REGEX = /^\+?[\d\s\-()]{7,20}$/;
 
 const headingFont = "'Bodoni MT Black', 'Bodoni MT', 'Didot', 'Georgia', serif";
 
-const FAQ = [
-  { q: "How much does a website cost?", a: "A professional website starts from €1,000. The final price depends on complexity, number of pages, and features you need. Contact us for a personalized quote." },
-  { q: "How long does it take to build a website?", a: "Most websites take 2–4 weeks depending on complexity. We'll give you a clear timeline after reviewing your needs." },
-  { q: "Do I need to provide content and images?", a: "It helps if you do, but we can also write content and source professional images for you. We'll guide you through the whole process." },
-  { q: "Will my website be mobile-friendly?", a: "Absolutely. Every website we build is fully responsive and looks great on phones, tablets, and desktops." },
-  { q: "Do you offer hosting and maintenance?", a: "Yes — hosting and maintenance are included in the price. SSL, backups, updates, and support are all covered at no extra cost." },
-  { q: "Can I update the website myself after it's built?", a: "Yes. We build on modern platforms with easy-to-use admin panels. We also provide a quick training session so you can manage your content confidently." },
-  { q: "What if I'm not happy with the design?", a: "We include up to 3 rounds of revisions. We work closely with you to make sure the final result matches your vision." },
-  { q: "Do you build online stores?", a: "Yes. We can build full e-commerce functionality — product pages, cart, checkout, payment integration, and order management." },
-];
-
 export default function BusinessForm() {
+  const { t } = useLanguage();
   const [form, setForm] = useState<FormData>({
     phone: "", country: "",
     businessType: "", message: "", honey: "",
@@ -61,14 +52,14 @@ export default function BusinessForm() {
 
   const validate = useCallback((): boolean => {
     const e: Partial<Record<keyof FormData, string>> = {};
-    if (!form.phone.trim()) e.phone = "Phone number is required";
-    else if (!PHONE_REGEX.test(form.phone.trim())) e.phone = "Invalid phone format";
-    if (!form.country) e.country = "Please select a country";
-    if (!form.businessType) e.businessType = "Please select a business type";
-    if (form.message.length > 1000) e.message = "Message is too long (max 1000 characters)";
+    if (!form.phone.trim()) e.phone = t.errorPhoneRequired;
+    else if (!PHONE_REGEX.test(form.phone.trim())) e.phone = t.errorPhoneInvalid;
+    if (!form.country) e.country = t.errorCountryRequired;
+    if (!form.businessType) e.businessType = t.errorBusinessRequired;
+    if (form.message.length > 1000) e.message = t.errorMessageTooLong;
     setErrors(e);
     return Object.keys(e).length === 0;
-  }, [form]);
+  }, [form, t]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,7 +96,7 @@ export default function BusinessForm() {
         setSubmitted(true);
       })
       .catch(() => {
-        setSubmitError("Something went wrong. Please try again.");
+        setSubmitError(t.submitError);
       })
       .finally(() => {
         setSubmitting(false);
@@ -125,19 +116,23 @@ export default function BusinessForm() {
         className="min-h-screen bg-black flex items-center justify-center p-6"
       >
         <div className="text-center max-w-md">
-          <div className="text-6xl mb-6">✅</div>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.1 }}
+            className="text-6xl mb-6"
+          >
+            ✅
+          </motion.div>
           <h2
             className="text-3xl font-black text-white mb-4"
             style={{ fontFamily: headingFont }}
           >
-            Thank You!
+            {t.thankYouTitle}
           </h2>
-          <p className="text-white/60 text-lg">
-            Your request has been received. We will contact you within
-            24 hours by phone or message.
-          </p>
+          <p className="text-white/60 text-lg">{t.thankYouBody}</p>
           <div className="mt-8 bg-white/5 border border-white/10 rounded-xl p-4 text-left">
-            <p className="text-white/40 text-xs uppercase tracking-wider mb-2">Your Details</p>
+            <p className="text-white/40 text-xs uppercase tracking-wider mb-2">{t.yourDetails}</p>
             <p className="text-white text-sm">📱 {form.phone}</p>
             <p className="text-white text-sm">🌍 {form.country}</p>
             <p className="text-white text-sm">💼 {form.businessType}</p>
@@ -157,17 +152,16 @@ export default function BusinessForm() {
       >
         <div className="text-center mb-10">
           <span className="inline-block bg-white text-black text-xs font-black tracking-[2px] uppercase px-3 py-1.5 rounded mb-4">
-            weblirev.com
+            {t.formBadge}
           </span>
           <h1
             className="text-4xl md:text-5xl font-black text-white mb-3"
             style={{ fontFamily: headingFont }}
           >
-            Let&apos;s Build Your <span className="text-white/60">Website</span>
+            {t.formTitlePre}
+            <span className="text-white/60">{t.formTitleHighlight}</span>
           </h1>
-          <p className="text-white/50 text-lg max-w-lg mx-auto">
-            Fill out the form below and we&apos;ll get back to you with a tailored offer for your business.
-          </p>
+          <p className="text-white/50 text-lg max-w-lg mx-auto">{t.formSubtitle}</p>
         </div>
 
         {/* FAQ */}
@@ -176,10 +170,10 @@ export default function BusinessForm() {
             className="text-2xl font-black text-white mb-5 text-center"
             style={{ fontFamily: headingFont }}
           >
-            Frequently Asked Questions
+            {t.faqTitle}
           </h2>
           <div className="space-y-2">
-            {FAQ.map((item, i) => (
+            {t.faq.map((item, i) => (
               <div
                 key={i}
                 className="border border-white/10 rounded-xl overflow-hidden"
@@ -190,25 +184,44 @@ export default function BusinessForm() {
                   className="w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer hover:bg-white/[0.03] transition-colors"
                 >
                   <span className="text-white text-sm font-bold pr-4">{item.q}</span>
-                  <span className="text-white/40 text-xl flex-shrink-0">
-                    {openFaq === i ? "−" : "+"}
-                  </span>
+                  <motion.span
+                    animate={{ rotate: openFaq === i ? 45 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-white/40 text-xl flex-shrink-0"
+                  >
+                    +
+                  </motion.span>
                 </button>
-                {openFaq === i && (
-                  <div className="px-5 pb-4">
-                    <p className="text-white/50 text-sm leading-relaxed">{item.a}</p>
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {openFaq === i && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
+                    >
+                      <p className="px-5 pb-4 text-white/50 text-sm leading-relaxed">{item.a}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
         </div>
 
-        <form
+        <motion.form
           onSubmit={handleSubmit}
-          className="bg-white/[0.04] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6"
+          className="relative bg-white/[0.04] border border-white/10 rounded-2xl p-6 md:p-8 space-y-6"
           autoComplete="off"
           noValidate
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.08 } },
+          }}
         >
           <div className="absolute -left-[9999px]" aria-hidden="true">
             <input
@@ -220,84 +233,87 @@ export default function BusinessForm() {
             />
           </div>
 
-          <div>
+          <motion.div variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}>
             <label className="block text-white/80 text-sm font-bold mb-2">
-              Phone Number <span className="text-red-400">*</span>
+              {t.phoneLabel} <span className="text-red-400">*</span>
             </label>
-            <input
+            <motion.input
+              whileFocus={{ scale: 1.01 }}
               type="tel"
               value={form.phone}
               onChange={(e) => update("phone", e.target.value)}
-              placeholder="+1 555 123 4567"
+              placeholder={t.phonePlaceholder}
               maxLength={25}
               className={`w-full bg-white/[0.06] border ${errors.phone ? "border-red-400" : "border-white/10"} rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-white/40 transition-colors`}
             />
             {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone}</p>}
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}>
             <label className="block text-white/80 text-sm font-bold mb-2">
-              Country <span className="text-red-400">*</span>
+              {t.countryLabel} <span className="text-red-400">*</span>
             </label>
-            <select
+            <motion.select
+              whileFocus={{ scale: 1.01 }}
               value={form.country}
               onChange={(e) => update("country", e.target.value)}
               className={`w-full bg-white/[0.06] border ${errors.country ? "border-red-400" : "border-white/10"} rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/40 transition-colors cursor-pointer [&>option]:bg-black [&>option]:text-white`}
             >
-              <option value="">Select your country...</option>
+              <option value="">{t.countryPlaceholder}</option>
               {COUNTRIES.map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
-            </select>
+            </motion.select>
             {errors.country && <p className="text-red-400 text-xs mt-1">{errors.country}</p>}
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}>
             <label className="block text-white/80 text-sm font-bold mb-2">
-              Business Type <span className="text-red-400">*</span>
+              {t.businessLabel} <span className="text-red-400">*</span>
             </label>
-            <select
+            <motion.select
+              whileFocus={{ scale: 1.01 }}
               value={form.businessType}
               onChange={(e) => update("businessType", e.target.value)}
               className={`w-full bg-white/[0.06] border ${errors.businessType ? "border-red-400" : "border-white/10"} rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/40 transition-colors cursor-pointer [&>option]:bg-black [&>option]:text-white`}
             >
-              <option value="">What do you need a website for?</option>
+              <option value="">{t.businessPlaceholder}</option>
               {BUSINESS_TYPES.map((b) => (
                 <option key={b} value={b}>{b}</option>
               ))}
-            </select>
+            </motion.select>
             {errors.businessType && <p className="text-red-400 text-xs mt-1">{errors.businessType}</p>}
-          </div>
+          </motion.div>
 
-          <div>
-            <label className="block text-white/80 text-sm font-bold mb-2">
-              Additional Message (optional)
-            </label>
-            <textarea
+          <motion.div variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}>
+            <label className="block text-white/80 text-sm font-bold mb-2">{t.messageLabel}</label>
+            <motion.textarea
+              whileFocus={{ scale: 1.01 }}
               value={form.message}
               onChange={(e) => update("message", e.target.value)}
-              placeholder="Describe what you want on your website..."
+              placeholder={t.messagePlaceholder}
               maxLength={1000}
               rows={3}
               className="w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/25 focus:outline-none focus:border-white/40 transition-colors resize-none"
             />
             <p className="text-white/20 text-xs text-right mt-1">{form.message.length}/1000</p>
-          </div>
+          </motion.div>
 
           {submitError && <p className="text-red-400 text-sm text-center">{submitError}</p>}
 
-          <button
+          <motion.button
+            variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
+            whileHover={{ scale: submitting || submitCount >= 5 ? 1 : 1.02 }}
+            whileTap={{ scale: submitting || submitCount >= 5 ? 1 : 0.98 }}
             type="submit"
             disabled={submitting || submitCount >= 5}
-            className="w-full bg-white text-black font-black text-lg py-4 rounded-xl hover:bg-white/90 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+            className="w-full bg-white text-black font-black text-lg py-4 rounded-xl hover:bg-white/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {submitting ? "Sending..." : submitCount >= 5 ? "Too many attempts" : "Submit Request"}
-          </button>
+            {submitting ? t.submittingBtn : submitCount >= 5 ? t.tooManyBtn : t.submitBtn}
+          </motion.button>
 
-          <p className="text-white/20 text-xs text-center">
-            Your data is secure and used only for contacting you.
-          </p>
-        </form>
+          <p className="text-white/20 text-xs text-center">{t.privacyNote}</p>
+        </motion.form>
       </motion.div>
     </div>
   );
