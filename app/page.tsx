@@ -18,9 +18,10 @@ import {
   Lock,
   ArrowUpRight,
 } from "lucide-react";
-import { useState, useRef, type FormEvent } from "react";
+import { useState, useRef, useEffect, type FormEvent } from "react";
 import dynamic from "next/dynamic";
 import { CookieConsent } from "@/components/ui/cookie-consent";
+import { T, LANG_KEY, type Lang } from "@/lib/i18n";
 
 const ScrollVideo = dynamic(() => import("@/components/ui/scroll-video"), { ssr: false });
 
@@ -36,43 +37,50 @@ const fade = {
 // ── Data ──
 
 const SKILLS = [
-  { name: "React / Next.js", pct: 95, icon: <Code2 className="size-4" /> },
-  { name: "UI/UX Design", pct: 90, icon: <Palette className="size-4" /> },
-  { name: "Performance", pct: 92, icon: <Rocket className="size-4" /> },
-  { name: "SEO", pct: 88, icon: <Globe className="size-4" /> },
-  { name: "Security", pct: 85, icon: <Shield className="size-4" /> },
-  { name: "Responsive", pct: 95, icon: <Smartphone className="size-4" /> },
+  { pct: 95, icon: <Code2 className="size-4" /> },
+  { pct: 90, icon: <Palette className="size-4" /> },
+  { pct: 92, icon: <Rocket className="size-4" /> },
+  { pct: 88, icon: <Globe className="size-4" /> },
+  { pct: 85, icon: <Shield className="size-4" /> },
+  { pct: 95, icon: <Smartphone className="size-4" /> },
 ];
 
-const STEPS = [
-  { n: "01", title: "Discovery", desc: "We learn about your business, goals, and target audience to define the project scope." },
-  { n: "02", title: "Design", desc: "Wireframes and high-fidelity mockups tailored to your brand identity." },
-  { n: "03", title: "Development", desc: "Clean, performant code built with modern frameworks — fast, secure, responsive." },
-  { n: "04", title: "Launch & Support", desc: "We deploy, configure your domain, and provide ongoing maintenance." },
+const STEP_NUMS = ["01", "02", "03", "04"];
+
+const PORTFOLIO_URLS: (string | null)[] = [
+  "https://begoodfasade.com",
+  "https://stopandgocaffe.com",
+  null,
+  null,
+  null,
+  null,
 ];
 
-const PORTFOLIO = [
-  { title: "BeGood Fasade", url: "https://begoodfasade.com", cat: "corporate", tags: ["Construction", "Facades", "Responsive"] },
-  { title: "Stop & Go Caffe", url: "https://stopandgocaffe.com", cat: "hospitality", tags: ["Cafe", "Menu", "Branding"] },
-];
+const STAT_VALUES = ["50+", "100%", "24/7", "30+"];
 
-const PROJECT_TYPES = [
-  "Landing page", "Corporate website", "Web shop", "Web application",
-  "Portfolio", "Blog / CMS", "Redesign", "Other",
-];
-
-const BUDGETS = ["Under 500€", "500€ – 1000€", "1000€ – 2000€", "2000€+", "Flexible"];
-
-const STATS = [
-  { n: "50+", l: "Projects delivered" },
-  { n: "100%", l: "Client satisfaction" },
-  { n: "24/7", l: "Ongoing support" },
-  { n: "30+", l: "Happy clients" },
-];
+const PROJECT_TYPES_EN = T.en.projectTypes;
+const BUDGETS_EN = T.en.budgets;
 
 // ── Component ──
 
 export default function Home() {
+  const [lang, setLang] = useState<Lang>("en");
+  const t = T[lang];
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(LANG_KEY);
+      if (saved === "hr" || saved === "en") setLang(saved);
+      else if (navigator.language?.toLowerCase().startsWith("hr")) setLang("hr");
+    } catch {}
+  }, []);
+
+  function changeLang(l: Lang) {
+    setLang(l);
+    try { localStorage.setItem(LANG_KEY, l); } catch {}
+    document.documentElement.lang = l;
+  }
+
   const [mobileMenu, setMobileMenu] = useState(false);
   const [flipped, setFlipped] = useState<Record<number, boolean>>({});
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -103,23 +111,23 @@ export default function Home() {
       });
       if (!res.ok) {
         const json = await res.json();
-        throw new Error(json.error || "Failed to send.");
+        throw new Error(json.error || t.contact.failed);
       }
       setFormStatus("sent");
       formRef.current?.reset();
       setTimeout(() => setFormStatus("idle"), 5000);
     } catch (err) {
       setFormStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Failed to send.");
+      setErrorMsg(err instanceof Error ? err.message : t.contact.failed);
       setTimeout(() => setFormStatus("idle"), 4000);
     }
   }
 
   const NAV = [
-    { id: "about", label: "About" },
-    { id: "portfolio", label: "Work" },
-    { id: "payment", label: "Payment" },
-    { id: "contact", label: "Contact" },
+    { id: "about", label: t.nav.about },
+    { id: "portfolio", label: t.nav.work },
+    { id: "payment", label: t.nav.payment },
+    { id: "contact", label: t.nav.contact },
   ];
 
   const inputCls =
@@ -127,7 +135,7 @@ export default function Home() {
 
   return (
     <div className="bg-white">
-      <CookieConsent />
+      <CookieConsent lang={lang} />
 
       {/* ── Nav ── */}
       <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
@@ -147,6 +155,20 @@ export default function Home() {
             ))}
           </ul>
           <div className="flex items-center gap-3">
+            <div className="flex rounded-full border border-slate-200 p-0.5 text-[11px] font-semibold" role="group" aria-label="Language">
+              {(["hr", "en"] as const).map((l) => (
+                <button
+                  key={l}
+                  onClick={() => changeLang(l)}
+                  aria-pressed={lang === l}
+                  className={`px-2.5 py-1 rounded-full uppercase transition-colors cursor-pointer ${
+                    lang === l ? "bg-slate-900 text-white" : "text-slate-500 hover:text-slate-900"
+                  }`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
             <button
               className="md:hidden text-slate-500 hover:text-slate-900 p-1"
               onClick={() => setMobileMenu(!mobileMenu)}
@@ -171,7 +193,7 @@ export default function Home() {
                   </a>
                 ))}
                 <a href="#contact" className="mt-1" onClick={() => setMobileMenu(false)}>
-                  <button className="fancy-btn w-full text-xs">Get in touch</button>
+                  <button className="fancy-btn w-full text-xs">{t.nav.getInTouch}</button>
                 </a>
               </div>
             </motion.div>
@@ -189,26 +211,26 @@ export default function Home() {
               <motion.h1 custom={0} variants={fade} initial="hidden" animate="visible"
                 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] mb-6 tracking-[-0.035em] text-white"
               >
-                We build websites
+                {t.hero.h1a}
                 <br />
-                that drive growth.
+                {t.hero.h1b}
               </motion.h1>
 
               <motion.p custom={1} variants={fade} initial="hidden" animate="visible"
                 className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-md"
               >
-                Modern, performant web experiences designed to convert visitors into customers.
+                {t.hero.sub}
               </motion.p>
 
               <motion.div custom={2} variants={fade} initial="hidden" animate="visible" className="flex gap-4 flex-wrap">
                 <a href="#contact">
                   <button className="fancy-btn">
-                    Start a project <ArrowRight className="inline size-4 ml-2" />
+                    {t.hero.cta1} <ArrowRight className="inline size-4 ml-2" />
                   </button>
                 </a>
                 <a href="#portfolio">
                   <button className="fancy-btn" style={{ "--bg": "transparent", "--color": "#ffffff" } as React.CSSProperties}>
-                    View our work
+                    {t.hero.cta2}
                   </button>
                 </a>
               </motion.div>
@@ -227,16 +249,16 @@ export default function Home() {
       <section id="about" className="py-32 px-6">
         <div className="max-w-5xl mx-auto">
           <SectionHead
-            label="About"
-            title="We craft digital experiences that matter"
-            sub="Combining thoughtful design with modern engineering to deliver results that speak for themselves."
+            label={t.about.label}
+            title={t.about.title}
+            sub={t.about.sub}
           />
 
           {/* Skill cards — glow style, click to flip */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-28 max-w-3xl mx-auto">
             {SKILLS.map((s, i) => (
               <motion.div
-                key={s.name}
+                key={t.skills[i]}
                 custom={i}
                 variants={fade}
                 initial="hidden"
@@ -260,8 +282,8 @@ export default function Home() {
                         <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-cyan-300">
                           {s.icon}
                         </div>
-                        <span className="text-[13px] font-semibold text-white/90 tracking-[-0.01em]">{s.name}</span>
-                        <span className="text-[10px] text-white/30 font-mono">Click to reveal</span>
+                        <span className="text-[13px] font-semibold text-white/90 tracking-[-0.01em]">{t.skills[i]}</span>
+                        <span className="text-[10px] text-white/30 font-mono">{t.about.reveal}</span>
                       </motion.div>
                     ) : (
                       <motion.div
@@ -273,7 +295,7 @@ export default function Home() {
                         className="flex flex-col items-center justify-center gap-2"
                       >
                         <span className="font-mono text-4xl font-bold text-cyan-300">{s.pct}%</span>
-                        <span className="text-[12px] text-white/50">{s.name}</span>
+                        <span className="text-[12px] text-white/50">{t.skills[i]}</span>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -284,15 +306,15 @@ export default function Home() {
 
           {/* Process */}
           <div className="max-w-2xl mx-auto">
-            <h3 className="font-mono text-xs text-slate-400 uppercase tracking-[0.2em] text-center mb-14 font-medium">How we work</h3>
+            <h3 className="font-mono text-xs text-slate-400 uppercase tracking-[0.2em] text-center mb-14 font-medium">{t.about.howWeWork}</h3>
             <div className="space-y-0">
-              {STEPS.map((step, i) => (
-                <motion.div key={step.n} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex gap-5 group">
+              {t.steps.map((step, i) => (
+                <motion.div key={STEP_NUMS[i]} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex gap-5 group">
                   <div className="flex flex-col items-center">
                     <div className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center flex-shrink-0 group-hover:border-indigo-300 group-hover:bg-indigo-50 transition-colors">
-                      <span className="font-mono text-xs text-slate-500 font-semibold group-hover:text-indigo-600 transition-colors">{step.n}</span>
+                      <span className="font-mono text-xs text-slate-500 font-semibold group-hover:text-indigo-600 transition-colors">{STEP_NUMS[i]}</span>
                     </div>
-                    {i < STEPS.length - 1 && <div className="w-px h-full bg-slate-200 min-h-[40px]" />}
+                    {i < t.steps.length - 1 && <div className="w-px h-full bg-slate-200 min-h-[40px]" />}
                   </div>
                   <div className="pb-10">
                     <h4 className="text-sm font-semibold text-slate-900 mb-1 tracking-[-0.01em]">{step.title}</h4>
@@ -305,12 +327,12 @@ export default function Home() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-slate-200/60 rounded-2xl overflow-hidden mt-20 max-w-3xl mx-auto border border-slate-200/60">
-            {STATS.map((s, i) => (
-              <motion.div key={s.l} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            {t.stats.map((label, i) => (
+              <motion.div key={STAT_VALUES[i]} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }}
                 className="bg-white text-center py-8 px-4"
               >
-                <span className="font-mono text-2xl font-bold text-slate-900 block tracking-[-0.02em]">{s.n}</span>
-                <span className="text-slate-500 text-xs font-medium mt-1 block">{s.l}</span>
+                <span className="font-mono text-2xl font-bold text-slate-900 block tracking-[-0.02em]">{STAT_VALUES[i]}</span>
+                <span className="text-slate-500 text-xs font-medium mt-1 block">{label}</span>
               </motion.div>
             ))}
           </div>
@@ -321,48 +343,55 @@ export default function Home() {
       <section id="portfolio" className="py-32 px-6 bg-slate-50/50">
         <div className="max-w-5xl mx-auto">
           <SectionHead
-            label="Work"
-            title="Our projects"
-            sub="Real websites we've designed and built for our clients."
+            label={t.portfolio.label}
+            title={t.portfolio.title}
+            sub={t.portfolio.sub}
           />
 
-          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            {PORTFOLIO.map((p, i) => (
-              <motion.a
-                key={p.title}
-                href={p.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                custom={i}
-                variants={fade}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="group border border-slate-200/60 rounded-xl overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all duration-300 bg-white"
-              >
-                <div className="h-48 bg-slate-100 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,#f1f5f9_25%,#e2e8f0_50%,#f1f5f9_75%)]" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-slate-400 text-sm font-semibold tracking-wide">{p.url.replace("https://", "")}</span>
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/60 backdrop-blur-sm">
-                    <span className="flex items-center gap-1.5 text-white text-[12px] font-medium bg-white/15 px-4 py-2 rounded-full border border-white/20">
-                      Visit site <ArrowUpRight className="size-3" />
-                    </span>
-                  </div>
-                </div>
-                <div className="p-5">
-                  <h3 className="text-base font-semibold text-slate-800 mb-2.5 tracking-[-0.01em]">{p.title}</h3>
-                  <div className="flex gap-1.5 flex-wrap">
-                    {p.tags.map((t) => (
-                      <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-medium">
-                        {t}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {t.portfolio.items.map((p, i) => {
+              const url = PORTFOLIO_URLS[i];
+              const cls =
+                "group border border-slate-200/60 rounded-xl overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all duration-300 bg-white block";
+              const inner = (
+                <>
+                  <div className="h-44 bg-slate-100 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[linear-gradient(135deg,#f1f5f9_25%,#e2e8f0_50%,#f1f5f9_75%)]" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-slate-400 text-sm font-semibold tracking-wide">
+                        {url ? url.replace("https://", "") : p.title}
                       </span>
-                    ))}
+                    </div>
+                    {url && (
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/60 backdrop-blur-sm">
+                        <span className="flex items-center gap-1.5 text-white text-[12px] font-medium bg-white/15 px-4 py-2 rounded-full border border-white/20">
+                          {t.portfolio.visit} <ArrowUpRight className="size-3" />
+                        </span>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </motion.a>
-            ))}
+                  <div className="p-5">
+                    <h3 className="text-base font-semibold text-slate-800 mb-2.5 tracking-[-0.01em]">{p.title}</h3>
+                    <div className="flex gap-1.5 flex-wrap">
+                      {p.tags.map((tag) => (
+                        <span key={tag} className="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-medium">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              );
+              return url ? (
+                <motion.a key={i} href={url} target="_blank" rel="noopener noreferrer" custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }} className={cls}>
+                  {inner}
+                </motion.a>
+              ) : (
+                <motion.div key={i} custom={i} variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }} className={cls}>
+                  {inner}
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -371,9 +400,9 @@ export default function Home() {
       <section id="payment" className="py-32 px-6">
         <div className="max-w-5xl mx-auto">
           <SectionHead
-            label="Payment"
-            title="Online card payments"
-            sub="We accept all major credit and debit cards via secure online processing."
+            label={t.payment.label}
+            title={t.payment.title}
+            sub={t.payment.sub}
           />
 
           <motion.div
@@ -385,9 +414,9 @@ export default function Home() {
             <div className="w-14 h-14 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mx-auto mb-4">
               <CreditCard className="size-6" />
             </div>
-            <h3 className="text-base font-semibold text-slate-800 mb-1 tracking-[-0.01em]">Card Payments</h3>
-            <p className="text-[13px] text-slate-500 mb-4">Visa, Mastercard, American Express</p>
-            <p className="text-[12px] text-slate-400">Processed securely via Stripe & Revolut Business</p>
+            <h3 className="text-base font-semibold text-slate-800 mb-1 tracking-[-0.01em]">{t.payment.cardTitle}</h3>
+            <p className="text-[13px] text-slate-500 mb-4">{t.payment.cards}</p>
+            <p className="text-[12px] text-slate-400">{t.payment.processed}</p>
           </motion.div>
 
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
@@ -395,8 +424,7 @@ export default function Home() {
           >
             <Lock className="size-4 text-slate-400 flex-shrink-0 mt-0.5" />
             <p className="text-[13px] text-slate-500 leading-relaxed">
-              <span className="font-semibold text-slate-700">Security notice:</span> Payment is arranged after consultation.
-              We never deliver services without confirmed payment. All transactions are encrypted and PCI-compliant.
+              <span className="font-semibold text-slate-700">{t.payment.noticeLabel}</span> {t.payment.notice}
             </p>
           </motion.div>
         </div>
@@ -411,9 +439,9 @@ export default function Home() {
               <div className="w-14 h-14 rounded-xl bg-indigo-50 flex items-center justify-center mb-6 shadow-sm">
                 <Send className="size-6 text-indigo-500" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-[-0.03em] mb-4">Contact us</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-[-0.03em] mb-4">{t.contact.title}</h2>
               <p className="text-slate-500 text-[15px] leading-relaxed mb-10 max-w-sm">
-                We are always looking for ways to improve our products and services. Contact us and let us know how we can help you.
+                {t.contact.desc}
               </p>
 
               <div className="space-y-5">
@@ -422,7 +450,7 @@ export default function Home() {
                     <svg className="size-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium mb-0.5">Email</p>
+                    <p className="text-xs text-slate-400 font-medium mb-0.5">{t.contact.email}</p>
                     <a href="mailto:contact@weblirev.com" className="text-sm text-slate-700 font-medium hover:text-indigo-600 transition-colors">contact@weblirev.com</a>
                   </div>
                 </div>
@@ -432,7 +460,7 @@ export default function Home() {
                     <svg className="size-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium mb-0.5">Phone</p>
+                    <p className="text-xs text-slate-400 font-medium mb-0.5">{t.contact.phone}</p>
                     <a href="tel:+385997874239" className="text-sm text-slate-700 font-medium hover:text-indigo-600 transition-colors">+385 99 787 4239</a>
                   </div>
                 </div>
@@ -442,8 +470,8 @@ export default function Home() {
                     <svg className="size-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400 font-medium mb-0.5">Location</p>
-                    <p className="text-sm text-slate-700 font-medium">Croatia, EU</p>
+                    <p className="text-xs text-slate-400 font-medium mb-0.5">{t.contact.location}</p>
+                    <p className="text-sm text-slate-700 font-medium">{t.contact.locationValue}</p>
                   </div>
                 </div>
               </div>
@@ -462,54 +490,54 @@ export default function Home() {
               <input type="text" name="website" className="absolute -left-[9999px]" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
               <div>
-                <label className="block text-slate-700 text-xs font-medium mb-1.5">Full name *</label>
-                <input name="name" type="text" required minLength={2} maxLength={100} className={inputCls} placeholder="Your name" />
+                <label className="block text-slate-700 text-xs font-medium mb-1.5">{t.contact.fullName}</label>
+                <input name="name" type="text" required minLength={2} maxLength={100} className={inputCls} placeholder={t.contact.namePh} />
               </div>
 
               <div>
-                <label className="block text-slate-700 text-xs font-medium mb-1.5">Email *</label>
+                <label className="block text-slate-700 text-xs font-medium mb-1.5">{t.contact.emailLabel}</label>
                 <input name="email" type="email" required maxLength={254} className={inputCls} placeholder="you@email.com" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-700 text-xs font-medium mb-1.5">Phone</label>
+                  <label className="block text-slate-700 text-xs font-medium mb-1.5">{t.contact.phoneLabel}</label>
                   <input name="phone" type="tel" className={inputCls} placeholder="+385 ..." />
                 </div>
                 <div>
-                  <label className="block text-slate-700 text-xs font-medium mb-1.5">Project type</label>
+                  <label className="block text-slate-700 text-xs font-medium mb-1.5">{t.contact.projectType}</label>
                   <select name="projectType" className={`${inputCls} appearance-none cursor-pointer`}>
-                    <option value="">Select...</option>
-                    {PROJECT_TYPES.map((t) => (<option key={t} value={t}>{t}</option>))}
+                    <option value="">{t.contact.select}</option>
+                    {PROJECT_TYPES_EN.map((en, i) => (<option key={en} value={en}>{t.projectTypes[i]}</option>))}
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-700 text-xs font-medium mb-1.5">Budget</label>
+                <label className="block text-slate-700 text-xs font-medium mb-1.5">{t.contact.budget}</label>
                 <select name="budget" className={`${inputCls} appearance-none cursor-pointer`}>
-                  <option value="">Select range...</option>
-                  {BUDGETS.map((b) => (<option key={b} value={b}>{b}</option>))}
+                  <option value="">{t.contact.selectRange}</option>
+                  {BUDGETS_EN.map((en, i) => (<option key={en} value={en}>{t.budgets[i]}</option>))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-slate-700 text-xs font-medium mb-1.5">Message *</label>
-                <textarea name="message" required minLength={10} rows={4} className={`${inputCls} resize-none`} placeholder="Tell us about your project..." />
+                <label className="block text-slate-700 text-xs font-medium mb-1.5">{t.contact.message}</label>
+                <textarea name="message" required minLength={10} rows={4} className={`${inputCls} resize-none`} placeholder={t.contact.messagePh} />
               </div>
 
               <button type="submit" disabled={formStatus === "sending"} className="fancy-btn w-full disabled:opacity-40">
                 {formStatus === "sending" ? (
-                  "Sending..."
+                  t.contact.sending
                 ) : formStatus === "sent" ? (
-                  <span className="flex items-center justify-center gap-2"><Check className="size-4" /> Sent!</span>
+                  <span className="flex items-center justify-center gap-2"><Check className="size-4" /> {t.contact.sent}</span>
                 ) : (
-                  <span className="flex items-center justify-center gap-2"><Send className="size-4" /> Send message</span>
+                  <span className="flex items-center justify-center gap-2"><Send className="size-4" /> {t.contact.send}</span>
                 )}
               </button>
 
               {formStatus === "error" && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
-              {formStatus === "sent" && <p className="text-emerald-600 text-sm text-center">Thank you! We&apos;ll get back to you within 24 hours.</p>}
+              {formStatus === "sent" && <p className="text-emerald-600 text-sm text-center">{t.contact.thanks}</p>}
             </motion.form>
           </div>
 
@@ -524,7 +552,7 @@ export default function Home() {
             <div className="bg-white border border-slate-200/60 rounded-2xl p-6 md:p-10 shadow-sm overflow-hidden">
               <div className="flex items-center gap-2 mb-6">
                 <Globe className="size-4 text-indigo-500" />
-                <span className="text-xs text-slate-400 font-medium uppercase tracking-[0.15em]">We work globally</span>
+                <span className="text-xs text-slate-400 font-medium uppercase tracking-[0.15em]">{t.contact.globally}</span>
               </div>
               <svg viewBox="0 0 1000 500" className="w-full h-auto opacity-[0.35]" fill="none">
                 <g fill="#94a3b8">
