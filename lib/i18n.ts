@@ -17,6 +17,11 @@ export const T = {
       reveal: "Click to reveal",
       howWeWork: "How we work",
     },
+    showcase: {
+      label: "In motion",
+      title: "Websites that move with your customers.",
+      sub: "Scroll to see how a modern, fast and polished website feels.",
+    },
     skills: ["React / Next.js", "UI/UX Design", "Performance", "SEO", "Security", "Responsive"],
     steps: [
       { title: "Discovery", desc: "We learn about your business, goals, and target audience to define the project scope." },
@@ -108,6 +113,11 @@ export const T = {
       sub: "Spajamo promišljen dizajn i modernu izradu kako bismo isporučili rezultate koji govore sami za sebe.",
       reveal: "Klikni za prikaz",
       howWeWork: "Kako radimo",
+    },
+    showcase: {
+      label: "U pokretu",
+      title: "Web stranice koje se kreću s vašim kupcima.",
+      sub: "Skrolajte i pogledajte kako izgleda moderna, brza i dotjerana web stranica.",
     },
     skills: ["React / Next.js", "UI/UX dizajn", "Performanse", "SEO", "Sigurnost", "Responzivnost"],
     steps: [

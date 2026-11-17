@@ -202,46 +202,53 @@ export default function Home() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative">
-        <ScrollVideo />
+      <section className="relative min-h-screen bg-black overflow-hidden flex items-center">
+        <div className="hero-blob hero-blob-a" />
+        <div className="hero-blob hero-blob-b" />
+        <div className="hero-blob hero-blob-c" />
+        <div className="absolute inset-0 hero-grid" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-black" />
 
-        <div className="absolute top-0 left-0 right-0 h-screen flex items-center z-10 pointer-events-none">
-          <div className="max-w-6xl mx-auto px-6 w-full">
-            <div className="max-w-2xl pointer-events-auto">
-              <motion.h1 custom={0} variants={fade} initial="hidden" animate="visible"
-                className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] mb-6 tracking-[-0.035em] text-white"
-              >
-                {t.hero.h1a}
-                <br />
+        <div className="relative z-10 max-w-6xl mx-auto px-6 w-full pt-24 pb-24">
+          <div className="max-w-3xl">
+            <motion.h1 custom={0} variants={fade} initial="hidden" animate="visible"
+              className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.05] mb-7 tracking-[-0.04em] text-white"
+            >
+              {t.hero.h1a}
+              <br />
+              <span className="bg-gradient-to-r from-amber-300 via-fuchsia-400 to-cyan-300 bg-clip-text text-transparent">
                 {t.hero.h1b}
-              </motion.h1>
+              </span>
+            </motion.h1>
 
-              <motion.p custom={1} variants={fade} initial="hidden" animate="visible"
-                className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-md"
-              >
-                {t.hero.sub}
-              </motion.p>
+            <motion.p custom={1} variants={fade} initial="hidden" animate="visible"
+              className="text-white/60 text-base sm:text-lg leading-relaxed mb-10 max-w-lg"
+            >
+              {t.hero.sub}
+            </motion.p>
 
-              <motion.div custom={2} variants={fade} initial="hidden" animate="visible" className="flex gap-4 flex-wrap">
-                <a href="#contact">
-                  <button className="fancy-btn">
-                    {t.hero.cta1} <ArrowRight className="inline size-4 ml-2" />
-                  </button>
-                </a>
-                <a href="#portfolio">
-                  <button className="fancy-btn" style={{ "--bg": "transparent", "--color": "#ffffff" } as React.CSSProperties}>
-                    {t.hero.cta2}
-                  </button>
-                </a>
-              </motion.div>
-            </div>
+            <motion.div custom={2} variants={fade} initial="hidden" animate="visible" className="flex gap-4 flex-wrap">
+              <a href="#contact">
+                <button className="fancy-btn">
+                  <span className="flex items-center gap-2 whitespace-nowrap">
+                    {t.hero.cta1} <ArrowRight className="size-4" />
+                  </span>
+                </button>
+              </a>
+              <a href="#portfolio">
+                <button className="fancy-btn" style={{ "--bg": "transparent", "--color": "#ffffff" } as React.CSSProperties}>
+                  {t.hero.cta2}
+                </button>
+              </a>
+            </motion.div>
           </div>
         </div>
 
-        <motion.a href="#about" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
-          className="absolute bottom-[calc(200vh+40px)] left-1/2 -translate-x-1/2 text-white/30 hover:text-white/60 transition-colors z-10"
+        <motion.a href="#about" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
+          aria-label="Scroll"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 hover:text-white transition-colors z-10"
         >
-          <ChevronDown className="size-5" />
+          <ChevronDown className="size-6 animate-bounce" />
         </motion.a>
       </section>
 
@@ -335,6 +342,20 @@ export default function Home() {
                 <span className="text-slate-500 text-xs font-medium mt-1 block">{label}</span>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Showcase (scroll video) ── */}
+      <section id="showcase" className="relative bg-black">
+        <ScrollVideo />
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="sticky top-0 h-screen flex items-end">
+            <div className="max-w-6xl mx-auto px-6 w-full pb-24">
+              <span className="font-mono text-[11px] text-cyan-300 uppercase tracking-[0.2em] block mb-3 font-medium">{t.showcase.label}</span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-[-0.03em] mb-3 max-w-xl">{t.showcase.title}</h2>
+              <p className="text-white/60 max-w-md text-[15px] leading-relaxed">{t.showcase.sub}</p>
+            </div>
           </div>
         </div>
       </section>
