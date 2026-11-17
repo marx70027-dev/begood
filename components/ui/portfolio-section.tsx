@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
 
@@ -61,30 +61,67 @@ const WORK_ITEMS: WorkItem[] = [
 
 function PortfolioTile({ item, index, lang }: { item: WorkItem; index: number; lang: "hr" | "en" }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const tileRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(false);
+  const [canHover, setCanHover] = useState(true);
 
-  const handleEnter = () => {
+  useEffect(() => {
+    setCanHover(window.matchMedia("(hover: hover)").matches);
+  }, []);
+
+  const playVideo = () => {
     const v = videoRef.current;
     if (!v) return;
-    v.currentTime = 0;
     v.play().catch(() => {});
   };
 
-  const handleLeave = () => {
+  const stopVideo = () => {
     const v = videoRef.current;
     if (!v) return;
     v.pause();
     v.currentTime = 0;
   };
 
+  // Touch/no-hover devices: autoplay the preview while the tile is visible on screen.
+  useEffect(() => {
+    if (canHover) return;
+    const el = tileRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setActive(entry.isIntersecting);
+        if (entry.isIntersecting) playVideo();
+        else stopVideo();
+      },
+      { threshold: 0.6 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [canHover]);
+
+  const handleEnter = () => {
+    if (!canHover) return;
+    setActive(true);
+    playVideo();
+  };
+
+  const handleLeave = () => {
+    if (!canHover) return;
+    setActive(false);
+    stopVideo();
+  };
+
   return (
     <motion.div
+      ref={tileRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
-      className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer border border-white/10"
+      className="relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer border border-white/10"
     >
       <div className="absolute inset-0" style={{ background: item.gradient }} />
 
@@ -93,15 +130,17 @@ function PortfolioTile({ item, index, lang }: { item: WorkItem; index: number; l
         muted
         loop
         playsInline
-        preload="none"
-        className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        preload="metadata"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${active ? "opacity-100" : "opacity-0"}`}
       >
         <source src={`/portfolio/${item.slug}.mp4`} type="video/mp4" />
       </video>
 
-      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-500" />
+      <div className={`absolute inset-0 transition-colors duration-500 ${active ? "bg-black/10" : "bg-black/30"}`} />
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 group-hover:opacity-0 transition-opacity duration-300">
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center text-center p-6 transition-opacity duration-300 ${active ? "opacity-0" : "opacity-100"}`}
+      >
         <span className="text-5xl mb-4">{item.emoji}</span>
         <p className="text-white/50 text-[10px] tracking-[0.3em] uppercase mb-1">{item.tagline[lang]}</p>
         <h3 className="text-white text-xl md:text-2xl" style={{ fontFamily: headingFont }}>
@@ -109,12 +148,16 @@ function PortfolioTile({ item, index, lang }: { item: WorkItem; index: number; l
         </h3>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div
+        className={`absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent transition-opacity duration-300 ${active ? "opacity-100" : "opacity-0"}`}
+      >
         <h3 className="text-white text-base font-bold">{item.label}</h3>
         <p className="text-white/60 text-[10px] tracking-[0.2em] uppercase">{item.tagline[lang]}</p>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+      <div
+        className={`absolute bottom-0 left-0 right-0 h-1 bg-white origin-left transition-transform duration-500 ${active ? "scale-x-100" : "scale-x-0"}`}
+      />
     </motion.div>
   );
 }
