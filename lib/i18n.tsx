@@ -112,7 +112,7 @@ const dictionaries: Record<Lang, Dict> = {
     aiResultLine2: "Status: Prepoznato ✓",
     portfolioTag: "Naši radovi",
     portfolioTitle: "Pogledaj što smo već napravili",
-    portfolioHint: "Pređi mišem preko kartice",
+    portfolioHint: "Pogledaj naš rad uživo",
     portfolioFooter: "Bavimo se i drugim vrstama biznisa — javi nam se za svoju ideju.",
 
     formBadge: "weblirev.com",
@@ -168,7 +168,7 @@ const dictionaries: Record<Lang, Dict> = {
     aiResultLine2: "Status: Recognized ✓",
     portfolioTag: "Our Work",
     portfolioTitle: "See what we've already built",
-    portfolioHint: "Hover over a tile to preview",
+    portfolioHint: "See our work in action",
     portfolioFooter: "We also work with other types of businesses — reach out with your idea.",
 
     formBadge: "weblirev.com",
