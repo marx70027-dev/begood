@@ -36,6 +36,7 @@ export const T = {
       sub: "Websites and web shops we've designed and built for our clients.",
       visit: "Visit site",
       items: [
+        { title: "Ironhouse", tags: ["E-commerce", "Web shop", "Fitness"] },
         { title: "BeGood Fasade", tags: ["Construction", "Facades", "Responsive"] },
         { title: "Stop & Go Caffe", tags: ["Cafe", "Menu", "Branding"] },
         { title: "Marlon Modeling", tags: ["E-commerce", "Web shop", "Payments"] },
@@ -133,6 +134,7 @@ export const T = {
       sub: "Web stranice i web trgovine koje smo dizajnirali i izradili za naše klijente.",
       visit: "Posjeti stranicu",
       items: [
+        { title: "Ironhouse", tags: ["E-trgovina", "Web shop", "Fitness"] },
         { title: "BeGood Fasade", tags: ["Građevina", "Fasade", "Responzivno"] },
         { title: "Stop & Go Caffe", tags: ["Kafić", "Jelovnik", "Brending"] },
         { title: "Marlon Modeling", tags: ["E-trgovina", "Web shop", "Plaćanje"] },

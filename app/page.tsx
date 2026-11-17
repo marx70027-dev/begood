@@ -21,9 +21,13 @@ import {
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import dynamic from "next/dynamic";
 import { CookieConsent } from "@/components/ui/cookie-consent";
+import { ProjectVideo } from "@/components/ui/project-video";
 import { T, LANG_KEY, type Lang } from "@/lib/i18n";
 
-const ScrollVideo = dynamic(() => import("@/components/ui/scroll-video"), { ssr: false });
+const ScrollVideo = dynamic(() => import("@/components/ui/scroll-video"), {
+  ssr: false,
+  loading: () => <div className="h-[300vh] bg-black" />,
+});
 
 const fade = {
   hidden: { opacity: 0, y: 24 },
@@ -47,7 +51,18 @@ const SKILLS = [
 
 const STEP_NUMS = ["01", "02", "03", "04"];
 
+const PORTFOLIO_VIDEOS: ({ src: string; poster: string } | null)[] = [
+  { src: "/videos/ironhouse.mp4", poster: "/videos/ironhouse.jpg" },
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+];
+
 const PORTFOLIO_URLS: (string | null)[] = [
+  null,
   "https://begoodfasade.com",
   "https://stopandgocaffe.com",
   null,
@@ -372,17 +387,25 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {t.portfolio.items.map((p, i) => {
               const url = PORTFOLIO_URLS[i];
-              const cls =
-                "group border border-slate-200/60 rounded-xl overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all duration-300 bg-white block";
+              const video = PORTFOLIO_VIDEOS[i];
+              const cls = `group border border-slate-200/60 rounded-xl overflow-hidden hover:border-slate-300 hover:shadow-lg transition-all duration-300 bg-white block ${
+                video ? "sm:col-span-2 lg:col-span-3 lg:flex" : ""
+              }`;
               const inner = (
                 <>
-                  <div className="h-44 bg-slate-100 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[linear-gradient(135deg,#f1f5f9_25%,#e2e8f0_50%,#f1f5f9_75%)]" />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-slate-400 text-sm font-semibold tracking-wide">
-                        {url ? url.replace("https://", "") : p.title}
-                      </span>
-                    </div>
+                  <div className={`bg-slate-100 relative overflow-hidden ${video ? "aspect-[720/668] lg:w-1/2 lg:flex-shrink-0" : "h-44"}`}>
+                    {video ? (
+                      <ProjectVideo src={video.src} poster={video.poster} className="absolute inset-0 w-full h-full object-cover bg-black" />
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-[linear-gradient(135deg,#f1f5f9_25%,#e2e8f0_50%,#f1f5f9_75%)]" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-slate-400 text-sm font-semibold tracking-wide">
+                            {url ? url.replace("https://", "") : p.title}
+                          </span>
+                        </div>
+                      </>
+                    )}
                     {url && (
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/60 backdrop-blur-sm">
                         <span className="flex items-center gap-1.5 text-white text-[12px] font-medium bg-white/15 px-4 py-2 rounded-full border border-white/20">
@@ -391,8 +414,8 @@ export default function Home() {
                       </div>
                     )}
                   </div>
-                  <div className="p-5">
-                    <h3 className="text-base font-semibold text-slate-800 mb-2.5 tracking-[-0.01em]">{p.title}</h3>
+                  <div className={`p-5 ${video ? "lg:w-1/2 lg:flex lg:flex-col lg:justify-center lg:p-12" : ""}`}>
+                    <h3 className={`font-semibold text-slate-800 mb-2.5 tracking-[-0.01em] ${video ? "text-xl lg:text-3xl" : "text-base"}`}>{p.title}</h3>
                     <div className="flex gap-1.5 flex-wrap">
                       {p.tags.map((tag) => (
                         <span key={tag} className="font-mono text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-medium">
